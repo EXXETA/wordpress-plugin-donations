@@ -12,12 +12,12 @@
 ### Set up WordPress
 * Select `Deutsch` as language
 * Set following values and press `WordPress installieren` <br>
-  ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Admin page")
+  ![alt text](https://github.com/EXXETA/wordpress-plugin-donations/blob/master/documents/preinstall/WordPressSettings.PNG "WordPress Settings")
 * Log in with credentials from the previous step
 
 ### Set up WooCommerce
 * Install WooCommerce plugin as described <br>
-  ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Language")
+  ![alt text](https://github.com/EXXETA/wordpress-plugin-donations/blob/master/documents/preinstall/PluginSearch.PNG "WooCommerce")
 * Activate plugin with Button `Aktivieren`
 * Complete plugin settings, the values can be entered as desired 
 
