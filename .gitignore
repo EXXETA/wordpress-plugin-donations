@@ -1,1 +1,5 @@
 .idea
+composer.phar
+wp-cli.phar
+donations-plugin/vendor
+donations-plugin/wp-content
