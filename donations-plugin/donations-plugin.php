@@ -1,49 +1,107 @@
 <?php
 /*
 Plugin Name: WP-Donations-Plugin
-Description: A Plugin to add a Donation Button to the Cart Page
+Plugin URI: https://github.com/EXXETA/wordpress-plugin-donations
+Description: A plugin to add a donation button to the cart page and integrating it into an existing WooCommerce wordpress setup
 Author: Heiko Scholz
 Version: 0.1
+License: TODO
 */
+
+define('BASE_PATH', plugin_dir_path(__FILE__));
+require BASE_PATH . 'vendor/autoload.php';
+
+use donations\CharityProduct;
+use donations\CharityProductManager;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
+
 register_activation_hook(__FILE__, 'wp_donations_plugin_activate');
 register_deactivation_hook(__FILE__, 'wp_donations_plugin_deactivate');
 
+/**
+ * this is called by wordpress if the plugin is activated
+ * This is the place to init all products at once and store their WooCommerce product IDs in wordpress options.
+ */
 function wp_donations_plugin_activate()
 {
-    if(empty(get_option("artenschutzeuro_id"))){
-        add_menu_page('Test Plugin Page', 'Donations Plugin', 'manage_options', 'wp-donations-plugin', 'init_menu_page');
-        $product = new WC_Product_Simple();
-        $product->set_name('Artenschutz Euro');
-        $product->set_slug('artenschutzeuro');
-        $product->set_description('Spenden Euro für wohltätige Zwecke');
-        $product->set_regular_price('1.00');
-        $product->save();
-        $product_id =$product->get_id();
-        update_option("artenschutzeuro_id",$product_id);
+    // add plugin pages
+    add_menu_page('Test Plugin Page', 'Donations Plugin', 'manage_options', 'wp-donations-plugin', 'init_menu_page');
+    // init all known products and store their IDs
 
+    $result = CharityProductManager::getCharityProductCategory();
+    $termId = null;
+    if (!$result instanceof WP_Term) {
+        // create it
+        $result = wp_insert_term("Spendemünzen", CharityProductManager::getWooProductCategoryTaxonomy(), [
+            'description' => 'Kategorie für Charity Coins',
+            'parent' => 0,
+            'slug' => CharityProductManager::getCategoryId(),
+        ]);
+        $termId = $result['term_id'];
+    } else {
+        $termId = $result->term_id;
     }
+    if (!$termId) {
+        error_log("Could not create default coin category");
+    }
+    // add default products
+    foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+        /* @var $singleProduct CharityProduct */
+        if (empty(get_option($singleProduct->getProductIdOptionKey()))) {
+            $product = new WC_Product_Simple();
+            $product->set_name($singleProduct->getName());
+            $product->set_slug($singleProduct->getSlug());
+            $product->set_description($singleProduct->getDescription());
+            // prices
+            $product->set_regular_price($singleProduct->getPrice());
+            $product->set_sale_price($singleProduct->getPrice());
+            // disable stock management
+            $product->set_manage_stock(false);
+            $product->set_sold_individually(true);
+            // disable reviews
+            $product->set_reviews_allowed(false);
+            // set category id
+            $product->set_category_ids([$termId]);
+            $product->set_virtual(true);
+            $product->save();
 
-
+            $product_id = $product->get_id();
+            update_option($singleProduct->getProductIdOptionKey(), $product_id);
+        }
+    }
 }
 
+/**
+ * this is called if the plugin is disabled
+ */
 function wp_donations_plugin_deactivate()
 {
-    $product_id = get_option("artenschutzeuro_id");
-    if (!empty($product_id)) {
-        $product=wc_get_product($product_id);
-        $product->delete();
+    // remove products
+    foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+        /* @var $singleProduct \donations\CharityProduct */
+        $product_id = get_option($singleProduct->getProductIdOptionKey());
+        if (!empty($product_id)) {
+            // delete product
+            $product = wc_get_product($product_id);
+            $product->delete();
+        }
+        // delete option
+        delete_option($singleProduct->getProductIdOptionKey());
     }
-    delete_option("artenschutzeuro_id");
 
+    // remove woo commerce product category which is technically a wordpress term
+    $result = CharityProductManager::getCharityProductCategory();
+    if ($result instanceof WP_Term) {
+        wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+    }
 }
 
 function init_menu_page()
 {
-    add_menu_page('Theme page title', 'Donationss Plugin', 'manage_options', 'theme-options', 'wps_theme_func');
+    add_menu_page('Theme page title', 'Donations Plugin', 'manage_options', 'theme-options', 'wps_theme_func');
     add_submenu_page('theme-options', 'Settings', 'Settings menu label', 'manage_options', 'theme-op-settings', 'init_settings');
     add_submenu_page('theme-options', 'Overview', 'Overview menu label', 'manage_options', 'theme-op-faq', 'init_overview');
 }
@@ -78,6 +136,3 @@ function init_overview()
     echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
         <h2>FAQ</h2></div>';
 }
-
-
-?>
