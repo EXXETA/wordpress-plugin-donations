@@ -23,6 +23,8 @@ class CharityProductManager
     // WoCommerce default taxonomy in wordpress for product categories
     // this should not be changed
     private static $WC_PRODUCT_CATEGORY_TAXONOMY = "product_cat";
+    // field for all charity products
+    private static $allProducts = [];
 
     /**
      * @return string[]
@@ -44,14 +46,11 @@ class CharityProductManager
      */
     public static function getAllProducts(): array
     {
-        return [
-            new CharityProduct(self::$PROTECT_SPECIES_COIN, "Artenschutzeuro", "Ein Euro für den Artenschutz", 1),
-            new CharityProduct(self::$PROTECT_OCEAN_COIN, "Meeresschutzeuro", "Ein Euro für den Meeresschutz", 1),
-            new CharityProduct(self::$PROTECT_FOREST_COIN, "Waldschutzeuro", "Ein Euro für den Waldschutz", 1),
-            new CharityProduct(self::$PROTECT_CHILDREN_YOUTH_COIN, "Kinder- und Jugendschutzeuro", "Ein Euro für den Kinder- und Jugendschutz", 1),
-            new CharityProduct(self::$PROTECT_CLIMATE_COIN, "Klimaerhaltungseuro", "Ein Euro für den Erhalt des Klimas", 1),
-            new CharityProduct(self::$PROTECT_DIVERSITY_COIN, "Biologischer Vielfaltseuro", "Ein Euro für die Erhaltung der biologischen Vielfalt", 1),
-        ];
+        if (count(self::$allProducts) === 0) {
+            // one-time init of products
+            self::initProducts();
+        }
+        return self::$allProducts;
     }
 
     /**
@@ -76,6 +75,18 @@ class CharityProductManager
     public static function getCharityProductCategory()
     {
         return get_term_by('slug', CharityProductManager::getCategoryId(), CharityProductManager::getWooProductCategoryTaxonomy());
+    }
+
+    private static function initProducts()
+    {
+        self::$allProducts = [
+            new CharityProduct(self::$PROTECT_SPECIES_COIN, "Artenschutzeuro", "Ein Euro für den Artenschutz", 1),
+            new CharityProduct(self::$PROTECT_OCEAN_COIN, "Meeresschutzeuro", "Ein Euro für den Meeresschutz", 1),
+            new CharityProduct(self::$PROTECT_FOREST_COIN, "Waldschutzeuro", "Ein Euro für den Waldschutz", 1),
+            new CharityProduct(self::$PROTECT_CHILDREN_YOUTH_COIN, "Kinder- und Jugendschutzeuro", "Ein Euro für den Kinder- und Jugendschutz", 1),
+            new CharityProduct(self::$PROTECT_CLIMATE_COIN, "Klimaerhaltungseuro", "Ein Euro für den Erhalt des Klimas", 1),
+            new CharityProduct(self::$PROTECT_DIVERSITY_COIN, "Biologischer Vielfaltseuro", "Ein Euro für die Erhaltung der biologischen Vielfalt", 1),
+        ];
     }
 }
 
