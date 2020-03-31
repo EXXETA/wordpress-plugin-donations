@@ -48,8 +48,14 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 - npm for JS
 
 ## TODO
-- Multi-Language Support
+- Multi-Language Support/I18N
 - Document manual DB backup/restore processes
+- Licensing (Pre-Release) issues + Copyright Header hinzufügen
+- Release-Script to build a plugin to release
+- Test with other themes
+- Test without WooCommerce
+- Versioning
+- Remove/Handle TODOs in Code
 - Cart Icon: https://fontawesome.com/icons/cart-plus?style=solid [License](https://fontawesome.com/license), Changed fill color to #fff
 
 ## Links

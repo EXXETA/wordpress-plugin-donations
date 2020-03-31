@@ -92,8 +92,9 @@ class Plugin
                 $product->set_reviews_allowed(false);
                 // set category id
                 $product->set_category_ids([$termId]);
-                $product->set_virtual(true);
+                $product->set_tax_status('none');
                 $product->set_catalog_visibility('hidden');
+                $product->set_virtual(true);
                 $product->save();
 
                 $product_id = $product->get_id();
@@ -111,7 +112,7 @@ class Plugin
         remove_shortcode(self::$bannerShortCode);
 
         if (function_exists('unregister_block_type')) {
-            // Gutenberg is not active.
+            // Gutenberg is active.
             unregister_block_type(self::$blockTypeName);
         }
     }
@@ -134,7 +135,7 @@ class Plugin
             delete_option($singleProduct->getProductIdOptionKey());
         }
 
-        // remove woo commerce product category which is technically a wordpress term
+        // remove woo commerce product category which is technically a wordpress term - but only if it's not empty!
         $result = CharityProductManager::getCharityProductCategory();
         if ($result instanceof WP_Term) {
             $productsInCategory = wc_get_term_product_ids($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
@@ -178,9 +179,9 @@ class Plugin
     }
 
     static function setup_banner_shortcode($atts) {
-        $bannerType = shortcode_atts([
+        $shortCodeAtts = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
-        return (new Banner($bannerType['campaign'], plugin_dir_url(self::$pluginFile)))->render();
+        return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::$pluginFile)))->render();
     }
 }

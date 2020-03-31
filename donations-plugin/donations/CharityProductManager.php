@@ -85,7 +85,7 @@ class CharityProductManager
             new CharityProduct(self::$PROTECT_OCEAN_COIN, "Meeresschutzeuro", "Ein Euro für den Meeresschutz", 1),
             new CharityProduct(self::$PROTECT_FOREST_COIN, "Waldschutzeuro", "Ein Euro für den Waldschutz", 1),
             new CharityProduct(self::$PROTECT_CHILDREN_YOUTH_COIN, "Kinder- und Jugendschutzeuro", "Ein Euro für den Kinder- und Jugendschutz", 1),
-            new CharityProduct(self::$PROTECT_CLIMATE_COIN, "Klimaerhaltungseuro", "Ein Euro für den Erhalt des Klimas", 1),
+            new CharityProduct(self::$PROTECT_CLIMATE_COIN, "Klimaschutzeuro", "Ein Euro für den Erhalt des Klimas", 1),
             new CharityProduct(self::$PROTECT_DIVERSITY_COIN, "Biologischer Vielfaltseuro", "Ein Euro für die Erhaltung der biologischen Vielfalt", 1),
         ];
     }

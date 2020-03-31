@@ -79,8 +79,8 @@ class Banner
         $output .= sprintf('<img class="cart-icon" src="%s" alt="" />In den Warenkorb', $this->pluginUrl . 'images/cart-plus-solid.svg');
         $output .= '</button></form></div>';
 
-        $output .= '</div>'; // .right-banner-text
-        $output .= '</div>'; // .donation-banner
+        $output .= '</div>'; // .col-right
+        $output .= '</div>'; // .cart-donation-banner
 
         return $output;
     }
