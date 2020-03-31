@@ -40,6 +40,9 @@ class Plugin
         add_action('init', [Plugin::class, 'setup_banner_block']);
         // register shortcode
         add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
+        // register styles
+        // TODO only enqueue if shortcode or block is present!
+        wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::$pluginFile) . 'styles/banner.css');
     }
 
     // (de-)activation and (un-)install logic
@@ -170,7 +173,7 @@ class Plugin
         } else {
             $campaign = $attributes['donationMode'];
         }
-        $banner = new Banner($campaign);
+        $banner = new Banner($campaign, plugin_dir_url(self::$pluginFile));
         return $banner->render();
     }
 
@@ -178,6 +181,6 @@ class Plugin
         $bannerType = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
-        return (new Banner($bannerType['campaign']))->render();
+        return (new Banner($bannerType['campaign'], plugin_dir_url(self::$pluginFile)))->render();
     }
 }

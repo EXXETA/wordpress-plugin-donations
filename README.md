@@ -50,6 +50,7 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 ## TODO
 - Multi-Language Support
 - Document manual DB backup/restore processes
+- Cart Icon: https://fontawesome.com/icons/cart-plus?style=solid [License](https://fontawesome.com/license), Changed fill color to #fff
 
 ## Links
 * [Quickstart: Compose and WordPress](https://docs.docker.com/compose/wordpress)

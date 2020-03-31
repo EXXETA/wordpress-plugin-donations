@@ -89,5 +89,15 @@ class CharityProductManager
             new CharityProduct(self::$PROTECT_DIVERSITY_COIN, "Biologischer Vielfaltseuro", "Ein Euro für die Erhaltung der biologischen Vielfalt", 1),
         ];
     }
+
+    public static function getProductBySlug(string $slug): ?CharityProduct
+    {
+        foreach (self::getAllProducts() as $singleProduct) {
+            if ($slug === $singleProduct->getSlug()) {
+                return $singleProduct;
+            }
+        }
+        return null;
+    }
 }
 
