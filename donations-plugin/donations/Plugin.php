@@ -124,11 +124,11 @@ class Plugin
     {
         // remove products of this plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
-            /* @var $singleProduct \donations\CharityProduct */
-            $product_id = get_option($singleProduct->getProductIdOptionKey());
-            if (!empty($product_id)) {
+            /* @var $singleProduct CharityProduct */
+            $productId = get_option($singleProduct->getProductIdOptionKey());
+            if (!empty($productId)) {
                 // delete product
-                $product = wc_get_product($product_id);
+                $product = wc_get_product($productId);
                 $product->delete();
             }
             // delete option
@@ -155,10 +155,10 @@ class Plugin
         }
 
         // automatically load dependencies and version
-        $asset_file = include(plugin_dir_path(self::$pluginFile) . 'build/index.asset.php');
+        $assetFile = include(plugin_dir_path(self::$pluginFile) . 'build/index.asset.php');
         wp_register_script('checkout-charity-banner', plugins_url('build/index.js', self::$pluginFile),
-            $asset_file['dependencies'],
-            $asset_file['version']
+            $assetFile['dependencies'],
+            $assetFile['version']
         );
         wp_localize_script('checkout-charity-banner', 'cart_page_id', get_option('woocommerce_cart_page_id'));
         register_block_type(self::$blockTypeName, [
@@ -178,7 +178,8 @@ class Plugin
         return $banner->render();
     }
 
-    static function setup_banner_shortcode($atts) {
+    static function setup_banner_shortcode($atts)
+    {
         $shortCodeAtts = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);

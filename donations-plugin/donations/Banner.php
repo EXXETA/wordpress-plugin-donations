@@ -59,12 +59,15 @@ class Banner
         $output .= '<div class="col-left"></div>';
         $output .= '<div class="col-right">';
         $output .= sprintf('<p class="donation-campaign-description">%s</p>', $campaign->getDescription());
-        $output .= sprintf('<p class="donation-campaign-details"><a href="%s">Klicke hier für weitere Informationen</a></p>', $campaign->getDetailURL());
+        $output .= sprintf('<p class="donation-campaign-details"><a href="%s" target="_blank" 
+                    title="Mehr Informationen zur Spende">Klicke hier für weitere Informationen</a>
+                    </p>', $campaign->getDetailURL());
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
         // WWF logo
-        $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" /> <span class="times">x</span>', $this->pluginUrl. 'images/wwf_logo.jpg');
+        $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" />
+                            <span class="times">x</span>', $this->pluginUrl . 'images/wwf_logo.jpg');
 
         if (strpos($cartUrl, '?page_id=') !== false) {
             // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly
@@ -76,7 +79,8 @@ class Banner
         $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $productId);
         $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
         $output .= '<button class="donation-campaign-submit" type="submit">';
-        $output .= sprintf('<img class="cart-icon" src="%s" alt="" />In den Warenkorb', $this->pluginUrl . 'images/cart-plus-solid.svg');
+        $output .= sprintf('<img class="cart-icon" src="%s" alt="" />In den Warenkorb',
+            $this->pluginUrl . 'images/cart-plus-solid.svg');
         $output .= '</button></form></div>';
 
         $output .= '</div>'; // .col-right
