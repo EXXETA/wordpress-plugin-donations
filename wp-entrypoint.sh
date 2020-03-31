@@ -4,7 +4,7 @@ set -euo pipefail
 # run default wordpress entrypoint script
 
 bash /usr/local/bin/docker-entrypoint.sh apache2-foreground &
-# wait for the other script's finish
+# "wait" for the other script's finish. Note: the previous script does not terminate.
 sleep 10
 
 echo "Basic setup started. Starting WP Setup"
@@ -35,7 +35,7 @@ wp plugin install --activate blackbox-debug-bar
 
 # link donations plugin to wp-content/plugins
 if [ ! -L /var/www/html/wp-content/plugins/donations-plugin ]; then
-  echo "creating symlink dir for plugin"
+  echo "creating symlink dir for plugin development"
   ln -s /var/www/donations-plugin/ /var/www/html/wp-content/plugins/donations-plugin
 fi
 # .. and activate it
@@ -50,7 +50,7 @@ function terminate() {
   echo "Exiting now."
   exit 0
 }
-echo "Running forever (hit Ctrl-C to exit) ..."
+echo "Running forever (press Ctrl-C to leave) ..."
 while(true); do
   sleep 5
 done
