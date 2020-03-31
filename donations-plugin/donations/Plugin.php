@@ -19,6 +19,9 @@ class Plugin
      */
     private static $pluginFile;
 
+    public static $bannerShortCode = 'wp_donations_banner';
+    public static $blockTypeName = 'wp-donations-plugin/checkout-banner';
+
     /**
      * Plugin constructor.
      * @param string $pluginFile
@@ -33,7 +36,10 @@ class Plugin
         register_activation_hook(self::$pluginFile, [Plugin::class, 'activate']);
         register_deactivation_hook(self::$pluginFile, [Plugin::class, 'deactivate']);
         register_uninstall_hook(self::$pluginFile, [Plugin::class, 'uninstall']);
+        // register gutenberg block
         add_action('init', [Plugin::class, 'setup_banner_block']);
+        // register shortcode
+        add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
     }
 
     // (de-)activation and (un-)install logic
@@ -99,6 +105,12 @@ class Plugin
     private function deactivate()
     {
         // atm there is nothing to do here
+        remove_shortcode(self::$bannerShortCode);
+
+        if (function_exists('unregister_block_type')) {
+            // Gutenberg is not active.
+            unregister_block_type(self::$blockTypeName);
+        }
     }
 
     /**
@@ -145,7 +157,7 @@ class Plugin
             $asset_file['version']
         );
         wp_localize_script('checkout-charity-banner', 'cart_page_id', get_option('woocommerce_cart_page_id'));
-        register_block_type('wp-donations-plugin/checkout-banner', [
+        register_block_type(self::$blockTypeName, [
             'editor_script' => 'checkout-charity-banner',
             'render_callback' => [Plugin::class, 'render_cart_block']
         ]);
@@ -153,7 +165,19 @@ class Plugin
 
     static function render_cart_block($attributes = [], $content = '')
     {
-        // TODO access "donationMode" in $attributes or use fallback
-        return $content;
+        if (!isset($attributes['donationMode'])) {
+            $campaign = CampaignManager::getAllCampaignTypes()[0];
+        } else {
+            $campaign = $attributes['donationMode'];
+        }
+        $banner = new Banner($campaign);
+        return $banner->render();
+    }
+
+    static function setup_banner_shortcode($atts) {
+        $bannerType = shortcode_atts([
+            'campaign' => CampaignManager::getAllCampaignTypes()[0],
+        ], $atts, self::$bannerShortCode);
+        return (new Banner($bannerType['campaign']))->render();
     }
 }

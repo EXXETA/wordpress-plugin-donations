@@ -11,13 +11,6 @@ namespace donations;
  */
 class CharityProductManager
 {
-    // available coin ids - no duplicates!
-    private static $PROTECT_SPECIES_COIN = 'protect_species_coin';
-    private static $PROTECT_OCEAN_COIN = 'protect_ocean_coin';
-    private static $PROTECT_FOREST_COIN = 'protect_forest_coin';
-    private static $PROTECT_CHILDREN_YOUTH_COIN = 'protect_children_youth_coin';
-    private static $PROTECT_CLIMATE_COIN = 'protect_climate_coin';
-    private static $PROTECT_DIVERSITY_COIN = 'protect_diversity_coin';
     // available product category
     private static $CHARITY_COINS_CATEGORY = "charity_coins";
     // WoCommerce default taxonomy in wordpress for product categories
@@ -26,10 +19,18 @@ class CharityProductManager
     // field for all charity products
     private static $allProducts = [];
 
+    // available coin ids - no duplicates!
+    public static $PROTECT_SPECIES_COIN = 'protect_species_coin';
+    public static $PROTECT_OCEAN_COIN = 'protect_ocean_coin';
+    public static $PROTECT_FOREST_COIN = 'protect_forest_coin';
+    public static $PROTECT_CHILDREN_YOUTH_COIN = 'protect_children_youth_coin';
+    public static $PROTECT_CLIMATE_COIN = 'protect_climate_coin';
+    public static $PROTECT_DIVERSITY_COIN = 'protect_diversity_coin';
+
     /**
      * @return string[]
      */
-    public static function getAllProductIds(): array
+    public static function getAllCharityProductSlugs(): array
     {
         return [
             self::$PROTECT_SPECIES_COIN,
