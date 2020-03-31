@@ -17,7 +17,7 @@ class Plugin
      *
      * @var string
      */
-    private $pluginFile;
+    private static $pluginFile;
 
     /**
      * Plugin constructor.
@@ -25,14 +25,15 @@ class Plugin
      */
     public function __construct(string $pluginFile)
     {
-        $this->pluginFile = $pluginFile;
+        self::$pluginFile = $pluginFile;
     }
 
     public function registerPluginHooks()
     {
-        register_activation_hook($this->pluginFile, [Plugin::class, 'activate']);
-        register_deactivation_hook($this->pluginFile, [Plugin::class, 'deactivate']);
-        register_uninstall_hook($this->pluginFile, [Plugin::class, 'uninstall']);
+        register_activation_hook(self::$pluginFile, [Plugin::class, 'activate']);
+        register_deactivation_hook(self::$pluginFile, [Plugin::class, 'deactivate']);
+        register_uninstall_hook(self::$pluginFile, [Plugin::class, 'uninstall']);
+        add_action('init', [Plugin::class, 'setup_banner_block']);
     }
 
     // (de-)activation and (un-)install logic
@@ -41,7 +42,7 @@ class Plugin
      * this is called by wordpress if the plugin is activated
      * This is the place to init all products at once and store their WooCommerce product IDs in wordpress options.
      */
-    static function activate()
+    private function activate()
     {
         // FIXME implement settings
         // add plugin pages
@@ -95,7 +96,7 @@ class Plugin
     /**
      * this is called if the plugin is disabled
      */
-    static function deactivate()
+    private function deactivate()
     {
         // atm there is nothing to do here
     }
@@ -103,7 +104,7 @@ class Plugin
     /**
      * this is called if the plugin is uninstalled
      */
-    static function uninstall()
+    private function uninstall()
     {
         // remove products of this plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
@@ -127,5 +128,32 @@ class Plugin
                 wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
             }
         }
+    }
+
+    /** banner block logic */
+    static function setup_banner_block()
+    {
+        if (!function_exists('register_block_type')) {
+            // Gutenberg is not active.
+            return;
+        }
+
+        // automatically load dependencies and version
+        $asset_file = include(plugin_dir_path(self::$pluginFile) . 'build/index.asset.php');
+        wp_register_script('checkout-charity-banner', plugins_url('build/index.js', self::$pluginFile),
+            $asset_file['dependencies'],
+            $asset_file['version']
+        );
+        wp_localize_script('checkout-charity-banner', 'cart_page_id', get_option('woocommerce_cart_page_id'));
+        register_block_type('wp-donations-plugin/checkout-banner', [
+            'editor_script' => 'checkout-charity-banner',
+            'render_callback' => [Plugin::class, 'render_cart_block']
+        ]);
+    }
+
+    static function render_cart_block($attributes = [], $content = '')
+    {
+        // TODO access "donationMode" in $attributes or use fallback
+        return $content;
     }
 }
