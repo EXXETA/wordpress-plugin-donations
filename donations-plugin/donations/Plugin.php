@@ -41,8 +41,7 @@ class Plugin
         // register shortcode
         add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
         // register styles
-        // TODO only enqueue if shortcode or block is present!
-        wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::$pluginFile) . 'styles/banner.css');
+        add_action('wp_enqueue_scripts', [Plugin::class, 'handle_styles']);
     }
 
     // (de-)activation and (un-)install logic
@@ -184,5 +183,30 @@ class Plugin
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
         return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::$pluginFile)))->render();
+    }
+
+    static function handle_styles()
+    {
+        $post = get_post();
+        $isStyleNeeded = false;
+        if ($post !== null) {
+            // only add banner styles if the block of this plugin is used
+            if (has_blocks($post->post_content)) {
+                $blocks = parse_blocks($post->post_content);
+                foreach ($blocks as $singleBlock) {
+                    if ($singleBlock['blockName'] === self::$blockTypeName) {
+                        $isStyleNeeded = true;
+                        break;
+                    }
+                }
+            }
+            // AND/OR only add banner styles if the shortcode is used
+            if (has_shortcode($post->post_content, self::$bannerShortCode)) {
+                $isStyleNeeded = true;
+            }
+        }
+        if ($isStyleNeeded) {
+            wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::$pluginFile) . 'styles/banner.css');
+        }
     }
 }
