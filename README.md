@@ -11,7 +11,7 @@
 * This project uses a custom wordpress image with predefined plugins, themes etc.
 * Build the development wordpress container with `docker-compose build`
 * Open root directory in cmd and run command `docker-compose up -d --remove-orphans`. Consider using `--force-recreate` in some cases.
-* Note, that after 10 seconds the wordpress setup routine starts inside the wordpress container.
+* Note that after 10 seconds the wordpress setup routine starts inside the wordpress container.
 * Check if container is running `docker container ls` or `docker ps`
 * Start shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
 * Be sure to run the WooCommerce plugin setup wizard once logged in. Note that we do not use the Jetpack Plugin yet.
@@ -27,6 +27,9 @@
     * Shophistic Lite
 
 # Plugin Development
+
+**NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository.
+
 * You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript
 * cd into `donations-plugin` directory and execute `composer install` and `npm install`
 * Build JS artifacts via `npm run build` (during development you can also use `npm run start`)
@@ -64,3 +67,7 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 * [Docker cheat sheet remove all](https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/)
 * [WP CLI](https://wp-cli.org)
 * [Wordpress JS build setup](https://developer.wordpress.org/block-editor/tutorials/javascript/js-build-setup/)
+
+## Release
+
+Execute `release.sh` in this repository to get a production-ready distributable .zip-archive of the plugin.
