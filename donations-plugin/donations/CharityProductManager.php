@@ -99,5 +99,23 @@ class CharityProductManager
         }
         return null;
     }
+
+    /**
+     * @param string $slug
+     * @return int|null
+     */
+    public static function getProductIdBySlug(string $slug): ?int {
+        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+            if ($singleProduct->getSlug() === $slug) {
+                $productId = get_option($singleProduct->getProductIdOptionKey());
+                if ($productId > 0) {
+                    return $productId;
+                } else {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
 }
 

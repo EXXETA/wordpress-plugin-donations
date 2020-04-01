@@ -239,10 +239,11 @@ class Plugin
         // add plugin pages
         add_menu_page('Spendenübersicht', 'Spendenübersicht', 'manage_options',
             self::$menuSlug, null, 'dashicons-cart');
-
         add_action('admin_notices', [Plugin::class, 'add_donation_info_banner']);
 
         // submenu page:
+        add_submenu_page(self::$menuSlug, 'Aktuell', 'Aktuell', 'manage_options',
+            'wp-donations-current', [Plugin::class, 'handle_menu_current']);
         add_submenu_page(self::$menuSlug, 'Einstellungen', 'Einstellungen', 'manage_options',
             'wp-donations-settings', [Plugin::class, 'handle_menu_settings']);
     }
@@ -252,6 +253,11 @@ class Plugin
         echo '<div class="wrap">
             <h2>Einstellungen</h2>
         </div>';
+    }
+
+    static function handle_menu_current()
+    {
+        include plugin_dir_path(self::$pluginFile) . 'donations/pages/current.php';
     }
 
     static function setup_report_post_type()
