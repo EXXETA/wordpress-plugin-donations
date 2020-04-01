@@ -47,6 +47,7 @@ class Plugin
 
     public function registerPluginHooks()
     {
+        // plugin lifecycle hooks
         register_activation_hook(self::$pluginFile, [Plugin::class, 'activate']);
         register_deactivation_hook(self::$pluginFile, [Plugin::class, 'deactivate']);
         register_uninstall_hook(self::$pluginFile, [Plugin::class, 'uninstall']);
@@ -58,6 +59,7 @@ class Plugin
         add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
         // register styles
         add_action('wp_enqueue_scripts', [Plugin::class, 'handle_styles']);
+
         if (is_admin()) {
             // add menu to wp admin section
             add_action('admin_menu', [Plugin::class, 'setup_menu']);
@@ -286,7 +288,7 @@ class Plugin
                 'edit_posts' => 'manage_options',
                 'edit_others_posts' => 'do_not_allow',
                 'publish_posts' => 'do_not_allow',
-                'read_private_posts' => 'manage_options'
+                'read_private_posts' => 'manage_options',
             ],
         ]);
     }
@@ -294,12 +296,26 @@ class Plugin
     static function add_donation_info_banner()
     {
         $screen = get_current_screen();
-        if ($screen->post_type !== 'donation_report' || $screen->id !== 'edit-donation_report') {
+        if ($screen->post_type !== 'donation_report'
+            || $screen->id !== 'edit-donation_report') {
             return;
         }
-        // TODO add iban information
-        echo '<div class="notice notice-info">
-             <p>This notice appears on the settings page.</p>
-         </div>';
+        
+        $allProductIds = [];
+        foreach (CharityProductManager::getAllProducts() as $charityProduct) {
+            /* @var $charityProduct CharityProduct */
+            $allProductIds[] = get_option($charityProduct->getProductIdOptionKey());
+        }
+        
+        // TODO add correct iban information
+        $output = '<div class="notice notice-info"><p>';
+        $output .= 'Dieses Plugin erweitert den Shop um mehrere Produkte, um Gelder für 
+                    Wohltätigkeitsorganisationen zu sammeln.<br/>';
+        $output .= sprintf('Produkt-IDs: <strong>%s</strong>', join(', ', $allProductIds)) . '<br/>';
+        $output .= 'Bitte überweisen Sie in regelmäßigen Abständen die Beträge der eingenommenen Spenden 
+                    unter Angabe des jeweilig gewünschten Spendenzwecks auf folgendes Konto:<br/>';
+        $output .= '<strong>IBAN:</strong> DE1234567890';
+        $output .= '</p></div>';
+        echo $output;
     }
 }
