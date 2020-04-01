@@ -7,10 +7,10 @@ if (isset($_GET['donation_report_start_date'])) {
     try {
         $startDate = new \DateTime($sanitizedDate);
     } catch (\Exception $ex) {
-        $startDate = (new \DateTime('now'))->sub(new DateInterval('P' + $defaultDaysInPast + 'D'));
+        $startDate = (new \DateTime('now'))->sub(new DateInterval('P' . $defaultDaysInPast . 'D'));
     }
 } else {
-    $startDate = (new \DateTime('now'))->sub(new DateInterval('P' + $defaultDaysInPast + 'D'));
+    $startDate = (new \DateTime('now'))->sub(new DateInterval('P' . $defaultDaysInPast . 'D'));
 }
 ?>
 <div class="wrap">
