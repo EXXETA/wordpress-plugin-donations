@@ -29,16 +29,22 @@ class CharityCampaign
     private $detailURL;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * CharityCampaign constructor.
      * @param string $slug
      * @param string $description
      * @param string $detailURL
      */
-    public function __construct(string $slug, string $description, string $detailURL)
+    public function __construct(string $slug, string $description, string $detailURL, string $name)
     {
         $this->slug = $slug;
         $this->description = $description;
         $this->detailURL = $detailURL;
+        $this->name = $name;
     }
 
     /**
@@ -63,5 +69,13 @@ class CharityCampaign
     public function getDetailURL(): string
     {
         return $this->detailURL;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

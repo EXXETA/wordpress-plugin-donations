@@ -14,16 +14,23 @@ if (isset($_GET['donation_report_start_date'])) {
 }
 ?>
 <div class="wrap">
-    <h2>Aktueller Bericht</h2>
+    <h2>Live-Spendenbericht</h2>
     <div class="notice notice-info">
         <p>
             Hier können Sie die aktuelle Auswertung der Spendeneinnahmen über einen bestimmten Zeitraum betrachten.
         </p>
     </div>
+    <div class="notice notice-warning">
+        <p>
+            <strong>WICHTIG:</strong>
+            In großen Shops mit vielen Bestellungen kann der folgende Aufruf sehr rechen- und zeitintensiv sein!<br/>
+            Bitte wählen Sie dementsprechend den Startzeitpunkt mit Vorsicht.
+        </p>
+    </div>
     <form action="<?php echo admin_url( 'admin.php' ); ?>" method="get">
         <input type="hidden" name="page" value="wp-donations-current" />
         <label for="donation_report_start_date">
-            Start-Zeitpunkt:
+            Startzeitpunkt:
             <input id="donation_report_start_date" name="donation_report_start_date"
                    type="date" value="<?php echo $startDate->format('Y-m-d') ?>" required
                    max="<?php echo $today->format('Y-m-d')?>" />
@@ -45,7 +52,7 @@ if (isset($_GET['donation_report_start_date'])) {
                 $revenue = \donations\CampaignManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
             ?>
             <tr>
-                <td><strong>Kampagne: <?php echo $charityCampaign->getSlug() ?></strong></td>
+                <td><strong>Kampagne: <?php echo $charityCampaign->getName() ?></strong></td>
                 <td><?php echo $revenue ?> &euro;</td>
             </tr>
         <?php endforeach ?>

@@ -55,34 +55,39 @@ class CampaignManager
         self::$allCampaigns = [
             new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Artenschutzprojekte des WWF",
-                "https://www.wwf.org/species"),
+                "https://www.wwf.org/species", "Artenschutz"),
             new CharityCampaign(CharityProductManager::$PROTECT_OCEAN_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Meeresprojekte des WWF",
-                "https://www.wwf.org/ocean"),
+                "https://www.wwf.org/ocean", "Meeresschutz"),
             new CharityCampaign(CharityProductManager::$PROTECT_FOREST_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Waldprojekte des WWF",
-                "https://www.wwf.org/forest"),
+                "https://www.wwf.org/forest", "Waldschutz"),
             new CharityCampaign(CharityProductManager::$PROTECT_CHILDREN_YOUTH_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Kinder- und Jugendschutzprojekte des WWF",
-                "https://www.wwf.org/children"),
+                "https://www.wwf.org/children", "Kinder- und Jugendschutz"),
             new CharityCampaign(CharityProductManager::$PROTECT_CLIMATE_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Klimaprojekte des WWF",
-                "https://www.wwf.org/climate"),
+                "https://www.wwf.org/climate", "Klimaschutz"),
             new CharityCampaign(CharityProductManager::$PROTECT_DIVERSITY_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für Projekte des WWF zur Erhaltung der biologischen Vielfalt",
-                "https://www.wwf.org/bio"),
+                "https://www.wwf.org/bio", "Biologische Vielfalt"),
         ];
     }
 
     /**
-     * NOTE: this method is untested for large amounts of orders!
+     * FIXME: this method is untested for a large amount of orders!
+     * memory problem: use batching or paging
+     * sql query count problem: use own SQL query or better WooCommerce api methods
+     * think about caching these values as well.
      *
      * @param string $campaignSlug
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      * @return float
      */
-    public static function getRevenueOfCampaignInTimeRange(string $campaignSlug, \DateTime $startDate, \DateTime $endDate): float
+    public static function getRevenueOfCampaignInTimeRange(string $campaignSlug,
+                                                           \DateTime $startDate,
+                                                           \DateTime $endDate): float
     {
         $sum = 0;
         $productId = CharityProductManager::getProductIdBySlug($campaignSlug);
