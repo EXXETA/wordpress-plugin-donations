@@ -53,7 +53,7 @@ if (isset($_GET['donation_report_start_date'])) {
             ?>
             <tr>
                 <td><strong>Kampagne: <?php echo $charityCampaign->getName() ?></strong></td>
-                <td><?php echo $revenue ?> &euro;</td>
+                <td><?php echo number_format($revenue, 2) ?> &euro;</td>
             </tr>
         <?php endforeach ?>
     </table>
