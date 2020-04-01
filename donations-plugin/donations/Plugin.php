@@ -34,19 +34,34 @@ class Plugin
         self::$pluginFile = $pluginFile;
     }
 
+    public function check()
+    {
+        $allActivePlugins = apply_filters('active_plugins', get_option('active_plugins'));
+        if (!in_array('woocommerce/woocommerce.php', $allActivePlugins)) {
+            die('Missing required plugin woocommerce');
+        }
+        if (!in_array('woocommerce-services/woocommerce-services.php', $allActivePlugins)) {
+            die('Missing required plugin woocommerce-services');
+        }
+    }
+
     public function registerPluginHooks()
     {
         register_activation_hook(self::$pluginFile, [Plugin::class, 'activate']);
         register_deactivation_hook(self::$pluginFile, [Plugin::class, 'deactivate']);
         register_uninstall_hook(self::$pluginFile, [Plugin::class, 'uninstall']);
+        // register report custom post type
+        add_action('init', [Plugin::class, 'setup_report_post_type'], 0);
         // register gutenberg block
         add_action('init', [Plugin::class, 'setup_banner_block']);
         // register shortcode
         add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
         // register styles
         add_action('wp_enqueue_scripts', [Plugin::class, 'handle_styles']);
-        // add menu to wp admin section
-        add_action('admin_menu', [Plugin::class, 'setup_menu']);
+        if (is_admin()) {
+            // add menu to wp admin section
+            add_action('admin_menu', [Plugin::class, 'setup_menu']);
+        }
     }
 
     // (de-)activation and (un-)install logic
@@ -188,6 +203,10 @@ class Plugin
 
     static function handle_styles()
     {
+        // no style inclusion on admin pages atm
+        if (is_admin()) {
+            return;
+        }
         $post = get_post();
         $isStyleNeeded = false;
         if ($post !== null) {
@@ -216,23 +235,71 @@ class Plugin
     static function setup_menu()
     {
         // add plugin pages
-        add_menu_page('Test Plugin Page', 'Donations Plugin', 'manage_options',
-            self::$menuSlug, [Plugin::class, 'handle_menu_page']);
-        // submenu page:
-        add_submenu_page(self::$menuSlug, 'Settings', 'Settings menu label', 'manage_options',
-            'wp-donations-settings', [Plugin::class, 'handle_menu_settings']);
-    }
+        add_menu_page('Spendenübersicht', 'Spendenübersicht', 'manage_options',
+            self::$menuSlug, null, 'dashicons-cart');
 
-    static function handle_menu_page()
-    {
-        echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-        <h2>Donations Plugin</h2></div>';
+        add_action('admin_notices', [Plugin::class, 'add_donation_info_banner']);
+
+        // submenu page:
+        add_submenu_page(self::$menuSlug, 'Einstellungen', 'Einstellungen', 'manage_options',
+            'wp-donations-settings', [Plugin::class, 'handle_menu_settings']);
     }
 
     static function handle_menu_settings()
     {
         echo '<div class="wrap">
-            <h2>Welcome To My Plugin</h2>
+            <h2>Einstellungen</h2>
         </div>';
+    }
+
+    static function setup_report_post_type()
+    {
+        register_post_type('donation_report', [
+            'public' => false,
+            'label' => 'Spenden-Reports',
+            'description' => 'Einträge über die Spendenaktivität im Shop',
+            'hierarchical' => false,
+            'exclude_from_search' => true,
+            'publicly_queryable' => false,
+            'show_ui' => true,
+            'show_in_menu' => self::$menuSlug,
+            'show_in_admin_bar' => false,
+            'show_in_rest' => false,
+            'supports' => [
+                'title',
+                'custom-fields',
+            ],
+            'has_archive' => false,
+            'can_export' => true,
+            'map_meta_cap' => false,
+            'rewrite' => [
+                ['slug' => 'donation_report']
+            ],
+            'delete_with_user' => false,
+            'query_var' => false,
+            'capabilities' => [
+                'create_posts' => 'do_not_allow',
+                // you need admin rights to use the following capabilities
+                'edit_post' => 'manage_options',
+                'read_post' => 'manage_options',
+                'delete_post' => 'do_not_allow',
+                'edit_posts' => 'manage_options',
+                'edit_others_posts' => 'do_not_allow',
+                'publish_posts' => 'do_not_allow',
+                'read_private_posts' => 'manage_options'
+            ],
+        ]);
+    }
+
+    static function add_donation_info_banner()
+    {
+        $screen = get_current_screen();
+        if ($screen->post_type !== 'donation_report' || $screen->id !== 'edit-donation_report') {
+            return;
+        }
+        // TODO add iban information
+        echo '<div class="notice notice-info">
+             <p>This notice appears on the settings page.</p>
+         </div>';
     }
 }
