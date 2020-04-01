@@ -18,9 +18,12 @@ class Plugin
      * @var string
      */
     private static $pluginFile;
-
+    // shortcode of this plugin
     public static $bannerShortCode = 'wp_donations_banner';
+    // block name of this plugin
     public static $blockTypeName = 'wp-donations-plugin/checkout-banner';
+    // parent menu slug of this plugin
+    public static $menuSlug = 'wp-donations-plugin';
 
     /**
      * Plugin constructor.
@@ -42,6 +45,8 @@ class Plugin
         add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
         // register styles
         add_action('wp_enqueue_scripts', [Plugin::class, 'handle_styles']);
+        // add menu to wp admin section
+        add_action('admin_menu', [Plugin::class, 'setup_menu']);
     }
 
     // (de-)activation and (un-)install logic
@@ -52,11 +57,7 @@ class Plugin
      */
     static function activate()
     {
-        // FIXME implement settings
-        // add plugin pages
-        // add_menu_page('Test Plugin Page', 'Donations Plugin', 'manage_options', 'wp-donations-plugin', 'init_menu_page');
         // init all known products and store their IDs
-
         $result = CharityProductManager::getCharityProductCategory();
         $termId = null;
         if (!$result instanceof WP_Term) {
@@ -208,5 +209,30 @@ class Plugin
         if ($isStyleNeeded) {
             wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::$pluginFile) . 'styles/banner.css');
         }
+    }
+
+    // menu related code
+
+    static function setup_menu()
+    {
+        // add plugin pages
+        add_menu_page('Test Plugin Page', 'Donations Plugin', 'manage_options',
+            self::$menuSlug, [Plugin::class, 'handle_menu_page']);
+        // submenu page:
+        add_submenu_page(self::$menuSlug, 'Settings', 'Settings menu label', 'manage_options',
+            'wp-donations-settings', [Plugin::class, 'handle_menu_settings']);
+    }
+
+    static function handle_menu_page()
+    {
+        echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
+        <h2>Donations Plugin</h2></div>';
+    }
+
+    static function handle_menu_settings()
+    {
+        echo '<div class="wrap">
+            <h2>Welcome To My Plugin</h2>
+        </div>';
     }
 }
