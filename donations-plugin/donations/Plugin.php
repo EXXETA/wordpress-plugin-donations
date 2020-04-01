@@ -51,7 +51,7 @@ class Plugin
      * this is called by wordpress if the plugin is activated
      * This is the place to init all products at once and store their WooCommerce product IDs in wordpress options.
      */
-    private function activate()
+    static function activate()
     {
         // FIXME implement settings
         // add plugin pages
@@ -106,7 +106,7 @@ class Plugin
     /**
      * this is called if the plugin is disabled
      */
-    private function deactivate()
+    static function deactivate()
     {
         // atm there is nothing to do here
         remove_shortcode(self::$bannerShortCode);
@@ -120,7 +120,7 @@ class Plugin
     /**
      * this is called if the plugin is uninstalled
      */
-    private function uninstall()
+    static function uninstall()
     {
         // remove products of this plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
