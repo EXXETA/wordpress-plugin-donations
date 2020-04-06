@@ -1,6 +1,6 @@
 <?php
 $today = new DateTime('now');
-$defaultDaysInPast = 90;
+$defaultDaysInPast = \donations\SettingsManager::getOptionLiveReportDaysInPast();
 
 if (isset($_GET['donation_report_start_date'])) {
     $sanitizedDate = preg_replace("([^0-9-])", "", $_GET['donation_report_start_date']);
@@ -12,12 +12,14 @@ if (isset($_GET['donation_report_start_date'])) {
 } else {
     $startDate = (new \DateTime('now'))->sub(new DateInterval('P' . $defaultDaysInPast . 'D'));
 }
+$dateDifference = intval($today->diff($startDate)->days);
 ?>
 <div class="wrap">
     <h2>Live-Spendenbericht</h2>
     <div class="notice notice-info">
         <p>
-            Hier können Sie die aktuelle Auswertung der Spendeneinnahmen über einen bestimmten Zeitraum betrachten.
+            Hier können Sie die aktuelle Auswertung der Spendeneinnahmen über einen bestimmten Zeitraum betrachten.<br />
+            <strong>Standardzeitraum:</strong> <?php esc_attr_e($defaultDaysInPast) ?> <?php echo $defaultDaysInPast === 1 ? 'Tag' : 'Tage' ?>
         </p>
     </div>
     <div class="notice notice-warning">
@@ -45,7 +47,12 @@ if (isset($_GET['donation_report_start_date'])) {
         </tr>
         <tr class="alternate">
             <td><strong>Endzeitpunkt</strong></td>
-            <td><?php echo $today->format('d.m.Y') ?></td>
+            <td>
+                <?php echo $today->format('d.m.Y') ?>
+                <?php if($dateDifference > 0): ?>
+                    (<?php echo $dateDifference ?> <?php echo $dateDifference === 1 ? 'Tag' : 'Tage' ?>)
+                <?php endif ?>
+            </td>
         </tr>
         <?php foreach (\donations\CampaignManager::getAllCampaigns() as $charityCampaign): ?>
             <?php

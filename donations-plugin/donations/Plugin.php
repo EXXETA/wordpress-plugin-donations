@@ -34,7 +34,10 @@ class Plugin
         self::$pluginFile = $pluginFile;
     }
 
-    public function check()
+    /**
+     * checking if dependent plugins (= woocommerce-services and woocommerce) are activated and present on class path
+     */
+    public function check(): void
     {
         $allActivePlugins = apply_filters('active_plugins', get_option('active_plugins'));
         if (!in_array('woocommerce/woocommerce.php', $allActivePlugins)) {
@@ -45,7 +48,7 @@ class Plugin
         }
     }
 
-    public function registerPluginHooks()
+    public function registerPluginHooks(): void
     {
         // plugin lifecycle hooks
         register_activation_hook(self::$pluginFile, [Plugin::class, 'activate']);
@@ -63,6 +66,8 @@ class Plugin
         if (is_admin()) {
             // add menu to wp admin section
             add_action('admin_menu', [Plugin::class, 'setup_menu']);
+            // register settings
+            add_action('admin_init', [Plugin::class, 'setup_settings']);
         }
     }
 
@@ -72,7 +77,7 @@ class Plugin
      * this is called by wordpress if the plugin is activated
      * This is the place to init all products at once and store their WooCommerce product IDs in wordpress options.
      */
-    static function activate()
+    static function activate(): void
     {
         // init all known products and store their IDs
         $result = CharityProductManager::getCharityProductCategory();
@@ -123,7 +128,7 @@ class Plugin
     /**
      * this is called if the plugin is disabled
      */
-    static function deactivate()
+    static function deactivate(): void
     {
         // atm there is nothing to do here
         remove_shortcode(self::$bannerShortCode);
@@ -137,7 +142,7 @@ class Plugin
     /**
      * this is called if the plugin is uninstalled
      */
-    static function uninstall()
+    static function uninstall(): void
     {
         // remove products of this plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
@@ -161,10 +166,11 @@ class Plugin
                 wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
             }
         }
+        SettingsManager::uninstall();
     }
 
     /** banner block logic */
-    static function setup_banner_block()
+    static function setup_banner_block(): void
     {
         if (!function_exists('register_block_type')) {
             // Gutenberg is not active.
@@ -184,7 +190,7 @@ class Plugin
         ]);
     }
 
-    static function render_cart_block($attributes = [], $content = '')
+    static function render_cart_block($attributes = [], $content = ''): string
     {
         if (!isset($attributes['donationMode'])) {
             $campaign = CampaignManager::getAllCampaignTypes()[0];
@@ -195,7 +201,7 @@ class Plugin
         return $banner->render();
     }
 
-    static function setup_banner_shortcode($atts)
+    static function setup_banner_shortcode($atts): string
     {
         $shortCodeAtts = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
@@ -203,7 +209,7 @@ class Plugin
         return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::$pluginFile)))->render();
     }
 
-    static function handle_styles()
+    static function handle_styles(): void
     {
         // no style inclusion on admin pages atm
         if (is_admin()) {
@@ -233,8 +239,7 @@ class Plugin
     }
 
     // menu related code
-
-    static function setup_menu()
+    static function setup_menu(): void
     {
         // add plugin pages
         add_menu_page('Spendenübersicht', 'Spendenübersicht', 'manage_options',
@@ -244,24 +249,24 @@ class Plugin
         // submenu page:
         add_submenu_page(self::$menuSlug, 'Aktuell', 'Aktuell', 'manage_options',
             'wp-donations-current', [Plugin::class, 'handle_menu_current']);
-        add_submenu_page(self::$menuSlug, 'Einstellungen', 'Einstellungen', 'manage_options',
+        // add options menu
+        add_options_page('Spenden', 'Spenden', 'manage_options',
             'wp-donations-settings', [Plugin::class, 'handle_menu_settings']);
     }
 
-    static function handle_menu_settings()
+    static function handle_menu_settings(): void
     {
-        echo '<div class="wrap">
-            <h2>Einstellungen</h2>
-        </div>';
+        include plugin_dir_path(self::$pluginFile) . 'donations/pages/settings.php';
     }
 
-    static function handle_menu_current()
+    static function handle_menu_current(): void
     {
         include plugin_dir_path(self::$pluginFile) . 'donations/pages/current.php';
     }
 
-    static function setup_report_post_type()
+    static function setup_report_post_type(): void
     {
+        // TODO add translation labels
         register_post_type('donation_report', [
             'public' => false,
             'label' => 'Spenden-Reports',
@@ -299,20 +304,23 @@ class Plugin
         ]);
     }
 
-    static function add_donation_info_banner()
+    /**
+     * this banner is showing up on dashboard page of this plugin
+     */
+    static function add_donation_info_banner(): void
     {
         $screen = get_current_screen();
         if ($screen->post_type !== 'donation_report'
             || $screen->id !== 'edit-donation_report') {
             return;
         }
-        
+
         $allProductIds = [];
         foreach (CharityProductManager::getAllProducts() as $charityProduct) {
             /* @var $charityProduct CharityProduct */
             $allProductIds[] = get_option($charityProduct->getProductIdOptionKey());
         }
-        
+
         // TODO add correct iban information
         $output = '<div class="notice notice-info"><p>';
         $output .= 'Dieses Plugin erweitert den Shop um mehrere Produkte, um Gelder für 
@@ -322,6 +330,19 @@ class Plugin
                     unter Angabe des jeweilig gewünschten Spendenzwecks auf folgendes Konto:<br/>';
         $output .= '<strong>IBAN:</strong> DE1234567890';
         $output .= '</p></div>';
+
+        $interval = SettingsManager::getReportingIntervals()[SettingsManager::getOptionCurrentReportingInterval()];
+
+        $output .= '<div class="notice notice-info"><p>';
+        $output .= '<strong>Automatisches Erzeugen von Spendenberichten:</strong> ' . $interval;
+        $output .= '</p></div>';
+
         echo $output;
+    }
+
+    // settings related code
+    static function setup_settings(): void
+    {
+        SettingsManager::init();
     }
 }

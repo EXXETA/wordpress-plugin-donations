@@ -30,7 +30,8 @@
 
 **NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository.
 
-* You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript
+* You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript.
+ Note: You need the `openssl` extension of PHP.
 * cd into `donations-plugin` directory and execute `composer install` and `npm install`
 * Build JS artifacts via `npm run build` (during development you can also use `npm run start`)
 * Start the whole stack (database + wordpress instance) in containers and find out the container ID of the wordpress instance via `docker ps`
@@ -60,6 +61,7 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 - Versioning
 - Remove/Handle TODOs in Code
 - Cart Icon: https://fontawesome.com/icons/cart-plus?style=solid [License](https://fontawesome.com/license), Changed fill color to #fff
+- Add product images
 
 ## Links
 * [Quickstart: Compose and WordPress](https://docs.docker.com/compose/wordpress)
