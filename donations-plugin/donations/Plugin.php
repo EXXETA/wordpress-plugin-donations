@@ -24,6 +24,8 @@ class Plugin
     public static $blockTypeName = 'wp-donations-plugin/checkout-banner';
     // parent menu slug of this plugin
     public static $menuSlug = 'wp-donations-plugin';
+    // custom post type for report
+    public static $customPostType = 'donation_report';
 
     /**
      * Plugin constructor.
@@ -68,6 +70,14 @@ class Plugin
             add_action('admin_menu', [Plugin::class, 'setup_menu']);
             // register settings
             add_action('admin_init', [Plugin::class, 'setup_settings']);
+        }
+
+        // register cron actions
+        if (!has_action('wp_donations_report_generate')) {
+            add_action('wp_donations_report_generate', [Plugin::class, 'do_report_generate']);
+        }
+        if (!has_action('wp_donations_report_check')) {
+            add_action('wp_donations_report_check', [Plugin::class, 'do_report_check']);
         }
     }
 
@@ -137,6 +147,9 @@ class Plugin
             // Gutenberg is active.
             unregister_block_type(self::$blockTypeName);
         }
+        // cron clear
+        wp_clear_scheduled_hook('wp_donations_report_generate');
+        wp_clear_scheduled_hook('wp_donations_report_check');
     }
 
     /**
@@ -267,7 +280,7 @@ class Plugin
     static function setup_report_post_type(): void
     {
         // TODO add translation labels
-        register_post_type('donation_report', [
+        register_post_type(self::$customPostType, [
             'public' => false,
             'label' => 'Spenden-Reports',
             'description' => 'Einträge über die Spendenaktivität im Shop',
@@ -280,13 +293,13 @@ class Plugin
             'show_in_rest' => false,
             'supports' => [
                 'title',
-                'custom-fields',
+                'editor',
             ],
             'has_archive' => false,
             'can_export' => true,
             'map_meta_cap' => false,
             'rewrite' => [
-                ['slug' => 'donation_report']
+                ['slug' => self::$customPostType]
             ],
             'delete_with_user' => false,
             'query_var' => false,
@@ -302,6 +315,40 @@ class Plugin
                 'read_private_posts' => 'manage_options',
             ],
         ]);
+
+        if (is_admin()) {
+            // hide default edit features of wordpress
+            add_filter('post_row_actions', [Plugin::class, 'remove_post_type_row_actions']);
+            add_action('admin_head', [Plugin::class, 'remove_post_type_edit_button']);
+        }
+    }
+
+    static function remove_post_type_row_actions(array $actions)
+    {
+        // hide "edit" and "quick edit" in rows of donation reports
+        $screen = get_current_screen();
+        if ($screen && $screen->post_type === self::$customPostType) {
+            unset($actions[0]);
+            unset($actions[1]);
+        }
+    }
+
+    static function remove_post_type_edit_button()
+    {
+        $screen = get_current_screen();
+        if ($screen && $screen->post_type === self::$customPostType) {
+            // disable edit button and edit form entirely via styles and script
+            echo '<style>#publishing-action { display: none; }
+                         #misc-publishing-actions .edit-post-status { display: none; }
+                    </style>
+                    <script lang="js">
+                    jQuery(document).ready(() => {
+                        jQuery("#post").submit((e) => {
+                            e.preventDefault();
+                        })    
+                    });
+                    </script>';
+        }
     }
 
     /**
@@ -310,8 +357,8 @@ class Plugin
     static function add_donation_info_banner(): void
     {
         $screen = get_current_screen();
-        if ($screen->post_type !== 'donation_report'
-            || $screen->id !== 'edit-donation_report') {
+        if ($screen->post_type !== self::$customPostType
+            || $screen->id !== 'edit-' . self::$customPostType) {
             return;
         }
 
@@ -347,5 +394,89 @@ class Plugin
     static function setup_settings(): void
     {
         SettingsManager::init();
+    }
+
+    /**
+     * @param \DateTime|null $timeRangeStart
+     * @param \DateTime|null $timeRangeEnd
+     * @param bool $isRegular
+     * @throws \Exception
+     */
+    static function do_report_generate(\DateTime $timeRangeStart = null, \DateTime $timeRangeEnd = null,
+                                       $isRegular = false): void
+    {
+        $now = new \DateTime('now');
+        if (!$timeRangeStart) {
+            $timeRangeStart = (clone $now)->modify('first day of this month');
+        }
+        $timeRangeStart->setTime(0, 0, 0);
+        if (!$timeRangeEnd) {
+            $timeRangeEnd = (clone $now)->modify('last day of this month');
+        }
+        $timeRangeEnd->setTime(23, 59, 59);
+        $reportingInterval = SettingsManager::getOptionCurrentReportingInterval();
+
+        // slug => float
+        $results = [];
+        $sum = 0.0;
+        foreach (CampaignManager::getAllCampaignTypes() as $campaignSlug) {
+            $results[$campaignSlug] =
+                CampaignManager::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
+            $sum += $results[$campaignSlug];
+        }
+
+        // - 'subject' - string representation of month
+        // - 'revenues' - array with campaignSlug => revenue, string => float
+        // - 'startDate'
+        // - 'endDate'
+        // - 'sum'
+        // - 'isRegular' - boolean
+        // - 'content' - set later after body was rendered
+        $args = [];
+        $args['subject'] = 'Spenden | ' . SettingsManager::getReportingIntervals()[$reportingInterval]
+            . ' | ' . $timeRangeStart->format('d/m') . ' - ' . $timeRangeEnd->format('d/m/Y') . ' | '
+            . get_bloginfo('name');
+
+        if (!$isRegular) {
+            $args['subject'] = 'Manueller Bericht: ' . $args['subject'];
+        } else {
+            $args['subject'] = 'Automatischer Bericht: ' . $args['subject'];
+        }
+
+        $args['revenues'] = $results;
+        $args['startDate'] = $timeRangeStart;
+        $args['endDate'] = $timeRangeEnd;
+        $args['sum'] = $sum;
+        $args['isRegular'] = $isRegular;
+
+        // get mail body content - used for report post type also
+        ob_start();
+        include(plugin_dir_path(self::$pluginFile) . 'donations/mail/content.php');
+        $mailBody = ob_get_contents();
+        ob_end_clean();
+        $args['content'] = $mailBody;
+
+        // render full mail template
+        ob_start();
+        include(plugin_dir_path(self::$pluginFile) . 'donations/mail/report.php');
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+
+        wp_insert_post([
+            'post_title' => $args['subject'],
+            'post_content' => $mailBody,
+            'post_type' => self::$customPostType,
+            'post_status' => 'publish',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+        ]);
+
+        $recipient = SettingsManager::getOptionReportRecipientMail();
+        wp_mail($recipient, esc_html($args['subject']), $mailContent);
+    }
+
+    static function do_report_check(): void
+    {
+        var_dump('report check');
     }
 }
