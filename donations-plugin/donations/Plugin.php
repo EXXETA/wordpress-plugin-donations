@@ -332,9 +332,12 @@ class Plugin
         $output .= '</p></div>';
 
         $interval = SettingsManager::getReportingIntervals()[SettingsManager::getOptionCurrentReportingInterval()];
+        $recipient = SettingsManager::getOptionReportRecipientMail();
 
         $output .= '<div class="notice notice-info"><p>';
-        $output .= '<strong>Automatisches Erzeugen von Spendenberichten:</strong> ' . $interval;
+        $output .= '<strong>Automatisches Erzeugen von Spendenberichten:</strong> ' . $interval . '<br/>';
+        $output .= '<strong>Empfangsadresse:</strong> ';
+        $output .= sprintf('<a href="mailto:%s">%s</a>', $recipient, esc_attr($recipient));
         $output .= '</p></div>';
 
         echo $output;

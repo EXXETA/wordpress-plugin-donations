@@ -18,11 +18,13 @@ class SettingsManager
     private static $options = [
         'wp_donations_reporting_interval' => 'monthly',
         'wp_donations_reporting_live_days_in_past' => 30,
+        'wp_donations_reporting_recipient' => 'donation-reports@test.local',
     ];
 
     private static $reportingIntervalOptions = [
-        'monthly' => 'Monatlich',
         'weekly' => 'Wöchentlich',
+        'monthly' => 'Monatlich',
+        'quarterly' => 'Quartalsweise',
     ];
 
     /**
@@ -44,6 +46,8 @@ class SettingsManager
             'wp_donations_reporting_interval', 'esc_attr');
         register_setting('wp_donations',
             'wp_donations_reporting_live_days_in_past', 'esc_attr');
+        register_setting('wp_donations',
+            'wp_donations_reporting_recipient', 'esc_attr');
     }
 
     public static function uninstall()
@@ -64,6 +68,12 @@ class SettingsManager
     {
         return intval(get_option('wp_donations_reporting_live_days_in_past',
             self::$options['wp_donations_reporting_live_days_in_past']));
+    }
+
+    public static function getOptionReportRecipientMail(): string
+    {
+        return strval(get_option('wp_donations_reporting_recipient',
+            self::$options['wp_donations_reporting_recipient']));
     }
 
     /**
