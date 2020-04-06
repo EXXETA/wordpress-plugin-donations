@@ -32,6 +32,7 @@ wp plugin delete --quiet akismet hello || true
 wp plugin install --activate woocommerce
 wp plugin install --activate woocommerce-services
 wp plugin install --activate blackbox-debug-bar
+wp plugin install --activate wp-mail-logging
 
 # link donations plugin to wp-content/plugins
 if [ ! -L /var/www/html/wp-content/plugins/donations-plugin ]; then
