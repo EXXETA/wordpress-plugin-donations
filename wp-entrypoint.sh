@@ -4,7 +4,7 @@ set -euo pipefail
 # run default wordpress entrypoint script
 
 bash /usr/local/bin/docker-entrypoint.sh apache2-foreground &
-# wait for the other script's finish
+# "wait" for the other script's finish. Note: the previous script does not terminate.
 sleep 10
 
 echo "Basic setup started. Starting WP Setup"
@@ -24,15 +24,22 @@ PHP
 wp core install --path="$WP_PATH" --url="http://127.0.0.1:8000" --title="WWF Plugin" --admin_user=admin --admin_password=password --admin_email="test@test.local"
 # remove all plugins
 wp plugin list
-wp plugin deactivate --quiet akismet hello
-wp plugin delete --quiet akismet hello
+
+wp plugin deactivate --quiet akismet hello || true
+wp plugin delete --quiet akismet hello || true
+
 # install and activate woocommerce plugin
 wp plugin install --activate woocommerce
 wp plugin install --activate woocommerce-services
+wp plugin install --activate blackbox-debug-bar
+
 # link donations plugin to wp-content/plugins
-ln -s /var/www/donations-plugin/ /var/www/html/wp-content/plugins/donations-plugin
+if [ ! -L /var/www/html/wp-content/plugins/donations-plugin ]; then
+  echo "creating symlink dir for plugin development"
+  ln -s /var/www/donations-plugin/ /var/www/html/wp-content/plugins/donations-plugin
+fi
 # .. and activate it
-wp plugin activate donations-plugin
+wp plugin activate donations-plugin || true
 # set proper theme
 wp theme install --activate shophistic-lite
 
@@ -43,7 +50,7 @@ function terminate() {
   echo "Exiting now."
   exit 0
 }
-echo "Running forever (hit Ctrl-C to exit) ..."
+echo "Running forever (press Ctrl-C to leave) ..."
 while(true); do
   sleep 5
 done

@@ -1,0 +1,21 @@
+{
+  "name": "exxeta/wp-donations-plugin",
+  "version": "1.0.0",
+  "type": "project",
+  "minimum-stability": "stable",
+  "require-dev": {
+    "wp-coding-standards/wpcs": "*",
+    "woocommerce/woocommerce": "^4.0"
+  },
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "donations\\": "donations"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.3"
+    }
+  }
+}

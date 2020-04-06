@@ -1,0 +1,16 @@
+{
+  "name": "wordpress-donations-plugin",
+  "version": "1.0.0",
+  "description": "JS project setup for wordpress plugin",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "EXXETA AG",
+  "license": "Apache v2",
+  "devDependencies": {
+    "@wordpress/scripts": "7.1.3"
+  }
+}
