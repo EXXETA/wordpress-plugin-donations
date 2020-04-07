@@ -17,7 +17,7 @@ class Plugin
      *
      * @var string
      */
-    public static $pluginFile;
+    private static $pluginFile;
     // shortcode of this plugin
     public static $bannerShortCode = 'wp_donations_banner';
     // block name of this plugin
@@ -26,6 +26,8 @@ class Plugin
     public static $menuSlug = 'wp-donations-plugin';
     // custom post type for report
     public static $customPostType = 'donation_report';
+    // name of daily report generation check cron
+    public static $cronName = 'wp_donations_daily_report_check';
 
     /**
      * Plugin constructor.
@@ -34,6 +36,14 @@ class Plugin
     public function __construct(string $pluginFile)
     {
         self::$pluginFile = $pluginFile;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getPluginFile(): string
+    {
+        return self::$pluginFile;
     }
 
     /**
@@ -53,9 +63,9 @@ class Plugin
     public function registerPluginHooks(): void
     {
         // plugin lifecycle hooks
-        register_activation_hook(self::$pluginFile, [Plugin::class, 'activate']);
-        register_deactivation_hook(self::$pluginFile, [Plugin::class, 'deactivate']);
-        register_uninstall_hook(self::$pluginFile, [Plugin::class, 'uninstall']);
+        register_activation_hook(self::getPluginFile(), [Plugin::class, 'activate']);
+        register_deactivation_hook(self::getPluginFile(), [Plugin::class, 'deactivate']);
+        register_uninstall_hook(self::getPluginFile(), [Plugin::class, 'uninstall']);
         // register report custom post type
         add_action('init', [Plugin::class, 'setup_report_post_type'], 0);
         // register gutenberg block
@@ -72,12 +82,18 @@ class Plugin
             add_action('admin_init', [Plugin::class, 'setup_settings']);
         }
 
-        // register cron actions
-        if (!has_action('wp_donations_report_generate')) {
-            add_action('wp_donations_report_generate', [Plugin::class, 'do_report_generate']);
-        }
+        // register cron hook as action
         if (!has_action('wp_donations_report_check')) {
             add_action('wp_donations_report_check', [Plugin::class, 'do_report_check']);
+        }
+
+        // uncomment the following line for debugging and force-register the scheduled event
+        // wp_clear_scheduled_hook('wp_donations_report_check');
+        if (wp_next_scheduled('wp_donations_report_check') === false) {
+            $result = wp_schedule_event(time(), 'daily', 'wp_donations_report_check');
+            if (!$result) {
+                error_log(sprintf('%s: Error registering check job for report generation', self::$pluginFile));
+            }
         }
     }
 
@@ -148,8 +164,7 @@ class Plugin
             unregister_block_type(self::$blockTypeName);
         }
         // cron clear
-        wp_clear_scheduled_hook('wp_donations_report_generate');
-        wp_clear_scheduled_hook('wp_donations_report_check');
+        wp_clear_scheduled_hook(self::$cronName);
     }
 
     /**
@@ -191,8 +206,8 @@ class Plugin
         }
 
         // automatically load dependencies and version
-        $assetFile = include(plugin_dir_path(self::$pluginFile) . 'build/index.asset.php');
-        wp_register_script('checkout-charity-banner', plugins_url('build/index.js', self::$pluginFile),
+        $assetFile = include(plugin_dir_path(self::getPluginFile()) . 'build/index.asset.php');
+        wp_register_script('checkout-charity-banner', plugins_url('build/index.js', self::getPluginFile()),
             $assetFile['dependencies'],
             $assetFile['version']
         );
@@ -210,7 +225,7 @@ class Plugin
         } else {
             $campaign = $attributes['donationMode'];
         }
-        $banner = new Banner($campaign, plugin_dir_url(self::$pluginFile));
+        $banner = new Banner($campaign, plugin_dir_url(self::getPluginFile()));
         return $banner->render();
     }
 
@@ -219,7 +234,7 @@ class Plugin
         $shortCodeAtts = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
-        return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::$pluginFile)))->render();
+        return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::getPluginFile())))->render();
     }
 
     static function handle_styles(): void
@@ -247,7 +262,7 @@ class Plugin
             }
         }
         if ($isStyleNeeded) {
-            wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::$pluginFile) . 'styles/banner.css');
+            wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'styles/banner.css');
         }
     }
 
@@ -269,12 +284,12 @@ class Plugin
 
     static function handle_menu_settings(): void
     {
-        include plugin_dir_path(self::$pluginFile) . 'donations/pages/settings.php';
+        include plugin_dir_path(self::getPluginFile()) . 'donations/pages/settings.php';
     }
 
     static function handle_menu_current(): void
     {
-        include plugin_dir_path(self::$pluginFile) . 'donations/pages/current.php';
+        include plugin_dir_path(self::getPluginFile()) . 'donations/pages/current.php';
     }
 
     static function setup_report_post_type(): void
@@ -389,7 +404,10 @@ class Plugin
             $lastGenerationDate ? $lastGenerationDate->format('Y-m-d') : '-');
         $nextExecutionDate = ReportGenerator::calculateNextExecutionDate($currentReportMode, $lastGenerationDate);
         $output .= sprintf('<strong>Nächste Berichtserzeugung:</strong> %s<br/>',
-                $nextExecutionDate ? $nextExecutionDate->format('Y-m-d') : '-');
+            $nextExecutionDate ? $nextExecutionDate->format('Y-m-d') : '-');
+        $lastCheckDate = SettingsManager::getOptionReportLastCheck();
+        $output .= sprintf('<strong>Letzte Überprüfung:</strong> %s<br/>',
+            $lastCheckDate ? $lastCheckDate->format('Y-m-d H:i:s') : '-');
 
         $output .= '<strong>Empfangsadresse:</strong> ';
         $output .= sprintf('<a href="mailto:%s">%s</a>', $recipient, esc_attr($recipient));
@@ -420,6 +438,12 @@ class Plugin
 
     static function do_report_check(): void
     {
-        ReportGenerator::checkReportGeneration();
+        try {
+            ReportGenerator::checkReportGeneration();
+            SettingsManager::setOptionReportLastCheck();
+        } catch (\Exception $ex) {
+            error_log(Plugin::getPluginFile() . ': error encountered during check for report generation');
+            return;
+        }
     }
 }

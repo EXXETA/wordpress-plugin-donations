@@ -24,6 +24,7 @@ class SettingsManager
         'wp_donations_reporting_live_days_in_past' => 30,
         'wp_donations_reporting_recipient' => 'donation-reports@test.local',
         'wp_donations_reporting_last_generation_date' => null,
+        'wp_donations_reporting_last_check_date' => null,
     ];
 
     private static $reportingIntervalOptions = [
@@ -113,7 +114,7 @@ class SettingsManager
         try {
             return new \DateTime($storedValue);
         } catch (\Exception $ex) {
-            error_log(sprintf('invalid date value "%s"', $storedValue));
+            error_log(sprintf('%s: invalid date value "%s"', Plugin::getPluginFile(), $storedValue));
             return null;
         }
     }
@@ -131,6 +132,29 @@ class SettingsManager
             }
         }
         update_option('wp_donations_reporting_last_generation_date', $dateTime->format('c'));
+    }
+
+    public static function getOptionReportLastCheck(): ?\DateTime
+    {
+        $storedValue = strval(get_option('wp_donations_reporting_last_check_date',
+            self::$options['wp_donations_reporting_last_check_date']));
+        if (!$storedValue) {
+            return null;
+        }
+        try {
+            return new \DateTime($storedValue);
+        } catch (\Exception $ex) {
+            error_log(sprintf('%s: invalid date value "%s"', Plugin::getPluginFile(), $storedValue));
+            return null;
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function setOptionReportLastCheck(): void
+    {
+        update_option('wp_donations_reporting_last_check_date', date('c'));
     }
 
     /**

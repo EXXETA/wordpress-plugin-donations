@@ -18,6 +18,7 @@ class ReportGenerator
      * main method for report generation
      *
      * @param ReportGenerationModel $reportGenerationModel
+     * @throws \Exception
      */
     public static function generateReport(ReportGenerationModel $reportGenerationModel): void
     {
@@ -28,7 +29,7 @@ class ReportGenerator
             ->setTime(23, 59, 59);
 
         if ($timeRangeStart > $timeRangeEnd) {
-            error_log(Plugin::$pluginFile . ': invalid time range');
+            error_log(Plugin::getPluginFile() . ': invalid time range');
             return;
         }
         $reportingInterval = $reportGenerationModel->getIntervalMode();
@@ -82,14 +83,14 @@ class ReportGenerator
 
         // get mail body content - used for report post type also
         ob_start();
-        include(plugin_dir_path(Plugin::$pluginFile) . 'donations/mail/content.php');
+        include(plugin_dir_path(Plugin::getPluginFile()) . 'donations/mail/content.php');
         $mailBody = ob_get_contents();
         ob_end_clean();
         $args['content'] = $mailBody;
 
         // render full mail template
         ob_start();
-        include(plugin_dir_path(Plugin::$pluginFile) . 'donations/mail/report.php');
+        include(plugin_dir_path(Plugin::getPluginFile()) . 'donations/mail/report.php');
         $mailContent = ob_get_contents();
         ob_end_clean();
 
@@ -128,21 +129,21 @@ class ReportGenerator
         try {
             $nextExecutionDate = self::calculateNextExecutionDate($mode, $lastExecutionDate);
         } catch (\Exception $ex) {
-            error_log(Plugin::$pluginFile . ': problem calculating nextExecutionDate for report generation');
+            error_log(Plugin::getPluginFile() . ': problem calculating nextExecutionDate for report generation');
             return;
         }
         if ($nextExecutionDate <= $today) {
             try {
                 $model = self::getReportModel($mode, $nextExecutionDate);
             } catch (\Exception $ex) {
-                error_log(Plugin::$pluginFile . ': problem calculating report model for report generation');
+                error_log(Plugin::getPluginFile() . ': problem calculating report model for report generation');
                 return;
             }
             if ($model instanceof ReportGenerationModel) {
                 // trigger report generation
                 self::generateReport($model);
             } else {
-                error_log(Plugin::$pluginFile . ': problem calculating report model for report generation');
+                error_log(Plugin::getPluginFile() . ': problem calculating report model for report generation');
                 return;
             }
         }
