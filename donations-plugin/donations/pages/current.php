@@ -52,9 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Startzeitpunkt:
             <input id="donation_report_start_date" name="donation_report_start_date"
                    type="date" value="<?php echo $startDate->format('Y-m-d') ?>" required
+                   min="<?php echo (clone $today)->sub(new DateInterval('P5Y'))->format('Y-m-d') ?>"
                    max="<?php echo $today->format('Y-m-d') ?>"/>
         </label>
-        <input type="submit" value="Aktualisieren" class="button-primary" />
+        <input type="submit" value="Aktualisieren" class="button-primary"/>
     </form>
     <?php if (defined('WP_DEBUG') && true === WP_DEBUG && !$reportTriggered): ?>
         <form action="" method="post" style="margin-top: 16px; margin-bottom: 25px;">

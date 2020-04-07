@@ -54,10 +54,10 @@
                             Empfangsadresse der Spendenberichte
                         </label>
                         <input id="wp_donations_reporting_recipient_mail_field" type="email" readonly
-                               <?php
-                               // do not make it too easy to change mail:
-                               // name="wp_donations_reporting_recipient"
-                               ?> size="75" value="<?php echo $reportRecipient ?>"/>
+                            <?php
+                            // do not make it too easy to change mail:
+                            // name="wp_donations_reporting_recipient"
+                            ?> size="75" value="<?php echo $reportRecipient ?>"/>
                     </fieldset>
                 </td>
             </tr>

@@ -104,7 +104,8 @@ class CharityProductManager
      * @param string $slug
      * @return int|null
      */
-    public static function getProductIdBySlug(string $slug): ?int {
+    public static function getProductIdBySlug(string $slug): ?int
+    {
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
             if ($singleProduct->getSlug() === $slug) {
                 $productId = get_option($singleProduct->getProductIdOptionKey());

@@ -17,7 +17,7 @@ class Plugin
      *
      * @var string
      */
-    private static $pluginFile;
+    public static $pluginFile;
     // shortcode of this plugin
     public static $bannerShortCode = 'wp_donations_banner';
     // block name of this plugin
@@ -378,11 +378,19 @@ class Plugin
         $output .= '<strong>IBAN:</strong> DE1234567890';
         $output .= '</p></div>';
 
-        $interval = SettingsManager::getReportingIntervals()[SettingsManager::getOptionCurrentReportingInterval()];
+        $currentReportMode = SettingsManager::getOptionCurrentReportingInterval();
+        $interval = SettingsManager::getReportingIntervals()[$currentReportMode];
         $recipient = SettingsManager::getOptionReportRecipientMail();
 
         $output .= '<div class="notice notice-info"><p>';
         $output .= '<strong>Automatisches Erzeugen von Spendenberichten:</strong> ' . $interval . '<br/>';
+        $lastGenerationDate = SettingsManager::getOptionReportLastGenerationDate();
+        $output .= sprintf('<strong>Letztes Berichtsdatum:</strong> %s<br/>',
+            $lastGenerationDate ? $lastGenerationDate->format('Y-m-d') : '-');
+        $nextExecutionDate = ReportGenerator::calculateNextExecutionDate($currentReportMode, $lastGenerationDate);
+        $output .= sprintf('<strong>Nächste Berichtserzeugung:</strong> %s<br/>',
+                $nextExecutionDate ? $nextExecutionDate->format('Y-m-d') : '-');
+
         $output .= '<strong>Empfangsadresse:</strong> ';
         $output .= sprintf('<a href="mailto:%s">%s</a>', $recipient, esc_attr($recipient));
         $output .= '</p></div>';
@@ -405,78 +413,13 @@ class Plugin
     static function do_report_generate(\DateTime $timeRangeStart = null, \DateTime $timeRangeEnd = null,
                                        $isRegular = false): void
     {
-        $now = new \DateTime('now');
-        if (!$timeRangeStart) {
-            $timeRangeStart = (clone $now)->modify('first day of this month');
-        }
-        $timeRangeStart->setTime(0, 0, 0);
-        if (!$timeRangeEnd) {
-            $timeRangeEnd = (clone $now)->modify('last day of this month');
-        }
-        $timeRangeEnd->setTime(23, 59, 59);
-        $reportingInterval = SettingsManager::getOptionCurrentReportingInterval();
-
-        // slug => float
-        $results = [];
-        $sum = 0.0;
-        foreach (CampaignManager::getAllCampaignTypes() as $campaignSlug) {
-            $results[$campaignSlug] =
-                CampaignManager::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
-            $sum += $results[$campaignSlug];
-        }
-
-        // - 'subject' - string representation of month
-        // - 'revenues' - array with campaignSlug => revenue, string => float
-        // - 'startDate'
-        // - 'endDate'
-        // - 'sum'
-        // - 'isRegular' - boolean
-        // - 'content' - set later after body was rendered
-        $args = [];
-        $args['subject'] = 'Spenden | ' . SettingsManager::getReportingIntervals()[$reportingInterval]
-            . ' | ' . $timeRangeStart->format('d/m') . ' - ' . $timeRangeEnd->format('d/m/Y') . ' | '
-            . get_bloginfo('name');
-
-        if (!$isRegular) {
-            $args['subject'] = 'Manueller Bericht: ' . $args['subject'];
-        } else {
-            $args['subject'] = 'Automatischer Bericht: ' . $args['subject'];
-        }
-
-        $args['revenues'] = $results;
-        $args['startDate'] = $timeRangeStart;
-        $args['endDate'] = $timeRangeEnd;
-        $args['sum'] = $sum;
-        $args['isRegular'] = $isRegular;
-
-        // get mail body content - used for report post type also
-        ob_start();
-        include(plugin_dir_path(self::$pluginFile) . 'donations/mail/content.php');
-        $mailBody = ob_get_contents();
-        ob_end_clean();
-        $args['content'] = $mailBody;
-
-        // render full mail template
-        ob_start();
-        include(plugin_dir_path(self::$pluginFile) . 'donations/mail/report.php');
-        $mailContent = ob_get_contents();
-        ob_end_clean();
-
-        wp_insert_post([
-            'post_title' => $args['subject'],
-            'post_content' => $mailBody,
-            'post_type' => self::$customPostType,
-            'post_status' => 'publish',
-            'comment_status' => 'closed',
-            'ping_status' => 'closed',
-        ]);
-
-        $recipient = SettingsManager::getOptionReportRecipientMail();
-        wp_mail($recipient, esc_html($args['subject']), $mailContent);
+        $mode = SettingsManager::getOptionCurrentReportingInterval();
+        ReportGenerator::generateReport(new ReportGenerationModel($timeRangeStart, $timeRangeEnd, $mode,
+            $isRegular, true));
     }
 
     static function do_report_check(): void
     {
-        var_dump('report check');
+        ReportGenerator::checkReportGeneration();
     }
 }

@@ -12,6 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin: 0 auto; padding: 6px;background-color: #eeeeff;max-width: 800px;width: 60%;">
-    <?php echo $args['content'] ?>
+<?php echo $args['content'] ?>
 </body>
 </html>
