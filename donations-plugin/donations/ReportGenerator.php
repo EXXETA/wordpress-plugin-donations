@@ -58,7 +58,7 @@ class ReportGenerator
          * @param \DateTime $endDate
          * @return string
          */
-        $timeRangeString = function(\DateTime $startDate, \DateTime $endDate): string {
+        $timeRangeString = function (\DateTime $startDate, \DateTime $endDate): string {
             $startStringFormat = 'd/m';
             if ($startDate->format('Y') !== $endDate->format('Y')) {
                 $startStringFormat = 'd/m/Y';
@@ -106,12 +106,15 @@ class ReportGenerator
         $recipient = SettingsManager::getOptionReportRecipientMail();
 
         if ($reportGenerationModel->isSendMail()) {
-            wp_mail($recipient, esc_html($args['subject']), $mailContent);
+            $headers = ['Content-Type: text/html; charset=UTF-8'];
+            wp_mail($recipient, esc_html($args['subject']), $mailContent, $headers);
         }
         // update last execution time
-        $lastExecutionDate = ($timeRangeEnd)->add(new \DateInterval('P1D'));
-        $lastExecutionDate->setTime(0, 0, 0);
-        SettingsManager::setOptionReportLastGeneration($lastExecutionDate);
+        if ($reportGenerationModel->isRegular()) {
+            $lastExecutionDate = ($timeRangeEnd)->add(new \DateInterval('P1D'));
+            $lastExecutionDate->setTime(0, 0, 0);
+            SettingsManager::setOptionReportLastGeneration($lastExecutionDate);
+        }
     }
 
     /**

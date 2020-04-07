@@ -385,8 +385,9 @@ class Plugin
 
         // TODO add correct iban information
         $output = '<div class="notice notice-info"><p>';
-        $output .= 'Dieses Plugin erweitert den Shop um mehrere Produkte, um Gelder für 
+        $output .= 'Dieses Plugin erweitert den Shop mit mehreren Produkten, um Gelder für 
                     Wohltätigkeitsorganisationen zu sammeln.<br/>';
+        // TODO name shortcode and/or Gutenberg Block
         $output .= sprintf('Produkt-IDs: <strong>%s</strong>', join(', ', $allProductIds)) . '<br/>';
         $output .= 'Bitte überweisen Sie in regelmäßigen Abständen die Beträge der eingenommenen Spenden 
                     unter Angabe des jeweilig gewünschten Spendenzwecks auf folgendes Konto:<br/>';

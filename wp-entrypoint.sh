@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+# NOTE: If you change this file, the wordpress container needs to be rebuilt
+
 # run default wordpress entrypoint script
 
 bash /usr/local/bin/docker-entrypoint.sh apache2-foreground &
@@ -31,7 +33,8 @@ wp plugin delete --quiet akismet hello || true
 # install and activate woocommerce plugin
 wp plugin install --activate woocommerce
 wp plugin install --activate woocommerce-services
-wp plugin install --activate blackbox-debug-bar
+wp plugin install --activate debug-bar
+wp plugin install --activate debug-bar-cron
 wp plugin install --activate wp-mail-logging
 
 # link donations plugin to wp-content/plugins

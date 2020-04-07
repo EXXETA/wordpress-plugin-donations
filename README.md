@@ -1,8 +1,34 @@
 # wp-donations-plugin
 
-**Wordpress plugin to collect donations for a non-profit organization.**
+**Wordpress plugin to collect donations for a non-profit organization and
+ automatically sending reports via mail.**
+
+### Features
+- Shortcode
+- Gutenberg Block
+- Reports with three interval modes
+- Mail cannot be changed
+- Reports are visible as readonly custom post type
+- Live-Preview of reports/custom reports
+- No privacy impact
 
 # Setup
+
+## Server and Wordpress requirements
+- PHP Language Level 7.3+
+- MySQL/MariaDB 5.7+/10.3+
+- Wordpress crons (= scheduled events) are set up
+- Mandatory active Wordpress plugins:
+    - `woocommerce`
+    - `woocommerce-services`
+- Wordpress should be able to send mails via `wp_mail`
+
+
+## Installation
+1. Be sure to meet the listed requirements for the web server and the wordpress installation.
+2. Extract provided archive of this plugin to `wp-content/plugins` directory.
+3. Activate this plugin in Wordpress plugin page.
+4. Configure plugin settings in `Settings > Donations`. 
 
 # Plugin Development
 
@@ -20,7 +46,7 @@ Your working directory inside the container is `/var/www/html`.
 e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugin` 
 * To run the unit tests, cd into `donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
 
-# Development
+## Development
 
 ### Run shop on your local machine
 * Install *docker* and *docker-compose* locally [Docker get started](https://www.docker.com/get-started)
@@ -42,22 +68,28 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 * Used Theme
     * Shophistic Lite
 
-## Shutdown and cleanup
+### Shutdown and cleanup
 **Warning:** This will remove the complete database and existing data!
 
 * Open root directory in cmd and run command `docker-compose down --volumes`.
  
-## System requirements
+### Update wordpress
+- Stop all running containers via `docker-compose down --volumes`
+- `docker-compose pull`
+- `docker-compose build`
+- Start with `docker-compose up`
+ 
+## System requirements for development
 - PHP Language Level 7.3+
 - MySQL/MariaDB 5.7+/10.3+
 - Composer for PHP
-- npm for JS
+- Wordpress crons (= scheduled events) are activated (by calling `wp-cron.php`)
+- npm
 
 ## TODO
 - Multi-Language Support/I18N
 - Document manual DB backup/restore processes
-- Licensing (Pre-Release) issues + Copyright Header hinzufügen
-- Release-Script to build a plugin to release
+- Copyright Header
 - Test with other themes
 - Test without WooCommerce
 - Versioning
@@ -66,12 +98,14 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 - Add product images
 
 ## Links
+* [Detailed Plugin Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/)
 * [Quickstart: Compose and WordPress](https://docs.docker.com/compose/wordpress)
-* [Docker cheat sheet](https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf)
-* [Docker cheat sheet remove all](https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/)
 * [WP CLI](https://wp-cli.org)
-* [Wordpress JS build setup](https://developer.wordpress.org/block-editor/tutorials/javascript/js-build-setup/)
+* [Wordpress JS build setup for Gutenberg Blocks](https://developer.wordpress.org/block-editor/tutorials/javascript/js-build-setup/)
 
 ## Release
+Execute `release.sh` in this repository to get a production-ready distributable .zip-archive 
+of this plugin.
 
-Execute `release.sh` in this repository to get a production-ready distributable .zip-archive of the plugin.
+# License
+Licensed under [GPL v3.0](./LICENSE).
