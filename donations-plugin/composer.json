@@ -5,7 +5,8 @@
   "minimum-stability": "stable",
   "require-dev": {
     "wp-coding-standards/wpcs": "*",
-    "woocommerce/woocommerce": "^4.0"
+    "woocommerce/woocommerce": "^4.0",
+    "phpunit/phpunit": "^9"
   },
   "require": {},
   "autoload": {

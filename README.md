@@ -4,6 +4,22 @@
 
 # Setup
 
+# Plugin Development
+
+**NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository and 
+run `docker-compose` afterwards.
+
+* You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript.
+ Note: You need the `openssl` extension of PHP.
+* cd into `donations-plugin` directory and execute `composer install` and `npm install`
+* Build JS artifacts via `npm run build` (during development you can also use `npm run start`)
+* Start the whole stack (database + wordpress instance) in containers and find out the container ID of the wordpress instance via `docker ps`
+* Get a shell inside the wordpress development container it via: `docker exec -ti <container_id> bash`.
+Your working directory inside the container is `/var/www/html`.
+* Use the `wp` command as documented [here](https://wp-cli.org), 
+e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugin` 
+* To run the unit tests, cd into `donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
+
 # Development
 
 ### Run shop on your local machine
@@ -25,20 +41,6 @@
     * Woocommerce-Services
 * Used Theme
     * Shophistic Lite
-
-# Plugin Development
-
-**NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository.
-
-* You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript.
- Note: You need the `openssl` extension of PHP.
-* cd into `donations-plugin` directory and execute `composer install` and `npm install`
-* Build JS artifacts via `npm run build` (during development you can also use `npm run start`)
-* Start the whole stack (database + wordpress instance) in containers and find out the container ID of the wordpress instance via `docker ps`
-* Get a shell inside the wordpress development container it via: `docker exec -ti <container_id> bash`.
-Your working directory inside the container is `/var/www/html`.
-* Use the `wp` command as documented [here](https://wp-cli.org), 
-e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugin` 
 
 ## Shutdown and cleanup
 **Warning:** This will remove the complete database and existing data!

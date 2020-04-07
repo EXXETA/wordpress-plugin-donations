@@ -43,7 +43,10 @@ cd release/donations-plugin
 php ../../composer.phar install --no-dev
 rm package.json
 rm package-lock.json
+# remove js sources
 rm -rf src
+# remove php unit tests
+rm -rf test
 
 # build archives
 cd ..
