@@ -1,36 +1,114 @@
 # wp-donations-plugin
 
-**Wordpress plugin to collect donations for a non-profit organization and
- automatically sending reports via mail.**
+**Plugin for Wordpress to collect donations in a WooCommerce shop 
+for a non-profit organization. Automatically sending reports via mail.**
+ 
+**NOTE:** Currently this plugin is in German language available only.
 
 ### Features
-- Shortcode
-- Gutenberg Block
-- Reports with three interval modes
-- Mail cannot be changed
-- Reports are visible as readonly custom post type
-- Live-Preview of reports/custom reports
-- No privacy impact
+- Six donation products/campaigns
+- Providing easy banner content (for cart page):
+    - Shortcode: `[wp_donations_banner]`
+    - Gutenberg Block: `Spendemünzen`
+- Campaign reports
+    - Automatically generating reports
+    - mail delivery of report content
+    - Reports are persistent and transparently accessible in custom backend section
+    - Three interval modes: *weekly*, *monthly*, *quarterly*
+    - Custom report live preview
+- No privacy impact of this plugin
 
-# Setup
-
-## Server and Wordpress requirements
-- PHP Language Level 7.3+
-- MySQL/MariaDB 5.7+/10.3+
-- Wordpress crons (= scheduled events) are set up
-- Mandatory active Wordpress plugins:
-    - `woocommerce`
-    - `woocommerce-services`
-- Wordpress should be able to send mails via `wp_mail`
-
-
-## Installation
+# Installation
 1. Be sure to meet the listed requirements for the web server and the wordpress installation.
 2. Extract provided archive of this plugin to `wp-content/plugins` directory.
 3. Activate this plugin in Wordpress plugin page.
 4. Configure plugin settings in `Settings > Donations`. 
 
+# Setup
+- Install and activate this plugin in your wordpress installation.
+- Add the banner to your *WooCommerce* cart page by using a block (in "Gutenberg" editor) 
+or use a shortcode (documented below). Technically both ways lead to the same result.
+
+### Products
+This plugin will create one new product category in a WooCommerce shop called "Spendemünzen" containing
+six donation products (à 1 €) for different campaigns:
+- Protecting species
+- Protecting oceans
+- Protecting forests
+- Protecting children and youth
+- Protecting climate
+- Protecting diversity
+
+You can view the WooCommerce product IDs in plugin report dashboard page in backend.
+
+#### Product details
+- virtual
+- no stock management
+- no taxation (`tax_status='none'`)
+- not sold individually
+- no reviews allowed
+- `catalog_visibility='hidden'`
+
+### Shortcode `wp_donations_banner`
+You can configure the target donation campaign by providing a `campaign` argument. If no campaign
+is given, the *default* one is: `protect_species_coin`.
+
+Valid values for `campaign` argument are:
+- `protect_species_coin`
+- `protect_ocean_coin`
+- `protect_forest_coin`
+- `protect_children_youth_coin`
+- `protect_climate_coin`
+- `protect_diversity_coin`
+
+Example of shortcode usage: `[wp_donations_banner campaign='protect_climate_coin']`
+
+### Reports
+You can configure three different report interval modes: `weekly`, `monthly`, `quarterly`.
+
+Each report will be send by mail to an address you can view,
+ but not change in plugin's backend section.
+ 
+Technically the report generation is a summation of plugin's donation products in completed 
+or processed orders grouped by a donation campaign in a certain time range.
+
+All reports are persisted as a private custom post type integrated into the Wordpress system.
+
+One time per day, a routine will check if time to generate a new report is reached. You can view the 
+date and time of the last check in plugin's report dashboard.
+
+**NOTE:** After plugin installation there will be generated one first (probably empty) report.
+
+### Banner styling
+This plugin is shipped with self-contained responsive CSS styles without dependencies to 
+a specific theme or framework.
+
+Banner top class: `.cart-donation-banner`
+
+## Server and Wordpress requirements
+- PHP 7.3+
+- MySQL/MariaDB 5.7+/10.3+
+- Required active Wordpress plugins:
+    - `woocommerce`
+    - `woocommerce-services`
+- Wordpress crons (= scheduled events) are set up
+- Wordpress should be able to send mails via `wp_mail`
+- WooCommerce is (initially) set up
+    - Currency: Euro
+
 # Plugin Development
+
+This repository contains a docker-compose configuration for a reproducible
+environment during development. The directory `./donations-plugin` is mounted into the
+wordpress container.
+
+## Requirements for development
+- PHP Language Level 7.3+
+- MySQL/MariaDB 5.7+/10.3+
+- `docker` and `docker-compose`
+- Composer for PHP
+- Wordpress crons (= scheduled events) are activated (by calling `wp-cron.php`)
+- npm
 
 **NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository and 
 run `docker-compose` afterwards.
@@ -44,17 +122,17 @@ run `docker-compose` afterwards.
 Your working directory inside the container is `/var/www/html`.
 * Use the `wp` command as documented [here](https://wp-cli.org), 
 e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugin` 
-* To run the unit tests, cd into `donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
+* To run **unit tests**, cd into `donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
 
 ## Development
 
 ### Run shop on your local machine
-* Install *docker* and *docker-compose* locally [Docker get started](https://www.docker.com/get-started)
-* This project uses a custom wordpress image with predefined plugins, themes etc.
-* Build the development wordpress container with `docker-compose build`
+* This project uses a custom docker wordpress image with predefined plugins, themes etc.
+* Build the development container with `docker-compose build`
 * Open root directory in cmd and run command `docker-compose up -d --remove-orphans`. Consider using `--force-recreate` in some cases.
-* Note that after 10 seconds the wordpress setup routine starts inside the wordpress container.
-* Check if container is running `docker container ls` or `docker ps`
+* Note that after 10 seconds the wordpress setup routine starts inside the wordpress container,
+    which is defined in `wp-entrypoint.sh`.
+* Check if container is running `docker container ls` or `docker ps`.
 * Start shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
 * Be sure to run the WooCommerce plugin setup wizard once logged in. Note that we do not use the Jetpack Plugin yet.
 
@@ -69,32 +147,24 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
     * Shophistic Lite
 
 ### Shutdown and cleanup
-**Warning:** This will remove the complete database and existing data!
+**Warning:** This will remove the complete database and all existing data!
 
 * Open root directory in cmd and run command `docker-compose down --volumes`.
  
-### Update wordpress
+### Update wordpress container
 - Stop all running containers via `docker-compose down --volumes`
 - `docker-compose pull`
 - `docker-compose build`
 - Start with `docker-compose up`
- 
-## System requirements for development
-- PHP Language Level 7.3+
-- MySQL/MariaDB 5.7+/10.3+
-- Composer for PHP
-- Wordpress crons (= scheduled events) are activated (by calling `wp-cron.php`)
-- npm
 
 ## TODO
 - Multi-Language Support/I18N
-- Document manual DB backup/restore processes
-- Copyright Header
+- add screenshots
+- Add copyright header to source files
 - Test with other themes
 - Test without WooCommerce
 - Versioning
 - Remove/Handle TODOs in Code
-- Cart Icon: https://fontawesome.com/icons/cart-plus?style=solid [License](https://fontawesome.com/license), Changed fill color to #fff
 - Add product images
 
 ## Links
@@ -108,4 +178,6 @@ Execute `release.sh` in this repository to get a production-ready distributable 
 of this plugin.
 
 # License
-Licensed under [GPL v3.0](./LICENSE).
+[Cart Icon](https://fontawesome.com/icons/cart-plus?style=solid) (used in banner's "Add to cart"-button): [License](https://fontawesome.com/license), changed fill color to #fff
+
+This plugin is licensed under [GPL v3.0](./LICENSE).

@@ -26,8 +26,6 @@ class Plugin
     public static $menuSlug = 'wp-donations-plugin';
     // custom post type for report
     public static $customPostType = 'donation_report';
-    // name of daily report generation check cron
-    public static $cronName = 'wp_donations_daily_report_check';
 
     /**
      * Plugin constructor.
@@ -98,7 +96,6 @@ class Plugin
     }
 
     // (de-)activation and (un-)install logic
-
     /**
      * this is called by wordpress if the plugin is activated
      * This is the place to init all products at once and store their WooCommerce product IDs in wordpress options.
@@ -164,7 +161,7 @@ class Plugin
             unregister_block_type(self::$blockTypeName);
         }
         // cron clear
-        wp_clear_scheduled_hook(self::$cronName);
+        wp_clear_scheduled_hook('wp_donations_report_check');
     }
 
     /**
@@ -211,7 +208,10 @@ class Plugin
             $assetFile['dependencies'],
             $assetFile['version']
         );
-        wp_localize_script('checkout-charity-banner', 'cart_page_id', get_option('woocommerce_cart_page_id'));
+        // after wooCommerce setup this value is available
+        if (strlen(trim(get_option('woocommerce_cart_page_id'))) > 0) {
+            wp_localize_script('checkout-charity-banner', 'cart_page_id', get_option('woocommerce_cart_page_id'));
+        }
         register_block_type(self::$blockTypeName, [
             'editor_script' => 'checkout-charity-banner',
             'render_callback' => [Plugin::class, 'render_cart_block']

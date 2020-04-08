@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <td>
                 <?php echo $today->format('d.m.Y') ?>
                 <?php if ($dateDifference > 0): ?>
-                    (<?php echo $dateDifference ?><?php echo $dateDifference === 1 ? 'Tag' : 'Tage' ?>)
+                    (<?php echo $dateDifference ?>&nbsp;<?php echo $dateDifference === 1 ? 'Tag' : 'Tage' ?>)
                 <?php endif ?>
             </td>
         </tr>
