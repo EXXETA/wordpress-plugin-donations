@@ -96,6 +96,7 @@ class Plugin
     }
 
     // (de-)activation and (un-)install logic
+
     /**
      * this is called by wordpress if the plugin is activated
      * This is the place to init all products at once and store their WooCommerce product IDs in wordpress options.
@@ -408,7 +409,7 @@ class Plugin
             $nextExecutionDate ? $nextExecutionDate->format('Y-m-d') : '-');
         $lastCheckDate = SettingsManager::getOptionReportLastCheck();
         $output .= sprintf('<strong>Letzte Überprüfung:</strong> %s<br/>',
-            $lastCheckDate ? $lastCheckDate->format('Y-m-d H:i:s') : '-');
+            $lastCheckDate ? get_date_from_gmt(date('Y-m-d H:i:s', $lastCheckDate->getTimestamp()), 'F j, Y H:i:s') : '-');
 
         $output .= '<strong>Empfangsadresse:</strong> ';
         $output .= sprintf('<a href="mailto:%s">%s</a>', $recipient, esc_attr($recipient));
