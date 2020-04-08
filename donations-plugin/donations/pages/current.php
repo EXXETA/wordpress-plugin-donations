@@ -57,10 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </label>
         <input type="submit" value="Aktualisieren" class="button-primary"/>
     </form>
-    <?php if (defined('WP_DEBUG') && true === WP_DEBUG && !$reportTriggered): ?>
+    <?php if (!$reportTriggered): ?>
         <form action="" method="post" style="margin-top: 16px; margin-bottom: 25px;">
             <input type="hidden" name="action" value="generate_report"/>
-            <input type="submit" value="Bericht generieren" class="button-secondary"/>
+            <input type="submit" value="Bericht generieren seit <?php echo $startDate->format('Y-m-d') ?>" class="button-secondary"/>
         </form>
     <?php endif ?>
 
@@ -78,14 +78,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif ?>
             </td>
         </tr>
+        <?php $sum = 0 ?>
         <?php foreach (\donations\CampaignManager::getAllCampaigns() as $charityCampaign): ?>
             <?php
             $revenue = \donations\CampaignManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
+            $sum += $revenue;
             ?>
             <tr>
                 <td><strong>Kampagne: <?php echo $charityCampaign->getName() ?></strong></td>
                 <td><?php echo number_format($revenue, 2) ?> &euro;</td>
             </tr>
         <?php endforeach ?>
+        <tr class="alternate">
+            <td><strong>Summe</strong></td>
+            <td>
+                <strong><?php echo number_format($sum, 2);?> &euro;</strong>
+            </td>
+        </tr>
     </table>
 </div>

@@ -66,8 +66,9 @@ class Banner
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
         // WWF logo
+
         $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" />
-                            <span class="times">x</span>', $this->pluginUrl . 'images/wwf_logo.jpg');
+                            <span class="times">x</span>', wp_get_attachment_image_url(get_option($product->getImageIdOptionKey())));
 
         if (strpos($cartUrl, '?page_id=') !== false) {
             // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly

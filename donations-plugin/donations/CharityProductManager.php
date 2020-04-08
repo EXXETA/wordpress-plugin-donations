@@ -81,12 +81,12 @@ class CharityProductManager
     private static function initProducts()
     {
         self::$allProducts = [
-            new CharityProduct(self::$PROTECT_SPECIES_COIN, "Artenschutzeuro", "Ein Euro für den Artenschutz", 1),
-            new CharityProduct(self::$PROTECT_OCEAN_COIN, "Meeresschutzeuro", "Ein Euro für den Meeresschutz", 1),
-            new CharityProduct(self::$PROTECT_FOREST_COIN, "Waldschutzeuro", "Ein Euro für den Waldschutz", 1),
-            new CharityProduct(self::$PROTECT_CHILDREN_YOUTH_COIN, "Kinder- und Jugendschutzeuro", "Ein Euro für den Kinder- und Jugendschutz", 1),
-            new CharityProduct(self::$PROTECT_CLIMATE_COIN, "Klimaschutzeuro", "Ein Euro für den Erhalt des Klimas", 1),
-            new CharityProduct(self::$PROTECT_DIVERSITY_COIN, "Biologischer Vielfaltseuro", "Ein Euro für die Erhaltung der biologischen Vielfalt", 1),
+            new CharityProduct(self::$PROTECT_SPECIES_COIN, "Deine WWF-Spende (Artenschutz)", "Ein Euro für den Artenschutz", 1, "product_protect_species.png"),
+            new CharityProduct(self::$PROTECT_OCEAN_COIN, "Deine WWF-Spende (Meeresschutz)", "Ein Euro für den Meeresschutz", 1, "product_protect_oceans.png"),
+            new CharityProduct(self::$PROTECT_FOREST_COIN, "Deine WWF-Spende (Waldschutz)", "Ein Euro für den Waldschutz", 1, "product_protect_forest.png"),
+            new CharityProduct(self::$PROTECT_CHILDREN_YOUTH_COIN, "Deine WWF-Spende (Kinder- und Jugendschutz)", "Ein Euro für den Kinder- und Jugendschutz", 1, "product_protect_children_youth.png"),
+            new CharityProduct(self::$PROTECT_CLIMATE_COIN, "Deine WWF-Spende (Klimaschutz)", "Ein Euro für den Erhalt des Klimas", 1, "product_protect_climate.png"),
+            new CharityProduct(self::$PROTECT_DIVERSITY_COIN, "Deine WWF-Spende (Biologische Artenvielfalt)", "Ein Euro für die Erhaltung der biologischen Vielfalt", 1, "product_protect_diversity.png"),
         ];
     }
 

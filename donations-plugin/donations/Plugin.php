@@ -36,6 +36,33 @@ class Plugin
         self::$pluginFile = $pluginFile;
     }
 
+    private static function uploadImage(CharityProduct $singleProduct): ?int
+    {
+        // source: https://gist.github.com/hissy/7352933
+        $file = plugin_dir_path(self::$pluginFile) . 'images/' . $singleProduct->getImagePath();
+        $filename = basename($file);
+
+        $upload_file = wp_upload_bits($filename, null, file_get_contents($file));
+        if (!$upload_file['error']) {
+            $wp_filetype = wp_check_filetype($filename, null);
+            $attachment = array(
+                'post_mime_type' => $wp_filetype['type'],
+                'post_parent' => 0,
+                'post_title' => preg_replace('/\.[^.]+$/', '', $filename),
+                'post_content' => '',
+                'post_status' => 'inherit'
+            );
+            $attachment_id = wp_insert_attachment($attachment, $upload_file['file'], 0);
+            if (!is_wp_error($attachment_id)) {
+                require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+                $attachment_data = wp_generate_attachment_metadata($attachment_id, $upload_file['file']);
+                wp_update_attachment_metadata($attachment_id, $attachment_data);
+                return $attachment_id;
+            }
+        }
+        return null;
+    }
+
     /**
      * @return string
      */
@@ -141,10 +168,20 @@ class Plugin
                 $product->set_tax_status('none');
                 $product->set_catalog_visibility('hidden');
                 $product->set_virtual(true);
+
+                // upload image
+                $imageId = self::uploadImage($singleProduct);
+                if ($imageId) {
+                    update_option($singleProduct->getImageIdOptionKey(), $imageId);
+                    $product->set_image_id($imageId);
+                } else {
+                    error_log(sprintf('%s: problem uploading image "%s"', self::$pluginFile,
+                        $singleProduct->getImagePath()));
+                }
                 $product->save();
 
-                $product_id = $product->get_id();
-                update_option($singleProduct->getProductIdOptionKey(), $product_id);
+                $productId = $product->get_id();
+                update_option($singleProduct->getProductIdOptionKey(), $productId);
             }
         }
     }

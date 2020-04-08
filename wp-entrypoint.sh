@@ -24,6 +24,8 @@ define( 'WP_DEBUG_LOG', true );
 PHP
 
 wp core install --path="$WP_PATH" --url="http://127.0.0.1:8000" --title="WWF Plugin" --admin_user=admin --admin_password=password --admin_email="test@test.local"
+wp option update timezone_string "Europe/Berlin"
+
 # remove all plugins
 wp plugin list
 

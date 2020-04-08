@@ -83,7 +83,7 @@ date and time of the last check in plugin's report dashboard.
 This plugin is shipped with self-contained responsive CSS styles without dependencies to 
 a specific theme or framework.
 
-Banner top class: `.cart-donation-banner`
+Banner main class: `.cart-donation-banner`
 
 ## Server and Wordpress requirements
 - PHP 7.3+
@@ -95,6 +95,7 @@ Banner top class: `.cart-donation-banner`
 - Wordpress should be able to send mails via `wp_mail`
 - WooCommerce is (initially) set up
     - Currency: Euro
+- Minimum screen width: `320px`
 
 # Plugin Development
 
@@ -107,7 +108,7 @@ wordpress container.
 - MySQL/MariaDB 5.7+/10.3+
 - `docker` and `docker-compose`
 - Composer for PHP
-- Wordpress crons (= scheduled events) are activated (by calling `wp-cron.php`)
+- Wordpress crons (= scheduled events) are activated (simply by calling [wp-cron.php](http://127.0.0.1:8000/wp-cron.php))
 - npm
 
 **NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository and 
@@ -165,7 +166,6 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 - Test without WooCommerce
 - Versioning
 - Remove/Handle TODOs in Code
-- Add product images
 
 ## Links
 * [Detailed Plugin Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/)
@@ -177,7 +177,10 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 Execute `release.sh` in this repository to get a production-ready distributable .zip-archive 
 of this plugin.
 
-# License
+# License & Copyright
+
+All images in `donations-plugin/images/` are explicitly excluded of the licensing mentioned below.
+
 [Cart Icon](https://fontawesome.com/icons/cart-plus?style=solid) (used in banner's "Add to cart"-button): [License](https://fontawesome.com/license), changed fill color to #fff
 
 This plugin is licensed under [GPL v3.0](./LICENSE).
