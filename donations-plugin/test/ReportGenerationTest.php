@@ -2,6 +2,7 @@
 
 namespace test;
 
+use donations\ReportGenerationModel;
 use donations\ReportGenerator;
 use donations\SettingsManager;
 use PHPUnit\Framework\TestCase;
@@ -205,6 +206,27 @@ final class ReportGenerationTest extends TestCase
         $this->assertEquals(new \DateTime('2019-07-01 00:00:00'), $model->getStartDate());
         $this->assertEquals(new \DateTime('2019-09-30 23:59:59'), $model->getEndDate());
         $this->assertEquals($mode, $model->getIntervalMode());
+    }
+
+    public function testAllDaysOfYearInAllModes(): void
+    {
+        $modes = array_keys(SettingsManager::getReportingIntervals());
+
+        foreach ($modes as $mode) {
+            $startDate = new \DateTime(sprintf('%s-1-1 0:0:0', (new \DateTime('now'))->format('Y')));
+
+            for ($i = 0; $i < 370; $i++) {
+                $model = ReportGenerator::getReportModel($mode, $startDate);
+                $this->assertNotNull($model);
+                $this->assertInstanceOf(ReportGenerationModel::class, $model);
+
+                $date = ReportGenerator::calculateNextExecutionDate($mode, $startDate);
+                $this->assertNotNull($date);
+                $this->assertInstanceOf(\DateTime::class, $date);
+
+                $startDate->add(new \DateInterval('P1D'));
+            }
+        }
     }
 
     /** helper methods */
