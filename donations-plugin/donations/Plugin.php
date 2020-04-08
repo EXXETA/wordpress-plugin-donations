@@ -343,9 +343,9 @@ class Plugin
         // hide "edit" and "quick edit" in rows of donation reports
         $screen = get_current_screen();
         if ($screen && $screen->post_type === self::$customPostType) {
-            unset($actions[0]);
-            unset($actions[1]);
+            return [];
         }
+        return $actions;
     }
 
     static function remove_post_type_edit_button()

@@ -46,6 +46,7 @@ class ReportGenerator
 
         // - 'subject' - string representation of month
         // - 'revenues' - array with campaignSlug => revenue, string => float
+        // - 'counter' - int, incremented id of report, starting with 1
         // - 'startDate'
         // - 'endDate'
         // - 'sum'
@@ -66,11 +67,13 @@ class ReportGenerator
             return $startDate->format($startStringFormat) . ' - ' . $endDate->format('d/m/Y');
         };
 
+        $args['counter'] = SettingsManager::getOptionReportCounterIncremented();
+
         if (!$isRegular) {
-            $args['subject'] = 'Manueller Bericht: ' . 'Spenden | '
+            $args['subject'] = 'Manueller Bericht #' . $args['counter'] . ': Spenden | '
                 . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . get_bloginfo('name');
         } else {
-            $args['subject'] = 'Automatischer Bericht: Spenden | '
+            $args['subject'] = 'Automatischer Bericht #' . $args['counter'] .': Spenden | '
                 . SettingsManager::getReportingIntervals()[$reportingInterval]
                 . ' | ' . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . get_bloginfo('name');
         }

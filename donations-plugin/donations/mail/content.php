@@ -1,6 +1,7 @@
 <?php
 // template vars $args
 // - 'subject' - string
+// - 'counter' - int = report id
 // - 'revenues' - array with campaignSlug => revenue, string => float
 // - 'startDate' - \DateTime
 // - 'endDate' - \DateTime
@@ -23,7 +24,7 @@
     </tbody>
 </table>
 
-<h3>Bericht</h3>
+<h3>Bericht #<?php echo $args['counter'] ?></h3>
 <table style="border: 2px solid #000;width: 100%;">
     <tbody>
     <?php foreach ($args['revenues'] as $slug => $revenue) : ?>

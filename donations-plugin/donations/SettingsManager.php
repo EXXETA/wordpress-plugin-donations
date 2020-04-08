@@ -25,6 +25,7 @@ class SettingsManager
         'wp_donations_reporting_recipient' => 'donation-reports@test.local',
         'wp_donations_reporting_last_generation_date' => null,
         'wp_donations_reporting_last_check_date' => null,
+        'wp_donations_reporting_counter' => 0,
     ];
 
     private static $reportingIntervalOptions = [
@@ -155,6 +156,18 @@ class SettingsManager
     public static function setOptionReportLastCheck(): void
     {
         update_option('wp_donations_reporting_last_check_date', date('c'));
+    }
+
+    /**
+     * report counter
+     *
+     * @return int
+     */
+    public static function getOptionReportCounterIncremented(): int
+    {
+        $incrementedCounter = intval(get_option('wp_donations_reporting_counter', 0)) + 1;
+        update_option('wp_donations_reporting_counter', $incrementedCounter);
+        return $incrementedCounter;
     }
 
     /**
