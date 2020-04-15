@@ -79,11 +79,16 @@ date and time of the last check in plugin's report dashboard.
 
 **NOTE:** After plugin installation there will be generated one first (probably empty) report.
 
-### Banner styling
+### Banner design/styling
 This plugin is shipped with self-contained responsive CSS styles without dependencies to 
 a specific theme or framework.
 
+*NOTE*: Styles are included by wordpress only if the banner was placed into a page/post.
+
+**Minimum screen width:** `320px`
+
 Banner main class: `.cart-donation-banner`
+CSS styles: `donations-plugin/styles/banner.css`
 
 ## Server and Wordpress requirements
 - PHP 7.3+
@@ -95,7 +100,7 @@ Banner main class: `.cart-donation-banner`
 - Wordpress should be able to send mails via `wp_mail`
 - WooCommerce is (initially) set up
     - Currency: Euro
-- Minimum screen width: `320px`
+
 
 # Plugin Development
 
@@ -180,7 +185,5 @@ of this plugin.
 # License & Copyright
 
 All images in `donations-plugin/images/` are explicitly excluded of the licensing mentioned below.
-
-[Cart Icon](https://fontawesome.com/icons/cart-plus?style=solid) (used in banner's "Add to cart"-button): [License](https://fontawesome.com/license), changed fill color to #fff
 
 This plugin is licensed under [GPL v3.0](./LICENSE).
