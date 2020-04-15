@@ -7,6 +7,7 @@
     "start": "wp-scripts start",
     "build": "npm run styles ; wp-scripts build",
     "styles": "node-sass --output-style compressed styles/banner.scss styles/banner.css",
+    "stylewatch": "node-sass -w --output-style compressed styles/banner.scss styles/banner.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "EXXETA AG",

@@ -89,10 +89,15 @@ class Banner
             $this->pluginUrl . 'images/icon_cart.svg');
         $output .= '</button></form></div>';
 
+        $output .= '</div>'; // .cart-banner-content
+
         // add collapsible content here
         $output .= sprintf('<div class="donation-campaign-collapsible" id="%s">', $infoAreaId);
         $output .= sprintf('<p class="donation-campaign-more-info">Hier ist ein längerer HTML-Text mit weiteren Infos und <a href="%s" target="_blank">
-                            Links</a> zum Spendenprojekt. (<a href="#" id="%s">Ausblenden</a>)</p></div>', $campaign->getDetailURL(), $hideInfoAreaId);
+                            Links</a> zum Spendenprojekt. ', $campaign->getDetailURL());
+        $output .= 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibu';
+        $output .= sprintf('&nbsp;(<a href="#" id="%s">Ausblenden</a>)</p>', $hideInfoAreaId);
+        $output .= '</div>'; // .donation-campaign-collapsible
 
         $output .= <<<SCRIPT
 <script lang="js">
@@ -112,7 +117,7 @@ class Banner
 </script>
 SCRIPT;
 
-        $output .= '</div>'; // .cart-banner-content
+
         $output .= '</div>'; // .cart-donation-banner
 
         return $output;
