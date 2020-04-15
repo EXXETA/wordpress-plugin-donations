@@ -42,7 +42,6 @@
     font-weight: bold;
     text-decoration: none;
 
-
     &:active {
       color: #eeeeee;
     }
@@ -52,6 +51,11 @@
       text-decoration: underline;
       color: #eeeeee;
     }
+  }
+
+  p {
+    margin: 0.5rem 0;
+    line-height: 1;
   }
 
   .cart-banner-content {
