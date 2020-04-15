@@ -1,0 +1,195 @@
+.cart-donation-banner {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  align-items: stretch;
+  -webkit-box-sizing: initial;
+  -moz-box-sizing: initial;
+  box-sizing: initial;
+  background-color: #e9ebd7;
+  margin: 0.5rem auto;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+
+  &.protect-climate {
+    background-image: url(../images/banner_protect_climate.jpg);
+  }
+
+  &.protect-species {
+    background-image: url(../images/banner_protect_species.jpg);
+  }
+
+  &.protect-oceans {
+    background-image: url(../images/banner_protect_oceans.jpg);
+  }
+
+  &.protect-forests {
+    background-image: url(../images/banner_protect_forests.jpg);
+  }
+
+  &.protect-children-youth {
+    /* FIXME use separate image! */
+    background-image: url(../images/banner_protect_climate.jpg);
+  }
+
+  &.protect-diversity {
+    background-image: url(../images/banner_protect_diversity.jpg);
+  }
+
+  .cart-banner-content {
+    flex-basis: 100%;
+    order: 1;
+    word-wrap: break-word;
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem;
+
+    a {
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+
+      &:focus,
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .cart-banner-title {
+      font-size: 175%;
+      font-weight: bold;
+      text-shadow: 0 0 0.5rem black;
+    }
+
+    .donation-campaign-description {
+      font-weight: bold;
+      font-size: 125%;
+      word-wrap: break-word;
+      line-height: 110%;
+      margin-top: 1rem;
+      text-shadow: 0 0 0.5rem black;
+    }
+
+    .donation-campaign-order .times {
+      background: url("../images/icon_times.svg") no-repeat;
+      background-size: contain;
+      display: inline-block;
+      width: 0.75rem;
+      height: 0.75rem;
+      margin: 0 0.8rem 0 0.9rem;
+      font-weight: bold;
+    }
+
+    .donation-campaign-logo {
+      height: 6rem;
+      width: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .donation-campaign-quantity-input {
+      height: 3rem;
+      width: 2rem;
+      display: inline;
+      padding: 0.25rem;
+      border: 0;
+      margin-bottom: 0.5rem;
+      border-radius: 0.5rem;
+    }
+
+    button.donation-campaign-submit {
+      height: 3rem;
+      line-height: 3rem;
+      display: inline;
+      background-color: #ff0039;
+      color: #ffffff;
+      margin-left: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      font-size: 110%;
+      font-stretch: 25%;
+      border: 0;
+      border-radius: 0.5rem;
+
+      .cart-icon {
+        width: 2rem;
+        height: auto;
+        margin-right: 0.25rem;
+      }
+    }
+
+    .donation-campaign-collapsible {
+      opacity: 0;
+      transition: opacity 0.5s;
+
+      &.fade {
+        opacity: 1;
+      }
+
+      .donation-campaign-more-info {
+        font-size: 75%;
+        text-shadow: 0 0 0.25rem black;
+      }
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  .cart-donation-banner .cart-banner-content button.donation-campaign-submit .donation-campaign-cart-text {
+    display: none;
+  }
+}
+
+@media (max-width: 550px) {
+  .cart-donation-banner .cart-banner-content {
+    padding: 0.5rem;
+    text-align: left;
+
+    .cart-banner-title {
+      font-size: 120%;
+      line-height: 1;
+    }
+
+    .donation-campaign-description {
+      font-size: 90%;
+      font-weight: normal;
+    }
+
+    .donation-campaign-logo {
+      height: 3rem;
+    }
+
+    button.donation-campaign-submit {
+      margin-left: 0.25rem;
+    }
+
+    .donation-campaign-order .times {
+      width: 0.55rem;
+      height: 0.55rem;
+      margin: 0 0.20rem 0 -0.1rem;
+    }
+
+    .donation-campaign-collapsible {
+      display: none;
+
+      &.fade {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .cart-donation-banner .cart-banner-content {
+    flex-basis: 55%;
+    text-align: left;
+
+    .donation-campaign-description a {
+      text-decoration: underline;
+    }
+
+    .donation-campaign-quantity-input {
+      width: 3.5rem;
+    }
+  }
+}
