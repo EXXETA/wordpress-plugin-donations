@@ -29,10 +29,9 @@ const campaigns = [
 
 export function bannerBlock() {
     const cartPageId = cart_page_id; // this value is provided by the wordpress plugin
-    // TODO compare with current post
 
     registerBlockType('wp-donations-plugin/checkout-banner', {
-        title: __('Spendemünzen', 'wp-donations-plugin'),
+        title: __('Spendenbanner', 'wp-donations-plugin'),
         description: '',
         isPrivate: false,
         icon: 'cart',
@@ -44,7 +43,7 @@ export function bannerBlock() {
         },
         keywords: ['donation', 'charity', 'cart', 'banner'],
         edit: (props) => {
-            const {setAttributes, isSelected} = props;
+            const {setAttributes, isSelected, attributes} = props;
             return (
                 <PanelBody
                     title={__(
@@ -57,6 +56,7 @@ export function bannerBlock() {
                             'Zielkampagne',
                             'wp-donations-plugin'
                         )}
+                        value={attributes['donationMode']}
                         options={campaigns}
                         onChange={(value) =>
                             setAttributes({

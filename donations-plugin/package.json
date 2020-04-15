@@ -5,12 +5,14 @@
   "main": "build/index.js",
   "scripts": {
     "start": "wp-scripts start",
-    "build": "wp-scripts build",
+    "build": "npm run styles ; wp-scripts build",
+    "styles": "node-sass --output-style compressed styles/banner.scss styles/banner.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "EXXETA AG",
   "license": "Apache v2",
   "devDependencies": {
-    "@wordpress/scripts": "7.1.3"
+    "@wordpress/scripts": "7.1.3",
+    "node-sass": "^4.13.1"
   }
 }

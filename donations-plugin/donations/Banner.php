@@ -55,13 +55,18 @@ class Banner
         $product = CharityProductManager::getProductBySlug($this->campaign);
         $productId = get_option($product->getProductIdOptionKey());
 
+        $randomString = uniqid();
+        $moreInfoId = sprintf('donation-campaign-more-info-%s-%s', $campaign->getSlug(), $randomString);
+        $infoAreaId = sprintf("donation-campaign-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
+        $hideInfoAreaId = sprintf("donation-campaign-hide-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
+
         $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
         $output .= '<p class="cart-banner-title">Gutes zu tun war noch nie so einfach.</p>';
         $output .= sprintf('<p class="donation-campaign-description">%s. ', $campaign->getDescription());
-        $output .= sprintf('Klicke <a href="%s" target="_blank" 
-                    title="Mehr Informationen zur Spende">hier</a> für weitere Informationen.
-                    </p>', $campaign->getDetailURL());
+
+        $output .= sprintf('Klicke <a id="%s" href="#" 
+                    title="Mehr Informationen zur Spende">hier</a> für weitere Informationen.</p>', $moreInfoId);
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
@@ -84,7 +89,30 @@ class Banner
             $this->pluginUrl . 'images/icon_cart.svg');
         $output .= '</button></form></div>';
 
-        $output .= '</div>'; // .col-right
+        // add collapsible content here
+        $output .= sprintf('<div class="donation-campaign-collapsible" id="%s">', $infoAreaId);
+        $output .= sprintf('<p class="donation-campaign-more-info">Hier ist ein längerer HTML-Text mit weiteren Infos und <a href="%s" target="_blank">
+                            Links</a> zum Spendenprojekt. (<a href="#" id="%s">Ausblenden</a>)</p></div>', $campaign->getDetailURL(), $hideInfoAreaId);
+
+        $output .= <<<SCRIPT
+<script lang="js">
+(function() {
+    const moreInfoButton = document.getElementById("$moreInfoId");
+    const moreInfoArea = document.getElementById("$infoAreaId");
+    moreInfoButton.addEventListener("click", e => {
+        e.preventDefault();
+        moreInfoArea.classList.toggle("fade");
+    });
+    const hideInfoArea = document.getElementById("$hideInfoAreaId");
+    hideInfoArea.addEventListener("click", e => {
+        e.preventDefault();
+        moreInfoArea.classList.remove("fade");
+    });
+})();
+</script>
+SCRIPT;
+
+        $output .= '</div>'; // .cart-banner-content
         $output .= '</div>'; // .cart-donation-banner
 
         return $output;
