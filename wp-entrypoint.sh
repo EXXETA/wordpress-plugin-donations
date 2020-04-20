@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+# NOTE: If you change this file, the wordpress container needs to be rebuilt
+
 # run default wordpress entrypoint script
 
 bash /usr/local/bin/docker-entrypoint.sh apache2-foreground &
@@ -22,6 +24,8 @@ define( 'WP_DEBUG_LOG', true );
 PHP
 
 wp core install --path="$WP_PATH" --url="http://127.0.0.1:8000" --title="WWF Plugin" --admin_user=admin --admin_password=password --admin_email="test@test.local"
+wp option update timezone_string "Europe/Berlin"
+
 # remove all plugins
 wp plugin list
 
@@ -31,7 +35,9 @@ wp plugin delete --quiet akismet hello || true
 # install and activate woocommerce plugin
 wp plugin install --activate woocommerce
 wp plugin install --activate woocommerce-services
-wp plugin install --activate blackbox-debug-bar
+wp plugin install --activate debug-bar
+wp plugin install --activate debug-bar-cron
+wp plugin install --activate wp-mail-logging
 
 # link donations plugin to wp-content/plugins
 if [ ! -L /var/www/html/wp-content/plugins/donations-plugin ]; then

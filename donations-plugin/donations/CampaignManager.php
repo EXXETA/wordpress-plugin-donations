@@ -106,7 +106,7 @@ class CampaignManager
             ],
         ]);
         foreach ($orders as $order) {
-            /* @var $order Order*/
+            /* @var $order Order */
             foreach ($order->get_items() as $item) {
                 /* @var $item \WC_Order_Item */
                 if (in_array('product_id', $item->get_data_keys())

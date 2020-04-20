@@ -24,6 +24,9 @@ set -eu
 
 # build js artifacts
 cd donations-plugin
+
+./vendor/phpunit/phpunit/phpunit test
+
 npm i
 npm run build
 cd ..
@@ -43,7 +46,16 @@ cd release/donations-plugin
 php ../../composer.phar install --no-dev
 rm package.json
 rm package-lock.json
+rm composer.lock
+
+# remove js sources
 rm -rf src
+# remove php unit tests
+rm -rf test
+
+# copy license and readme
+cp ../../LICENSE .
+cp ../../README.md README_dev.md
 
 # build archives
 cd ..
