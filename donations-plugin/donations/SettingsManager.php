@@ -22,7 +22,7 @@ class SettingsManager
     private static $options = [
         'wp_donations_reporting_interval' => self::REPORT_INTERVAL_MODE_MONTHLY,
         'wp_donations_reporting_live_days_in_past' => 30,
-        'wp_donations_reporting_recipient' => 'donation-reports@test.local',
+        'wp_donations_reporting_recipient' => 'Eshop-Spenden@wwf.de',
         'wp_donations_reporting_last_generation_date' => null,
         'wp_donations_reporting_last_check_date' => null,
         'wp_donations_reporting_counter' => 0,
@@ -44,8 +44,9 @@ class SettingsManager
         }
         // ensure options are present
         foreach (self::$options as $key => $defaultValue) {
-            if (!get_option($key)) {
-                // default value = monthly
+            $optionValue = get_option($key);
+            if (!$optionValue || $optionValue !== $defaultValue) {
+                // default value
                 update_option($key, $defaultValue);
             }
         }
@@ -66,6 +67,9 @@ class SettingsManager
             // default value = monthly
             delete_option($key);
         }
+        unregister_setting('wp_donations', 'wp_donations_reporting_interval');
+        unregister_setting('wp_donations', 'wp_donations_reporting_live_days_in_past');
+        unregister_setting('wp_donations', 'wp_donations_reporting_recipient');
     }
 
     /**

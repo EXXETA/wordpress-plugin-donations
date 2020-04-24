@@ -428,8 +428,11 @@ class Plugin
         // TODO name shortcode and/or Gutenberg Block
         $output .= sprintf('Produkt-IDs: <strong>%s</strong>', join(', ', $allProductIds)) . '<br/>';
         $output .= 'Bitte überweisen Sie in regelmäßigen Abständen die Beträge der eingenommenen Spenden 
-                    unter Angabe des jeweilig gewünschten Spendenzwecks auf folgendes Konto:<br/>';
-        $output .= '<strong>IBAN:</strong> DE1234567890';
+                    unter Angabe des jeweilig gewünschten Spendenzwecks zusätzlich zum angegebenen Verwendungszweck
+                    auf folgendes Konto:<br/><br/>';
+        $output .= '<strong>IBAN:</strong> DE06 5502 0500 0222 2222 22<br/>';
+        $output .= '<strong>BIC:</strong> BFSWDE33MNZ &ndash; Bank für Sozialwirtschaft<br/>';
+        $output .= '<strong>Verwendungszweck:</strong> 20ISAZ2002';
         $output .= '</p></div>';
 
         $currentReportMode = SettingsManager::getOptionCurrentReportingInterval();

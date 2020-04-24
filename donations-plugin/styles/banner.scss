@@ -10,6 +10,7 @@ $breakpoint_small: 375px;
 $breakpoint_medium: 550px;
 $breakpoint_large: 1024px;
 $text-shadow-color: #000000;
+$fade-out-link-color: #cccccc;
 
 .cart-donation-banner {
   -webkit-box-sizing: initial;
@@ -169,11 +170,15 @@ $text-shadow-color: #000000;
 
     .donation-campaign-more-info {
       font-size: 85%;
-      text-shadow: 0 0 0.05rem $white-color;
     }
 
     a {
       color: $collapsible-link-color;
+
+      &.fade-out-link {
+        color: $fade-out-link-color;
+        font-weight: normal;
+      }
     }
   }
 }
