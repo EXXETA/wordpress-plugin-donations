@@ -139,6 +139,8 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 * Check if container is running `docker container ls` or `docker ps`.
 * Start shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
 * Be sure to run the WooCommerce plugin setup wizard once logged in. Note that we do not use the Jetpack Plugin yet.
+* For tests with a lot of orders, use [this plugin](https://github.com/75nineteen/order-simulator-woocommerce).
+* Performance measurement: 1000 orders need ~25 seconds for report generation
 
 ### WordPress development setup information
 * Locale: `de_DE`

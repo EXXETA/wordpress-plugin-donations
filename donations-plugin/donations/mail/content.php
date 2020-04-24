@@ -24,7 +24,7 @@
     </tr>
     <tr>
         <td style="border: 1px solid #eee;padding-left: 12px;"><strong>Bestellungen insgesamt im Zeitraum</strong></td>
-        <td style="border: 1px solid #eee;padding-left: 12px;"><?php echo $args['totalOrderCount'] ?>></td>
+        <td style="border: 1px solid #eee;padding-left: 12px;"><?php echo $args['totalOrderCount'] ?></td>
     </tr>
     </tbody>
 </table>
