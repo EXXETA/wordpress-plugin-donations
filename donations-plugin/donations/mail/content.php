@@ -7,6 +7,7 @@
 // - 'endDate' - \DateTime
 // - 'sum' - sum of all campaign revenues, float
 // - 'isRegular' - boolean, indicate if report was triggered manually
+// - 'totalOrderCount' - float
 ?>
 <h1><?php echo $args['subject'] ?></h1>
 
@@ -20,6 +21,10 @@
     <tr>
         <td style="border: 1px solid #eee;padding-left: 12px;"><strong>Ende</strong></td>
         <td style="border: 1px solid #eee;padding-left: 12px;"><?php echo $args['endDate']->format(DateTime::RFC2822) ?></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid #eee;padding-left: 12px;"><strong>Bestellungen insgesamt im Zeitraum</strong></td>
+        <td style="border: 1px solid #eee;padding-left: 12px;"><?php echo $args['totalOrderCount'] ?>></td>
     </tr>
     </tbody>
 </table>

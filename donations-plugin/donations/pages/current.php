@@ -78,10 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif ?>
             </td>
         </tr>
-        <?php $sum = 0 ?>
+        <?php $sum = 0; $totalOrderCounter = 0;?>
         <?php foreach (\donations\CampaignManager::getAllCampaigns() as $charityCampaign): ?>
             <?php
-            $revenue = \donations\CampaignManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
+            $report = \donations\CampaignManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
+            $revenue = $report->getAmount();
+            $totalOrderCounter = $report->getOrderCountTotal();
             $sum += $revenue;
             ?>
             <tr>
@@ -93,6 +95,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <td><strong>Summe</strong></td>
             <td>
                 <strong><?php echo number_format($sum, 2);?> &euro;</strong>
+            </td>
+        </tr
+        <tr class="alternate">
+            <td><strong>Bestellungen insgesamt im Zeitraum</strong></td>
+            <td>
+                <strong><?php echo $totalOrderCounter;?></strong>
             </td>
         </tr>
     </table>

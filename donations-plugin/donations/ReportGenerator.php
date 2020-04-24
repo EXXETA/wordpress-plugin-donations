@@ -38,9 +38,11 @@ class ReportGenerator
         // results: slug => money, string => float
         $results = [];
         $sum = 0.0;
+        $totalOrderCounter = 0;
         foreach (CampaignManager::getAllCampaignTypes() as $campaignSlug) {
-            $results[$campaignSlug] =
-                CampaignManager::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
+            $reportResult = CampaignManager::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
+            $results[$campaignSlug] = $reportResult->getAmount();
+            $totalOrderCounter = $reportResult->getOrderCountTotal();
             $sum += $results[$campaignSlug];
         }
 
@@ -51,6 +53,7 @@ class ReportGenerator
         // - 'endDate'
         // - 'sum'
         // - 'isRegular' - boolean
+        // - 'totalOrderCount' - float
         // - 'content' - set later after body was rendered
         $args = [];
 
@@ -83,6 +86,7 @@ class ReportGenerator
         $args['endDate'] = $timeRangeEnd;
         $args['sum'] = $sum;
         $args['isRegular'] = $isRegular;
+        $args['totalOrderCount'] = $totalOrderCounter;
 
         // get mail body content - used for report post type also
         ob_start();

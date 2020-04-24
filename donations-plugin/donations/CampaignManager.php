@@ -117,17 +117,19 @@ class CampaignManager
      * @param string $campaignSlug
      * @param \DateTime $startDate
      * @param \DateTime $endDate
-     * @return float
+     * @return ReportResultModel
      */
     public static function getRevenueOfCampaignInTimeRange(string $campaignSlug,
                                                            \DateTime $startDate,
-                                                           \DateTime $endDate): float
+                                                           \DateTime $endDate): ReportResultModel
     {
+        $reportResultModel = new ReportResultModel($startDate, $endDate);
+
         $sum = 0;
         $productId = CharityProductManager::getProductIdBySlug($campaignSlug);
         if (!$productId) {
             error_log(sprintf('no product id found in wooCommerce shop for campaign "%s"', $campaignSlug));
-            return 0;
+            return $reportResultModel;
         }
         $orders = wc_get_orders([
             'date_after' => $startDate->format('c'),
@@ -139,20 +141,28 @@ class CampaignManager
                 'wc-completed',
             ],
         ]);
+        $totalOrderCounter = 0;
         foreach ($orders as $order) {
             /* @var $order Order */
+            $totalOrderCounter++;
+
             foreach ($order->get_items() as $item) {
                 /* @var $item \WC_Order_Item */
                 if (in_array('product_id', $item->get_data_keys())
                     && in_array('total', $item->get_data_keys())) {
                     $orderItemProductId = $item->get_data()['product_id'];
                     if ($orderItemProductId === $productId) {
+                        $isAffected = true;
                         $sum += $item->get_data()['total'];
                     }
                 }
             }
         }
-        return $sum;
+
+        $reportResultModel->setAmount($sum);
+        $reportResultModel->setOrderCountTotal($totalOrderCounter);
+
+        return $reportResultModel;
     }
 
 }
