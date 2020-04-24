@@ -35,7 +35,6 @@ six donation products (à 1 €) for different campaigns:
 - Protecting species
 - Protecting oceans
 - Protecting forests
-- Protecting children and youth
 - Protecting climate
 - Protecting diversity
 
@@ -57,7 +56,6 @@ Valid values for `campaign` argument are:
 - `protect_species_coin`
 - `protect_ocean_coin`
 - `protect_forest_coin`
-- `protect_children_youth_coin`
 - `protect_climate_coin`
 - `protect_diversity_coin`
 

@@ -61,9 +61,10 @@ class Banner
         $hideInfoAreaId = sprintf("donation-campaign-hide-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
 
         $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
+        $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
-        $output .= '<p class="cart-banner-title">Gutes zu tun war noch nie so einfach.</p>';
-        $output .= sprintf('<p class="donation-campaign-description">%s. ', $campaign->getDescription());
+        $output .= '<p class="cart-banner-title">Gutes zu tun war noch nie so einfach</p>';
+        $output .= sprintf('<p class="donation-campaign-description">%s.<br/> ', $campaign->getDescription());
 
         $output .= sprintf('Klicke <a id="%s" href="#" 
                     title="Mehr Informationen zur Spende">hier</a> für weitere Informationen.</p>', $moreInfoId);
@@ -90,6 +91,7 @@ class Banner
         $output .= '</button></form></div>';
 
         $output .= '</div>'; // .cart-banner-content
+        $output .= '</div>'; // .cart-donation-banner-background
 
         // add collapsible content here
         $output .= sprintf('<div class="donation-campaign-collapsible" id="%s">', $infoAreaId);
@@ -116,7 +118,6 @@ class Banner
 })();
 </script>
 SCRIPT;
-
 
         $output .= '</div>'; // .cart-donation-banner
 

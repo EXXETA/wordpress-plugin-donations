@@ -13,6 +13,8 @@
  * License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
  * Requires PHP: 7.3
  * Requires at least: 5.2
+ * WC requires at least: 3.5.0
+ * WC tested up to: 4.1.0
  */
 
 if (!defined('ABSPATH')) {

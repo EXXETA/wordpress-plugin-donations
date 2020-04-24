@@ -16,9 +16,6 @@ const campaigns = [
         label: __('Waldschutz', 'wp-donations-plugin'),
         value: 'protect_forest_coin',
     }, {
-        label: __('Kinder- und Jugendschutz', 'wp-donations-plugin'),
-        value: 'protect_children_youth_coin',
-    }, {
         label: __('Klimaschutz', 'wp-donations-plugin'),
         value: 'protect_climate_coin',
     }, {
