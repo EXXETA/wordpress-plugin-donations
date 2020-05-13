@@ -74,6 +74,7 @@ class Banner
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
         // WWF logo
 
+        // do not add a line break here!
         $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" /><span class="times"></span>',
             wp_get_attachment_image_url(get_option($product->getImageIdOptionKey())));
 

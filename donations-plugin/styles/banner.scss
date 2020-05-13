@@ -134,7 +134,7 @@ $fade-out-link-color: #cccccc;
         line-height: 3rem;
         display: inline;
         background-color: $submit-button-color;
-        color: $white-color !important;
+        color: $white-color;
         margin-left: 2rem;
         margin-bottom: 0.5rem;
         font-weight: bold;
@@ -142,6 +142,10 @@ $fade-out-link-color: #cccccc;
         font-stretch: 25%;
         border: 0;
         border-radius: 0.5rem;
+
+        span {
+          color: $white-color;
+        }
 
         .cart-icon {
           width: 2rem;
