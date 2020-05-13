@@ -29,6 +29,7 @@ cd donations-plugin
 
 npm i
 npm run build
+npm run build-js
 cd ..
 
 # create empty release dir
