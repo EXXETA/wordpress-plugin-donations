@@ -52,8 +52,8 @@ class CampaignManager
     private static function initCampaigns()
     {
         // FIXME add correct URLs and review description texts
-        self::$allCampaigns = [            
-			new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN,
+        self::$allCampaigns = [
+            new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN_HH_DE,
                 "Hey Honey!<br>Spende den Artenschutzeuro für Projekte des WWF*",
                 "Die Zahlen des Artenschutzberichtes des Weltbiodiversitätsrats IPBES sind alarmierend: Rund eine Million Arten könnten innerhalb 
 						der nächsten Jahrzehnte verschwinden, wenn sich der Zustand unserer Ökosysteme weiterhin verschlechtert. Auch die Weltnaturschutzunion IUCN konstatiert den Arten mit ihrer  
@@ -62,8 +62,8 @@ class CampaignManager
 						<p><br>Gemeinsam mit dir möchten wir einen Beitrag zum Artenschutz leisten. Hilf mit deiner Spende die biologische Vielfalt auf unserem Planten zu erhalten! 
 						<p><br>*Der gesamte Erlös der Spende kommt ausgewählten Artenschutzprojekten des WWF zugute. Bitte beachte, dass die Ausstellung einer Spendenquittung nicht möglich ist.
 						<p><br>**Bitte beachte: Der WWF Euro ist kein physisches Produkt, sondern die Möglichkeit der digitalen Spende für den WWF. Eine Auslieferung und Rückerstattung des WWF Euros ist daher nicht möglich",
-                "Yoga für Artenschutz und biologische Vielfalt","1 € In den Warenkorb","Artenschutz HeyHoney DE", "protect-species"),
-            new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN,
+                "Yoga für Artenschutz und biologische Vielfalt", "1 € In den Warenkorb", "Artenschutz HeyHoney DE", "protect-species"),
+            new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN,
                 "Hey Honey!<br>donate the “Artenschutzeuro” to support the WWF*",
                 "The statistics published in the Conservation Report created by the Intergovernmental Science-Policy Platform on Biodiversity and 
 						Ecosystem Services (IPBES) are truly shocking. It is expected that about one million animal species will become extinct within the next decades, if the condition of our ecosystems will continue to worsen. Also the International Union for Conservation of Nature IUCN published drastics facts regarding endangered species on their  
@@ -73,11 +73,11 @@ class CampaignManager
 						<p><br>Let’s make a contribution for the protection of endangered species together. Support the biological diversity of our planet with your donation! 
 						<p><br>*The entire revenue of your donation will be used for selected projects initiated from the WWF to support the protection of endangered animal species. Please note that it is not possible to receive a donation receipt.
 						<p><br>**Please note: The WWF Euro is not a physical product, but a digital donation. Therefore, the delivery and refund of the WWF is not possible",
-                "Yoga for the protection of endangered animal species and biological diversity","1 € into the shopping cart","Artenschutz HeyHoney EN", "protect-species"),
+                "Yoga for the protection of endangered animal species and biological diversity", "1 € into the shopping cart", "Artenschutz HeyHoney EN", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Artenschutzprojekte des WWF",
-                "Wir befinden uns heute im größten Artensterben seit dem Ende der Dinosaurierzeit vor 65 Millionen Jahren. Dass Arten aussterben ist ein natürlicher Prozess, der jedoch heute unter dem Einfluss des Menschen beträchtlich beschleunigt ist. Wir sägen an dem Ast, auf dem wir sitzen. Nahrung, Medizin, Rohstoffe, sauberes Wasser und Luft sind nur einige der wichtigen Dinge, die die Natur uns zur Verfügung stellt. Es ist längst Zeit, zu handeln. Und es könnte bald zu spät sein. Die Mission des WWF ist wichtiger denn je: &quot;Bewahrung der biologischen Vielfalt – ein lebendiger Planet für uns und unsere Kinder&quot;. Für weitere Informationen bitte <a href='https://www.wwf.de/themen-projekte/artenschutz-und-biologische-vielfalt/' target='_blank'>&quot;hier&quot;</a> klicken", 
-				"Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Artenschutz HeyHoney DE", "Artenschutz", "protect-species"),
+                "Wir befinden uns heute im größten Artensterben seit dem Ende der Dinosaurierzeit vor 65 Millionen Jahren. Dass Arten aussterben ist ein natürlicher Prozess, der jedoch heute unter dem Einfluss des Menschen beträchtlich beschleunigt ist. Wir sägen an dem Ast, auf dem wir sitzen. Nahrung, Medizin, Rohstoffe, sauberes Wasser und Luft sind nur einige der wichtigen Dinge, die die Natur uns zur Verfügung stellt. Es ist längst Zeit, zu handeln. Und es könnte bald zu spät sein. Die Mission des WWF ist wichtiger denn je: &quot;Bewahrung der biologischen Vielfalt – ein lebendiger Planet für uns und unsere Kinder&quot;. Für weitere Informationen bitte <a href='https://www.wwf.de/themen-projekte/artenschutz-und-biologische-vielfalt/' target='_blank'>&quot;hier&quot;</a> klicken",
+                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Artenschutz HeyHoney DE", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_OCEAN_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Meeresprojekte des WWF",
                 "Unser Planet ist blau – die Meere bedecken rund 70 Prozent der Erdoberfläche und sind von entscheidender Bedeutung 

@@ -88,7 +88,7 @@ class Banner
         $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
         $output .= '<button class="donation-campaign-submit" type="submit">';
         $output .= sprintf('<img class="cart-icon" src="%s" alt="" /><span class="donation-campaign-cart-text">%s</span>',
-            $this->pluginUrl, $campaign->getButtonDescription() . 'images/icon_cart.svg');
+            $this->pluginUrl . 'images/icon_cart.svg', $campaign->getButtonDescription());
         $output .= '</button></form></div>';
 
         $output .= '</div>'; // .cart-banner-content
