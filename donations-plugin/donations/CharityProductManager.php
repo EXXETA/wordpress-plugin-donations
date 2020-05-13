@@ -79,6 +79,7 @@ class CharityProductManager
     private static function initProducts()
     {
         self::$allProducts = [
+            #new CharityProduct(self::$PROTECT_SPECIES_COIN, "Your WWF-Donation (protection of endangered animal species)", "One Euro for protection of endangered animal species", 1, "product_protect_species.png"),
             new CharityProduct(self::$PROTECT_SPECIES_COIN, "Deine WWF-Spende (Artenschutz)", "Ein Euro für den Artenschutz", 1, "product_protect_species.png"),
             new CharityProduct(self::$PROTECT_OCEAN_COIN, "Deine WWF-Spende (Meeresschutz)", "Ein Euro für den Meeresschutz", 1, "product_protect_oceans.png"),
             new CharityProduct(self::$PROTECT_FOREST_COIN, "Deine WWF-Spende (Waldschutz)", "Ein Euro für den Waldschutz", 1, "product_protect_forest.png"),

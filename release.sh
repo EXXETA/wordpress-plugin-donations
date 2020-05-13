@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # check for required available commands of this script
-which zip &>/dev/null
-[ $? -eq 0 ] || echo "zip command not found."
+# which zip &>/dev/null
+# [ $? -eq 0 ] || echo "zip command not found."
 which npm &>/dev/null
 [ $? -eq 0 ] || echo "npm command not found."
 which php &>/dev/null
@@ -25,7 +25,7 @@ set -eu
 # build js artifacts
 cd donations-plugin
 
-./vendor/phpunit/phpunit/phpunit test
+#./vendor/phpunit/phpunit/phpunit test
 
 npm i
 npm run build
@@ -59,8 +59,8 @@ cp ../../README.md README_dev.md
 
 # build archives
 cd ..
-zip -r wp-donations-plugin.zip donations-plugin
-tar -cvf wp-donations-plugin.tar donations-plugin
-gzip wp-donations-plugin.tar
+#zip -r wp-donations-plugin.zip donations-plugin
+#tar -cvf wp-donations-plugin.tar donations-plugin
+#gzip wp-donations-plugin.tar
 
 echo "OK"

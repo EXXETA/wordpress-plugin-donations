@@ -80,9 +80,9 @@ class Plugin
         if (!in_array('woocommerce/woocommerce.php', $allActivePlugins)) {
             die('Missing required plugin woocommerce');
         }
-        if (!in_array('woocommerce-services/woocommerce-services.php', $allActivePlugins)) {
-            die('Missing required plugin woocommerce-services');
-        }
+        #if (!in_array('woocommerce-services/woocommerce-services.php', $allActivePlugins)) {
+        #    die('Missing required plugin woocommerce-services');
+        #}
     }
 
     public function registerPluginHooks(): void

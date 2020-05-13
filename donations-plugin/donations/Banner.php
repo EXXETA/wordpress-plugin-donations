@@ -63,11 +63,12 @@ class Banner
         $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
         $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
-        $output .= '<p class="cart-banner-title">Gutes zu tun war noch nie so einfach</p>';
-        $output .= sprintf('<p class="donation-campaign-description">%s.<br/> ', $campaign->getDescription());
+        #$output .= '<p class="cart-banner-title">Yoga for the protection of endangered animal species and biological diversity</p>';
+        $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
+        $output .= sprintf('<p class="donation-campaign-description">%s<br/> ', $campaign->getDescription());
 
-        $output .= sprintf('Klicke <a id="%s" href="#" 
-                    title="Mehr Informationen zur Spende">hier</a> für weitere Informationen.</p>', $moreInfoId);
+        $output .= sprintf('Click <a id="%s" href="#" 
+                    title="More information about the donation">here</a> for more information</p>', $moreInfoId);
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
@@ -86,8 +87,8 @@ class Banner
         $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $productId);
         $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
         $output .= '<button class="donation-campaign-submit" type="submit">';
-        $output .= sprintf('<img class="cart-icon" src="%s" alt="" /><span class="donation-campaign-cart-text">In den Warenkorb</span>',
-            $this->pluginUrl . 'images/icon_cart.svg');
+        $output .= sprintf('<img class="cart-icon" src="%s" alt="" /><span class="donation-campaign-cart-text">%s</span>',
+            $this->pluginUrl, $campaign->getButtonDescription() . 'images/icon_cart.svg');
         $output .= '</button></form></div>';
 
         $output .= '</div>'; // .cart-banner-content
