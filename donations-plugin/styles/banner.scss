@@ -37,6 +37,7 @@ $fade-out-link-color: #cccccc;
   p {
     margin: 0.5rem 0;
     line-height: 1;
+    color: $white-color;
   }
 
   .cart-donation-banner-background {
@@ -133,7 +134,7 @@ $fade-out-link-color: #cccccc;
         line-height: 3rem;
         display: inline;
         background-color: $submit-button-color;
-        color: $white-color;
+        color: $white-color !important;
         margin-left: 2rem;
         margin-bottom: 0.5rem;
         font-weight: bold;
