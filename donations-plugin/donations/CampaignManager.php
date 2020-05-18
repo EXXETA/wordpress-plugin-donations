@@ -62,7 +62,7 @@ class CampaignManager
 						<p><br>Gemeinsam mit dir möchten wir einen Beitrag zum Artenschutz leisten. Hilf mit deiner Spende die biologische Vielfalt auf unserem Planten zu erhalten! 
 						<p><br>*Der gesamte Erlös der Spende kommt ausgewählten Artenschutzprojekten des WWF zugute. Bitte beachte, dass die Ausstellung einer Spendenquittung nicht möglich ist.
 						<p><br>**Bitte beachte: Der WWF Euro ist kein physisches Produkt, sondern die Möglichkeit der digitalen Spende für den WWF. Eine Auslieferung und Rückerstattung des WWF Euros ist daher nicht möglich",
-                "Yoga für Artenschutz und biologische Vielfalt", "1 € In den Warenkorb", "Artenschutz HeyHoney DE", "protect-species"),
+                "Yoga für Artenschutz und biologische Vielfalt", "1 € In den Warenkorb","Klick", "hier</a> für weitere Informationen</p>", "Mehr Informationen über die Spende", "Artenschutz HeyHoney DE", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN,
                 "Hey Honey!<br>donate the “Artenschutzeuro” to support the WWF*",
                 "The statistics published in the Conservation Report created by the Intergovernmental Science-Policy Platform on Biodiversity and 
@@ -73,11 +73,11 @@ class CampaignManager
 						<p><br>Let’s make a contribution for the protection of endangered species together. Support the biological diversity of our planet with your donation! 
 						<p><br>*The entire revenue of your donation will be used for selected projects initiated from the WWF to support the protection of endangered animal species. Please note that it is not possible to receive a donation receipt.
 						<p><br>**Please note: The WWF Euro is not a physical product, but a digital donation. Therefore, the delivery and refund of the WWF is not possible",
-                "Yoga for the protection of endangered animal species and biological diversity", "1 € into the shopping cart", "Artenschutz HeyHoney EN", "protect-species"),
+                "Yoga for the protection of endangered animal species and biological diversity", "1 € into the shopping cart","Click", "here</a> for more information</p>", "More information about the donation", "Artenschutz HeyHoney EN", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Artenschutzprojekte des WWF",
                 "Wir befinden uns heute im größten Artensterben seit dem Ende der Dinosaurierzeit vor 65 Millionen Jahren. Dass Arten aussterben ist ein natürlicher Prozess, der jedoch heute unter dem Einfluss des Menschen beträchtlich beschleunigt ist. Wir sägen an dem Ast, auf dem wir sitzen. Nahrung, Medizin, Rohstoffe, sauberes Wasser und Luft sind nur einige der wichtigen Dinge, die die Natur uns zur Verfügung stellt. Es ist längst Zeit, zu handeln. Und es könnte bald zu spät sein. Die Mission des WWF ist wichtiger denn je: &quot;Bewahrung der biologischen Vielfalt – ein lebendiger Planet für uns und unsere Kinder&quot;. Für weitere Informationen bitte <a href='https://www.wwf.de/themen-projekte/artenschutz-und-biologische-vielfalt/' target='_blank'>&quot;hier&quot;</a> klicken",
-                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Artenschutz HeyHoney DE", "protect-species"),
+                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klick", "hier</a> für weitere Informationen</p>", "Mehr Informationen über die Spende", "Artenschutz", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_OCEAN_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Meeresprojekte des WWF",
                 "Unser Planet ist blau – die Meere bedecken rund 70 Prozent der Erdoberfläche und sind von entscheidender Bedeutung 
@@ -88,7 +88,7 @@ class CampaignManager
                         angenommen, die nicht nur die biologische Vielfalt der Erde, sondern auch unsere zukünftige Ernährung bedrohen.<br/>
                         Deshalb setzt sich der <strong>WWF</strong> weltweit für einen respektvollen und nachhaltigen Umgang mit den Ökosystemen und natürlichen 
                         Ressourcen unserer Meere ein.",
-                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Meeresschutz", "protect-oceans"),
+                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klick", "hier</a> für weitere Informationen</p>", "Mehr Informationen über die Spende", "Meeresschutz", "protect-oceans"),
             new CharityCampaign(CharityProductManager::$PROTECT_FOREST_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Waldprojekte des WWF",
                 "Wälder bedecken knapp vier Mrd. Hektar und damit rund 30 Prozent der Landoberfläche der Erde. Vor 10.000 Jahren war 
@@ -97,7 +97,7 @@ class CampaignManager
                         Fläche, die größer ist als Österreich und die Schweiz zusammengenommen. Besonders dramatisch ist der Rückgang der wertvollen 
                         Urwälder. Weltweit gibt es noch zwei bis drei Prozent Naturwälder. Wie der <strong>WWF</strong> schützen will, erfahrt ihr 
                         <a href='https://www.wwf.de/themen-projekte/waelder/' target='_blank'>hier</a>.",
-                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Waldschutz", "protect-forests"),
+                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klick", "hier</a> für weitere Informationen</p>", "Mehr Informationen über die Spende", "Waldschutz", "protect-forests"),
             new CharityCampaign(CharityProductManager::$PROTECT_CLIMATE_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Klimaprojekte des WWF",
                 "Dürren, Überflutungen, Stürme: Immer häufiger und heftiger führt der Klimawandel zu Tod und Verwüstung.
@@ -111,7 +111,7 @@ class CampaignManager
                         Wirtschaft und Gesellschaft müssen sofort handeln und so schnell und effizient wie möglich gegen die 
                         drohende Klimakatastrophe vorgehen. Wie das aus Sicht des <strong>WWF</strong> gelingen kann, bitte 
                         <a href='https://www.wwf.de/themen-projekte/klima-energie/' target='_blank'>hier weiter lesen</a>.",
-                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klimaschutz", "protect-climate"),
+                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klick", "hier</a> für weitere Informationen</p>", "Mehr Informationen über die Spende", "Klimaschutz", "protect-climate"),
             new CharityCampaign(CharityProductManager::$PROTECT_DIVERSITY_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für Projekte des WWF zur Erhaltung der biologischen Vielfalt",
                 "Der <strong>WWF</strong> ist die größte und einflussreichste Umweltorganisation in Deutschland. Wir wollen die weltweite Zerstörung der 
@@ -119,7 +119,7 @@ class CampaignManager
                         nationalen und internationalen Projekte tragen dazu bei, unsere Ziele zu erreichen und zu beweisen, dass Bewahrung 
                         und verantwortungsvolle Nutzung der natürlichen Lebensgrundlagen mit nachhaltiger wirtschaftlicher Entwicklung vereinbar 
                         sind. <a href='https://www.wwf.de/' target='_blank'>https://www.wwf.de/</a>",
-                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Biologische Vielfalt", "protect-diversity"),
+                "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klick", "hier</a> für weitere Informationen</p>", "Mehr Informationen über die Spende", "Biologische Vielfalt", "protect-diversity"),
         ];
     }
 

@@ -63,12 +63,13 @@ class Banner
         $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
         $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
-        #$output .= '<p class="cart-banner-title">Yoga for the protection of endangered animal species and biological diversity</p>';
         $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
         $output .= sprintf('<p class="donation-campaign-description">%s<br/> ', $campaign->getDescription());
 
-        $output .= sprintf('Click <a id="%s" href="#" 
-                    title="More information about the donation">here</a> for more information</p>', $moreInfoId);
+		#$output .= sprintf('Click <a id="%s" href="#"
+		#                  title="More information about the donation">here</a> for more information</p>', $moreInfoId);
+        $output .= sprintf('%s <a id="%s" href="#" 
+                    title="%s">%s', $campaign->getMoreInformationPrefix(), $moreInfoId, $campaign->getMoreInformationTitel(), $campaign->getMoreInformationText());
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
