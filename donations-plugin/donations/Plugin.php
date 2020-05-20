@@ -148,8 +148,6 @@ class Plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
             /* @var $singleProduct CharityProduct */
 
-            //var_dump(get_option($singleProduct->getProductIdOptionKey()));
-
             if (empty(get_option($singleProduct->getProductIdOptionKey()))) {
                 $product = new WC_Product_Simple();
                 $product->set_name($singleProduct->getName());
