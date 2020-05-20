@@ -17,6 +17,9 @@ class CampaignManager
      */
     private static $allCampaigns = [];
 
+    private static $genericFootNotesTextDE = "* Der gesamte Erlös der Baumtaler kommt ausgewählten Waldschutzprojekten des WWF zugute. Bitte beachten Sie, dass die Ausstellung einer Spendenquittung nicht möglich ist.<br/>
+                                              ** Bitte beachten Sie: Der Baumtaler ist kein physisches Produkt, sondern die Möglichkeit der digitalen Spende für den WWF. Eine Auslieferung und Rückerstattung des Baumtalers ist daher nicht möglich.";
+
     /**
      * values correspond to charity coin product slug
      *
@@ -73,10 +76,11 @@ class CampaignManager
 						<br>Let’s make a contribution for the protection of endangered species together. Support the biological diversity of our planet with your donation! 
 						<br>*The entire revenue of your donation will be used for selected projects initiated from the WWF to support the protection of endangered animal species. Please note that it is not possible to receive a donation receipt.
 						<br>**Please note: The WWF Euro is not a physical product, but a digital donation. Therefore, the delivery and refund of the WWF is not possible",
-                "Yoga for the protection of endangered animal species and biological diversity", "1 € into the shopping cart", "Artenschutz HeyHoney EN", "protect-species"),
+                "Yoga for the protection of endangered animal species and biological diversity", "1 € Add to cart", "Artenschutz HeyHoney EN", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_SPECIES_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Artenschutzprojekte des WWF",
-                "Wir befinden uns heute im größten Artensterben seit dem Ende der Dinosaurierzeit vor 65 Millionen Jahren. Dass Arten aussterben ist ein natürlicher Prozess, der jedoch heute unter dem Einfluss des Menschen beträchtlich beschleunigt ist. Wir sägen an dem Ast, auf dem wir sitzen. Nahrung, Medizin, Rohstoffe, sauberes Wasser und Luft sind nur einige der wichtigen Dinge, die die Natur uns zur Verfügung stellt. Es ist längst Zeit, zu handeln. Und es könnte bald zu spät sein. Die Mission des WWF ist wichtiger denn je: &quot;Bewahrung der biologischen Vielfalt – ein lebendiger Planet für uns und unsere Kinder&quot;. Für weitere Informationen bitte <a href='https://www.wwf.de/themen-projekte/artenschutz-und-biologische-vielfalt/' target='_blank'>&quot;hier&quot;</a> klicken",
+                "Wir befinden uns heute im größten Artensterben seit dem Ende der Dinosaurierzeit vor 65 Millionen Jahren. Dass Arten aussterben ist ein natürlicher Prozess, der jedoch heute unter dem Einfluss des Menschen beträchtlich beschleunigt ist. Wir sägen an dem Ast, auf dem wir sitzen. Nahrung, Medizin, Rohstoffe, sauberes Wasser und Luft sind nur einige der wichtigen Dinge, die die Natur uns zur Verfügung stellt. Es ist längst Zeit, zu handeln. Und es könnte bald zu spät sein. Die Mission des WWF ist wichtiger denn je: &quot;Bewahrung der biologischen Vielfalt – ein lebendiger Planet für uns und unsere Kinder&quot;. Für weitere Informationen bitte <a href='https://www.wwf.de/themen-projekte/artenschutz-und-biologische-vielfalt/' target='_blank'>&quot;hier&quot;</a> klicken"
+                        . '<br/>' . static::$genericFootNotesTextDE,
                 "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Artenschutz", "protect-species"),
             new CharityCampaign(CharityProductManager::$PROTECT_OCEAN_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Meeresprojekte des WWF",
@@ -87,7 +91,7 @@ class CampaignManager
                         Meere zunehmend den dramatischen Folgen der Klimakrise ausgesetzt. Längst haben die zahlreichen Belastungen der Ozeane Ausmaße 
                         angenommen, die nicht nur die biologische Vielfalt der Erde, sondern auch unsere zukünftige Ernährung bedrohen.<br/>
                         Deshalb setzt sich der <strong>WWF</strong> weltweit für einen respektvollen und nachhaltigen Umgang mit den Ökosystemen und natürlichen 
-                        Ressourcen unserer Meere ein.",
+                        Ressourcen unserer Meere ein." . '<br/>' . static::$genericFootNotesTextDE,
                 "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Meeresschutz", "protect-oceans"),
             new CharityCampaign(CharityProductManager::$PROTECT_FOREST_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Waldprojekte des WWF",
@@ -96,7 +100,7 @@ class CampaignManager
                         global gesehen im Durchschnitt jedes Jahr mindestens 14 Millionen Hektar Wald, besonders in den Tropen. Das entspricht einer 
                         Fläche, die größer ist als Österreich und die Schweiz zusammengenommen. Besonders dramatisch ist der Rückgang der wertvollen 
                         Urwälder. Weltweit gibt es noch zwei bis drei Prozent Naturwälder. Wie der <strong>WWF</strong> schützen will, erfahrt ihr 
-                        <a href='https://www.wwf.de/themen-projekte/waelder/' target='_blank'>hier</a>.",
+                        <a href='https://www.wwf.de/themen-projekte/waelder/' target='_blank'>hier</a>." . '<br/>' . static::$genericFootNotesTextDE,
                 "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Waldschutz", "protect-forests"),
             new CharityCampaign(CharityProductManager::$PROTECT_CLIMATE_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für die Klimaprojekte des WWF",
@@ -110,7 +114,8 @@ class CampaignManager
                         die Klimakrise so wichtigen Regenwälder munter weiter ab. Aber nun ist es Zeit umzudenken! Politik, 
                         Wirtschaft und Gesellschaft müssen sofort handeln und so schnell und effizient wie möglich gegen die 
                         drohende Klimakatastrophe vorgehen. Wie das aus Sicht des <strong>WWF</strong> gelingen kann, bitte 
-                        <a href='https://www.wwf.de/themen-projekte/klima-energie/' target='_blank'>hier weiter lesen</a>.",
+                        <a href='https://www.wwf.de/themen-projekte/klima-energie/' target='_blank'>hier weiter lesen</a>."
+                        . '<br/>' . static::$genericFootNotesTextDE,
                 "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Klimaschutz", "protect-climate"),
             new CharityCampaign(CharityProductManager::$PROTECT_DIVERSITY_COIN,
                 "Erweitere deinen Warenkorb mit einer Spende für Projekte des WWF zur Erhaltung der biologischen Vielfalt",
@@ -118,7 +123,8 @@ class CampaignManager
                         Natur und Umwelt stoppen und eine Zukunft gestalten, in der Mensch und Natur in Einklang miteinander leben. Unsere 
                         nationalen und internationalen Projekte tragen dazu bei, unsere Ziele zu erreichen und zu beweisen, dass Bewahrung 
                         und verantwortungsvolle Nutzung der natürlichen Lebensgrundlagen mit nachhaltiger wirtschaftlicher Entwicklung vereinbar 
-                        sind. <a href='https://www.wwf.de/' target='_blank'>https://www.wwf.de/</a>",
+                        sind. <a href='https://www.wwf.de/' target='_blank'>https://www.wwf.de/</a>"
+                        . '<br/>' . static::$genericFootNotesTextDE,
                 "Gutes zu tun war noch nie so einfach", "1 € In den Warenkorb", "Biologische Vielfalt", "protect-diversity"),
         ];
     }

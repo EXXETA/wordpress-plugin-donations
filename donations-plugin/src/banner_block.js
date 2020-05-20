@@ -1,7 +1,4 @@
-import {
-    PanelBody,
-    SelectControl,
-} from '@wordpress/components';
+import {PanelBody, SelectControl,} from '@wordpress/components';
 import {registerBlockType} from '@wordpress/blocks';
 import {__} from '@wordpress/i18n';
 
@@ -9,10 +6,10 @@ const campaigns = [
     {
         label: __('Artenschutz', 'wp-donations-plugin'),
         value: 'protect_species_coin',
-    },{
+    }, {
         label: __('Artenschutz HH DE', 'wp-donations-plugin'),
         value: 'protect_species_coin_hh_de',
-    },{
+    }, {
         label: __('Artenschutz HH EN', 'wp-donations-plugin'),
         value: 'protect_species_coin_hh_en',
     }, {

@@ -32,6 +32,7 @@ class Banner
     public function __construct(string $bannerType, string $pluginUrl)
     {
         $isValid = false;
+
         foreach (CampaignManager::getAllCampaignTypes() as $singleCampaign) {
             if ($singleCampaign === $bannerType) {
                 $isValid = true;
@@ -53,6 +54,7 @@ class Banner
     {
         $campaign = CampaignManager::getCampaignBySlug($this->campaign);
         $product = CharityProductManager::getProductBySlug($this->campaign);
+
         $productId = get_option($product->getProductIdOptionKey());
 
         $randomString = uniqid();

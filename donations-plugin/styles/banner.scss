@@ -10,7 +10,7 @@ $breakpoint_small: 375px;
 $breakpoint_medium: 550px;
 $breakpoint_large: 1024px;
 $text-shadow-color: #000000;
-$fade-out-link-color: #cccccc;
+$fade-out-link-color: #999999;
 
 .cart-donation-banner {
   -webkit-box-sizing: initial;
@@ -158,23 +158,30 @@ $fade-out-link-color: #cccccc;
   }
 
   .donation-campaign-collapsible {
+    visibility: hidden;
+    height: 0;
     flex-basis: 100%;
     opacity: 0;
-    transition: opacity 0.75s;
+    transition: opacity 0.50s, visibility 0.25s;
     order: 2;
     word-wrap: break-word;
     color: $collapsible-text-color;
     background-color: $collapsible-text-background-color;
     text-align: left;
     padding: 0 1rem 0.5rem 0.25rem;
-    line-height: 1.10;
+    line-height: 1.15;
 
     &.fade {
+      visibility: visible;
       opacity: 1;
+      height: auto;
     }
 
     .donation-campaign-more-info {
       font-size: 85%;
+      p {
+        color: $collapsible-text-color;
+      }
     }
 
     a {
@@ -184,6 +191,10 @@ $fade-out-link-color: #cccccc;
         color: $fade-out-link-color;
         font-weight: normal;
       }
+    }
+
+    p {
+      color: $collapsible-text-color;
     }
   }
 }
