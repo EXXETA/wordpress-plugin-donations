@@ -76,7 +76,7 @@ class ReportGenerator
             $args['subject'] = 'Manueller Bericht #' . $args['counter'] . ': Spenden | '
                 . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . get_bloginfo('name');
         } else {
-            $args['subject'] = 'Automatischer Bericht #' . $args['counter'] .': Spenden | '
+            $args['subject'] = 'Automatischer Bericht #' . $args['counter'] . ': Spenden | '
                 . SettingsManager::getReportingIntervals()[$reportingInterval]
                 . ' | ' . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . get_bloginfo('name');
         }

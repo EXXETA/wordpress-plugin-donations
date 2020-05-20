@@ -27,31 +27,16 @@ class CharityCampaign
      * @var string
      */
     private $fullText;
-	
-	/**
+
+    /**
      * @var string
      */
     private $headline;
-	
-	/**
+
+    /**
      * @var string
      */
     private $buttonDescription;
-
-	/**
-     * @var string
-     */
-    private $moreInformationPrefix;
-	
-	/**
-     * @var string
-     */
-    private $moreInformationText;
-	
-	/**
-     * @var string
-     */
-    private $moreInformationTitel;
 
     /**
      * @var string
@@ -65,22 +50,22 @@ class CharityCampaign
 
     /**
      * CharityCampaign constructor.
-     * @param string $slug
+     * @param string $slug = id
      * @param string $description
      * @param string $fullText
+     * @param string $headline
+     * @param string $buttonDescription
      * @param string $name
      * @param string $class
      */
-    public function __construct(string $slug, string $description, string $fullText, string $headline, string $buttonDescription, string $moreInformationPrefix, string $moreInformationText, string $moreInformationTitel, string $name, string $class)
+    public function __construct(string $slug, string $description, string $fullText, string $headline,
+                                string $buttonDescription, string $name, string $class)
     {
         $this->slug = $slug;
         $this->description = $description;
         $this->fullText = $fullText;
         $this->headline = $headline;
         $this->buttonDescription = $buttonDescription;
-		$this->moreInformationPrefix = $moreInformationPrefix;
-        $this->moreInformationText = $moreInformationText;
-        $this->moreInformationTitel = $moreInformationTitel;
         $this->name = $name;
         $this->class = $class;
     }
@@ -123,30 +108,6 @@ class CharityCampaign
     public function getButtonDescription(): string
     {
         return $this->buttonDescription;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMoreInformationPrefix(): string
-    {
-        return $this->moreInformationPrefix;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMoreInformationText(): string
-    {
-        return $this->moreInformationText;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMoreInformationTitel(): string
-    {
-        return $this->moreInformationTitel;
     }
 
     /**

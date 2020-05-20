@@ -51,11 +51,17 @@ class CharityProduct
         $this->imagePath = $imagePath;
     }
 
+    /**
+     * @return string
+     */
     public function getProductIdOptionKey(): string
     {
         return $this->getSlug() . "_product_id";
     }
 
+    /**
+     * @return string
+     */
     public function getImageIdOptionKey(): string
     {
         return $this->getSlug() . "_image_id";

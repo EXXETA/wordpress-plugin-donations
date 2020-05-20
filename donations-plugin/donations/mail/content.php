@@ -53,7 +53,7 @@
 
 <p style="margin-top: 12px;">
     <strong>Bericht erstellt am:</strong> <?php
-        echo get_date_from_gmt(date('Y-m-d H:i:s', time()), 'F j, Y H:i:s') ?><br/>
+    echo get_date_from_gmt(date('Y-m-d H:i:s', time()), 'F j, Y H:i:s') ?><br/>
     <strong>Bericht manuell erstellt:</strong> <?php echo $args['isRegular'] ? 'Nein' : 'Ja' ?>
 </p>
 

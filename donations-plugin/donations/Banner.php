@@ -60,20 +60,26 @@ class Banner
         $infoAreaId = sprintf("donation-campaign-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
         $hideInfoAreaId = sprintf("donation-campaign-hide-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
 
+        // start to generate output
         $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
         $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
         $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
         $output .= sprintf('<p class="donation-campaign-description">%s<br/> ', $campaign->getDescription());
 
-		#$output .= sprintf('Click <a id="%s" href="#"
-		#                  title="More information about the donation">here</a> for more information</p>', $moreInfoId);
-        $output .= sprintf('%s <a id="%s" href="#" 
-                    title="%s">%s', $campaign->getMoreInformationPrefix(), $moreInfoId, $campaign->getMoreInformationTitel(), $campaign->getMoreInformationText());
+        if ($campaign->getSlug() == CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN) {
+            // FIXME make dependent of locale
+            $output .= sprintf('Click <a id="%s" href="#" title="More information about the donation">here</a> for more information</p>',
+                $moreInfoId,
+            );
+        } else {
+            $output .= sprintf('Klicke <a id="%s" href="#" title="Mehr Informationen über die Spende">hier</a> für weitere Informationen</p>',
+                $moreInfoId,
+            );
+        }
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
-        // WWF logo
 
         // do not add a line break here!
         $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" /><span class="times"></span>',

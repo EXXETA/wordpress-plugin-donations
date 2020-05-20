@@ -54,6 +54,8 @@ is given, the *default* one is: `protect_species_coin`.
 
 Valid values for `campaign` argument are:
 - `protect_species_coin`
+- `protect_species_coin_hh_en`
+- `protect_species_coin_hh_de`
 - `protect_ocean_coin`
 - `protect_forest_coin`
 - `protect_climate_coin`
