@@ -187,9 +187,12 @@ $fade-out-link-color: #999999;
       height: auto;
     }
 
+    p,
     .donation-campaign-more-info {
       font-size: 95%;
       margin: 0.75rem 0;
+      color: $collapsible-text-color;
+      line-height: 1.2;
 
       p {
         color: $collapsible-text-color;
@@ -204,11 +207,6 @@ $fade-out-link-color: #999999;
         color: $fade-out-link-color;
         font-weight: normal;
       }
-    }
-
-    p {
-      color: $collapsible-text-color;
-      line-height: 1.2;
     }
   }
 }
