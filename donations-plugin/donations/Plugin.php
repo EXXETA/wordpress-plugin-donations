@@ -72,7 +72,7 @@ class Plugin
     }
 
     /**
-     * checking if dependent plugins (= woocommerce-services and woocommerce) are activated and present on class path
+     * checking if dependent plugins (= woocommerce) are activated and present on class path
      */
     public function check(): void
     {
@@ -80,9 +80,6 @@ class Plugin
         if (!in_array('woocommerce/woocommerce.php', $allActivePlugins)) {
             die('Missing required plugin woocommerce');
         }
-        #if (!in_array('woocommerce-services/woocommerce-services.php', $allActivePlugins)) {
-        #    die('Missing required plugin woocommerce-services');
-        #}
     }
 
     public function registerPluginHooks(): void

@@ -95,7 +95,6 @@ CSS styles: `donations-plugin/styles/banner.css`
 - MySQL/MariaDB 5.7+/10.3+
 - Required active Wordpress plugins:
     - `woocommerce`
-    - `woocommerce-services`
 - Wordpress crons (= scheduled events) are set up
 - Wordpress should be able to send mails via `wp_mail`
 - WooCommerce is (initially) set up
@@ -150,7 +149,6 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 * Site URL `http://127.0.0.1:8000`
 * Required plugins
     * Woocommerce
-    * Woocommerce-Services
 * Used Theme
     * Shophistic Lite
 
