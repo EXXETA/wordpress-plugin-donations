@@ -67,7 +67,7 @@ class Banner
         $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
         $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
-        $output .= sprintf('<p class="donation-campaign-description">%s<br/> ', $campaign->getDescription());
+        $output .= sprintf('<p class="donation-campaign-description">%s. ', $campaign->getDescription());
 
         if ($campaign->getSlug() == CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN) {
             // FIXME make dependent of locale
@@ -107,7 +107,7 @@ class Banner
         // add collapsible content here
         $output .= sprintf('<div class="donation-campaign-collapsible" id="%s">', $infoAreaId);
         $output .= sprintf('<p class="donation-campaign-more-info">%s', $campaign->getFullText());
-        $output .= sprintf('&nbsp;<a href="#" id="%s" class="fade-out-link">(Ausblenden)</a></p>', $hideInfoAreaId);
+        $output .= sprintf('&nbsp;<br/><br/><a href="#" id="%s" class="fade-out-link">Informationstext schlie&szlig;en</a></p>', $hideInfoAreaId);
         $output .= '</div>'; // .donation-campaign-collapsible
 
         $output .= <<<SCRIPT
