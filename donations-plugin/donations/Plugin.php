@@ -147,6 +147,9 @@ class Plugin
         // add default products
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
             /* @var $singleProduct CharityProduct */
+
+            //var_dump(get_option($singleProduct->getProductIdOptionKey()));
+
             if (empty(get_option($singleProduct->getProductIdOptionKey()))) {
                 $product = new WC_Product_Simple();
                 $product->set_name($singleProduct->getName());
@@ -205,27 +208,28 @@ class Plugin
     static function uninstall(): void
     {
         // remove products of this plugin
-        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
-            /* @var $singleProduct CharityProduct */
-            $productId = get_option($singleProduct->getProductIdOptionKey());
-            if (!empty($productId)) {
-                // delete product
-                $product = wc_get_product($productId);
-                $product->delete();
-            }
-            // delete option
-            delete_option($singleProduct->getProductIdOptionKey());
-        }
-
-        // remove woo commerce product category which is technically a wordpress term - but only if it's not empty!
-        $result = CharityProductManager::getCharityProductCategory();
-        if ($result instanceof WP_Term) {
-            $productsInCategory = wc_get_term_product_ids($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
-            if (count($productsInCategory) === 0) {
-                // we do only delete the category if its empty!
-                wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
-            }
-        }
+        // TODO atm deletion of products + custom category is skipped
+//        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+//            /* @var $singleProduct CharityProduct */
+//            $productId = get_option($singleProduct->getProductIdOptionKey());
+//            if (!empty($productId)) {
+//                // delete product
+//                $product = wc_get_product($productId);
+//                $product->delete();
+//            }
+//            // delete option
+//            delete_option($singleProduct->getProductIdOptionKey());
+//        }
+//
+//        // remove woo commerce product category which is technically a wordpress term - but only if it's not empty!
+//        $result = CharityProductManager::getCharityProductCategory();
+//        if ($result instanceof WP_Term) {
+//            $productsInCategory = wc_get_term_product_ids($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+//            if (count($productsInCategory) === 0) {
+//                // we do only delete the category if its empty!
+//                wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+//            }
+//        }
         SettingsManager::uninstall();
     }
 
