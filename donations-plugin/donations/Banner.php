@@ -32,6 +32,7 @@ class Banner
     public function __construct(string $bannerType, string $pluginUrl)
     {
         $isValid = false;
+
         foreach (CampaignManager::getAllCampaignTypes() as $singleCampaign) {
             if ($singleCampaign === $bannerType) {
                 $isValid = true;
@@ -53,22 +54,38 @@ class Banner
     {
         $campaign = CampaignManager::getCampaignBySlug($this->campaign);
         $product = CharityProductManager::getProductBySlug($this->campaign);
+
         $productId = get_option($product->getProductIdOptionKey());
 
-        $output = '<div class="cart-donation-banner">';
-        $output .= '<div class="col-left"></div>';
-        $output .= '<div class="col-right">';
-        $output .= sprintf('<p class="donation-campaign-description">%s</p>', $campaign->getDescription());
-        $output .= sprintf('<p class="donation-campaign-details"><a href="%s" target="_blank" 
-                    title="Mehr Informationen zur Spende">Klicke hier für weitere Informationen</a>
-                    </p>', $campaign->getDetailURL());
+        $randomString = uniqid();
+        $moreInfoId = sprintf('donation-campaign-more-info-%s-%s', $campaign->getSlug(), $randomString);
+        $infoAreaId = sprintf("donation-campaign-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
+        $hideInfoAreaId = sprintf("donation-campaign-hide-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
+
+        // start to generate output
+        $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
+        $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
+        $output .= '<div class="cart-banner-content">';
+        $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
+        $output .= sprintf('<p class="donation-campaign-description">%s. ', $campaign->getDescription());
+
+        if ($campaign->getSlug() == CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN) {
+            // FIXME make dependent of locale
+            $output .= sprintf('Click <a id="%s" href="#" title="More information about the donation">here</a> for more information</p>',
+                $moreInfoId,
+            );
+        } else {
+            $output .= sprintf('Klicke <a id="%s" href="#" title="Mehr Informationen über die Spende">hier</a> für weitere Informationen</p>',
+                $moreInfoId,
+            );
+        }
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
-        // WWF logo
 
-        $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" />
-                            <span class="times">x</span>', wp_get_attachment_image_url(get_option($product->getImageIdOptionKey())));
+        // do not add a line break here!
+        $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" /><span class="times"></span>',
+            wp_get_attachment_image_url(get_option($product->getImageIdOptionKey())));
 
         if (strpos($cartUrl, '?page_id=') !== false) {
             // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly
@@ -80,11 +97,37 @@ class Banner
         $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $productId);
         $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
         $output .= '<button class="donation-campaign-submit" type="submit">';
-        $output .= sprintf('<img class="cart-icon" src="%s" alt="" />In den Warenkorb',
-            $this->pluginUrl . 'images/cart-plus-solid.svg');
+        $output .= sprintf('<img class="cart-icon" src="%s" alt="" /><span class="donation-campaign-cart-text">%s</span>',
+            $this->pluginUrl . 'images/icon_cart.svg', $campaign->getButtonDescription());
         $output .= '</button></form></div>';
 
-        $output .= '</div>'; // .col-right
+        $output .= '</div>'; // .cart-banner-content
+        $output .= '</div>'; // .cart-donation-banner-background
+
+        // add collapsible content here
+        $output .= sprintf('<div class="donation-campaign-collapsible" id="%s">', $infoAreaId);
+        $output .= sprintf('<p class="donation-campaign-more-info">%s', $campaign->getFullText());
+        $output .= sprintf('&nbsp;<br/><br/><a href="#" id="%s" class="fade-out-link">Informationstext schlie&szlig;en</a></p>', $hideInfoAreaId);
+        $output .= '</div>'; // .donation-campaign-collapsible
+
+        $output .= <<<SCRIPT
+<script lang="js">
+(function() {
+    const moreInfoButton = document.getElementById("$moreInfoId");
+    const moreInfoArea = document.getElementById("$infoAreaId");
+    moreInfoButton.addEventListener("click", e => {
+        e.preventDefault();
+        moreInfoArea.classList.toggle("fade");
+    });
+    const hideInfoArea = document.getElementById("$hideInfoAreaId");
+    hideInfoArea.addEventListener("click", e => {
+        e.preventDefault();
+        moreInfoArea.classList.remove("fade");
+    });
+})();
+</script>
+SCRIPT;
+
         $output .= '</div>'; // .cart-donation-banner
 
         return $output;

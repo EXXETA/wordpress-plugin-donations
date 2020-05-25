@@ -35,7 +35,6 @@ six donation products (à 1 €) for different campaigns:
 - Protecting species
 - Protecting oceans
 - Protecting forests
-- Protecting children and youth
 - Protecting climate
 - Protecting diversity
 
@@ -55,9 +54,10 @@ is given, the *default* one is: `protect_species_coin`.
 
 Valid values for `campaign` argument are:
 - `protect_species_coin`
+- `protect_species_coin_hh_en`
+- `protect_species_coin_hh_de`
 - `protect_ocean_coin`
 - `protect_forest_coin`
-- `protect_children_youth_coin`
 - `protect_climate_coin`
 - `protect_diversity_coin`
 
@@ -79,23 +79,27 @@ date and time of the last check in plugin's report dashboard.
 
 **NOTE:** After plugin installation there will be generated one first (probably empty) report.
 
-### Banner styling
+### Banner design/styling
 This plugin is shipped with self-contained responsive CSS styles without dependencies to 
 a specific theme or framework.
 
+*NOTE*: Styles are included by wordpress only if the banner was placed into a page/post.
+
+**Minimum screen width:** `320px`
+
 Banner main class: `.cart-donation-banner`
+CSS styles: `donations-plugin/styles/banner.css`
 
 ## Server and Wordpress requirements
 - PHP 7.3+
 - MySQL/MariaDB 5.7+/10.3+
 - Required active Wordpress plugins:
     - `woocommerce`
-    - `woocommerce-services`
 - Wordpress crons (= scheduled events) are set up
 - Wordpress should be able to send mails via `wp_mail`
 - WooCommerce is (initially) set up
     - Currency: Euro
-- Minimum screen width: `320px`
+
 
 # Plugin Development
 
@@ -136,6 +140,8 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 * Check if container is running `docker container ls` or `docker ps`.
 * Start shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
 * Be sure to run the WooCommerce plugin setup wizard once logged in. Note that we do not use the Jetpack Plugin yet.
+* For tests with a lot of orders, use [this plugin](https://github.com/75nineteen/order-simulator-woocommerce).
+* Performance measurement: 1000 orders need ~25 seconds for report generation
 
 ### WordPress development setup information
 * Locale: `de_DE`
@@ -143,7 +149,6 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 * Site URL `http://127.0.0.1:8000`
 * Required plugins
     * Woocommerce
-    * Woocommerce-Services
 * Used Theme
     * Shophistic Lite
 
@@ -180,7 +185,5 @@ of this plugin.
 # License & Copyright
 
 All images in `donations-plugin/images/` are explicitly excluded of the licensing mentioned below.
-
-[Cart Icon](https://fontawesome.com/icons/cart-plus?style=solid) (used in banner's "Add to cart"-button): [License](https://fontawesome.com/license), changed fill color to #fff
 
 This plugin is licensed under [GPL v3.0](./LICENSE).

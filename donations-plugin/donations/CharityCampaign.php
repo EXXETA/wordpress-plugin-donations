@@ -26,7 +26,17 @@ class CharityCampaign
     /**
      * @var string
      */
-    private $detailURL;
+    private $fullText;
+
+    /**
+     * @var string
+     */
+    private $headline;
+
+    /**
+     * @var string
+     */
+    private $buttonDescription;
 
     /**
      * @var string
@@ -34,17 +44,30 @@ class CharityCampaign
     private $name;
 
     /**
-     * CharityCampaign constructor.
-     * @param string $slug
-     * @param string $description
-     * @param string $detailURL
+     * @var string
      */
-    public function __construct(string $slug, string $description, string $detailURL, string $name)
+    private $class;
+
+    /**
+     * CharityCampaign constructor.
+     * @param string $slug = id
+     * @param string $description
+     * @param string $fullText
+     * @param string $headline
+     * @param string $buttonDescription
+     * @param string $name
+     * @param string $class
+     */
+    public function __construct(string $slug, string $description, string $fullText, string $headline,
+                                string $buttonDescription, string $name, string $class)
     {
         $this->slug = $slug;
         $this->description = $description;
-        $this->detailURL = $detailURL;
+        $this->fullText = $fullText;
+        $this->headline = $headline;
+        $this->buttonDescription = $buttonDescription;
         $this->name = $name;
+        $this->class = $class;
     }
 
     /**
@@ -66,9 +89,25 @@ class CharityCampaign
     /**
      * @return string
      */
-    public function getDetailURL(): string
+    public function getFullText(): string
     {
-        return $this->detailURL;
+        return $this->fullText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeadline(): string
+    {
+        return $this->headline;
+    }
+
+    /**
+     * @return string
+     */
+    public function getButtonDescription(): string
+    {
+        return $this->buttonDescription;
     }
 
     /**
@@ -77,5 +116,13 @@ class CharityCampaign
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return $this->class;
     }
 }

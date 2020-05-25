@@ -34,7 +34,6 @@ wp plugin delete --quiet akismet hello || true
 
 # install and activate woocommerce plugin
 wp plugin install --activate woocommerce
-wp plugin install --activate woocommerce-services
 wp plugin install --activate debug-bar
 wp plugin install --activate debug-bar-cron
 wp plugin install --activate wp-mail-logging

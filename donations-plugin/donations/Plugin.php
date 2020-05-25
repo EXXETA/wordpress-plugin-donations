@@ -72,16 +72,13 @@ class Plugin
     }
 
     /**
-     * checking if dependent plugins (= woocommerce-services and woocommerce) are activated and present on class path
+     * checking if dependent plugins (= woocommerce) are activated and present on class path
      */
     public function check(): void
     {
         $allActivePlugins = apply_filters('active_plugins', get_option('active_plugins'));
         if (!in_array('woocommerce/woocommerce.php', $allActivePlugins)) {
             die('Missing required plugin woocommerce');
-        }
-        if (!in_array('woocommerce-services/woocommerce-services.php', $allActivePlugins)) {
-            die('Missing required plugin woocommerce-services');
         }
     }
 
@@ -150,6 +147,7 @@ class Plugin
         // add default products
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
             /* @var $singleProduct CharityProduct */
+
             if (empty(get_option($singleProduct->getProductIdOptionKey()))) {
                 $product = new WC_Product_Simple();
                 $product->set_name($singleProduct->getName());
@@ -208,27 +206,28 @@ class Plugin
     static function uninstall(): void
     {
         // remove products of this plugin
-        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
-            /* @var $singleProduct CharityProduct */
-            $productId = get_option($singleProduct->getProductIdOptionKey());
-            if (!empty($productId)) {
-                // delete product
-                $product = wc_get_product($productId);
-                $product->delete();
-            }
-            // delete option
-            delete_option($singleProduct->getProductIdOptionKey());
-        }
-
-        // remove woo commerce product category which is technically a wordpress term - but only if it's not empty!
-        $result = CharityProductManager::getCharityProductCategory();
-        if ($result instanceof WP_Term) {
-            $productsInCategory = wc_get_term_product_ids($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
-            if (count($productsInCategory) === 0) {
-                // we do only delete the category if its empty!
-                wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
-            }
-        }
+        // TODO atm deletion of products + custom category is skipped
+//        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+//            /* @var $singleProduct CharityProduct */
+//            $productId = get_option($singleProduct->getProductIdOptionKey());
+//            if (!empty($productId)) {
+//                // delete product
+//                $product = wc_get_product($productId);
+//                $product->delete();
+//            }
+//            // delete option
+//            delete_option($singleProduct->getProductIdOptionKey());
+//        }
+//
+//        // remove woo commerce product category which is technically a wordpress term - but only if it's not empty!
+//        $result = CharityProductManager::getCharityProductCategory();
+//        if ($result instanceof WP_Term) {
+//            $productsInCategory = wc_get_term_product_ids($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+//            if (count($productsInCategory) === 0) {
+//                // we do only delete the category if its empty!
+//                wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+//            }
+//        }
         SettingsManager::uninstall();
     }
 
@@ -428,8 +427,11 @@ class Plugin
         // TODO name shortcode and/or Gutenberg Block
         $output .= sprintf('Produkt-IDs: <strong>%s</strong>', join(', ', $allProductIds)) . '<br/>';
         $output .= 'Bitte überweisen Sie in regelmäßigen Abständen die Beträge der eingenommenen Spenden 
-                    unter Angabe des jeweilig gewünschten Spendenzwecks auf folgendes Konto:<br/>';
-        $output .= '<strong>IBAN:</strong> DE1234567890';
+                    unter Angabe des jeweilig gewünschten Spendenzwecks zusätzlich zum angegebenen Verwendungszweck
+                    auf folgendes Konto:<br/><br/>';
+        $output .= '<strong>IBAN:</strong> DE06 5502 0500 0222 2222 22<br/>';
+        $output .= '<strong>BIC:</strong> BFSWDE33MNZ &ndash; Bank für Sozialwirtschaft<br/>';
+        $output .= '<strong>Verwendungszweck:</strong> 20ISAZ2002';
         $output .= '</p></div>';
 
         $currentReportMode = SettingsManager::getOptionCurrentReportingInterval();
