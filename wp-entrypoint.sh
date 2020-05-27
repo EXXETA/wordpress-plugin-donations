@@ -31,6 +31,7 @@ wp plugin list
 
 wp plugin deactivate --quiet akismet hello || true
 wp plugin delete --quiet akismet hello || true
+wp maintenance-mode deactivate
 
 # install and activate woocommerce plugin
 wp plugin install --activate woocommerce

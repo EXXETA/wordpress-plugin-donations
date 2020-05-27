@@ -126,7 +126,14 @@ wordpress container.
 run `docker-compose`-commands afterwards.
 
 * You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript.
- Note: You need at least the `openssl` extension of PHP.
+ Note: You need at least the following **PHP extensions** enabled:
+    - `openssl`
+    - `dom`
+    - `json`
+    - `libxml`
+    - `mbstring`
+    - `xml`
+    - `xmlwriter`
 * cd into `wwf-donations-plugin` directory and execute `composer install` and `npm install`
 * Build CSS artifacts via `npm run build` (during development you can also use `npm run stylewatch`)
 * Build JS artifacts via `npm run build-js` (during development you can also use `npm run start`)

@@ -29,12 +29,13 @@ php wp-cli.phar --info
 # download current wordpress
 mkdir -p wp
 cd wp
-php ../wp-cli.phar core download
+php ../wp-cli.phar core download || true
 cd ..
 
 # setup development environment
 cd ./wwf-donations-plugin
-php ../composer.phar install
+php ../composer.phar install || php ../composer.phar dump-autoload || true
 
 npm i
 npm run build
+npm run build-js
