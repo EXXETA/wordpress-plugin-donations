@@ -40,8 +40,9 @@ class Banner
             }
         }
         if (!$isValid) {
-            // use fallback, take first of campaign types
-            $bannerType = CampaignManager::getAllCampaignTypes()[0];
+            // select default campaign - if input values were invalid
+            // use fallback, take third of campaign types = protect species
+            $bannerType = CampaignManager::getAllCampaignTypes()[2];
         }
         $this->campaign = $bannerType;
         $this->pluginUrl = $pluginUrl;

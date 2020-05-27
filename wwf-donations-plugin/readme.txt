@@ -5,7 +5,7 @@ Tags: woocommerce, donation, charity
 Requires at least: 5.3
 Stable tag: 5.3
 Requires PHP: 7.3
-Tested up to: 5.3
+Tested up to: 5.4
 License: GNU General Public License version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 

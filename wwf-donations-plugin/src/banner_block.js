@@ -44,6 +44,10 @@ export function bannerBlock() {
         keywords: ['donation', 'charity', 'cart', 'banner'],
         edit: (props) => {
             const {setAttributes, isSelected, attributes} = props;
+            // set proper initial value
+            if(!attributes['donationMode']) {
+                attributes['donationMode'] = 'protect_species_coin';
+            }
             return (
                 <PanelBody
                     title={__(

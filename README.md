@@ -132,35 +132,38 @@ run `docker-compose`-commands afterwards.
 * Build JS artifacts via `npm run build-js` (during development you can also use `npm run start`)
 * Start the whole stack (database + wordpress instance) in containers and find out the container ID of the wordpress instance via `docker ps`
 
-### Further information
-* To get a shell inside the wordpress development container, simply use: `docker exec -ti <container_id> bash`.
-Your working directory inside the container is `/var/www/html`.
-* You can use the `wp` command as documented [here](https://wp-cli.org), 
-e.g. to enable/disable the current plugin type `wp plugin toggle wwf-donations-plugin` 
-* To run **unit tests**, cd into `wwf-donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
-
 ## Development
 
 ### Run shop on your local machine
 * This project uses a custom docker wordpress image with predefined plugins, themes etc.
 * Build the development container with `docker-compose build`
 * Open root directory in cmd and run command `docker-compose up -d --remove-orphans`. Consider using `--force-recreate` in some cases.
-* Note that after 10 seconds the wordpress setup routine starts inside the wordpress container,
+ The initial setup procedure will take approx. 30 secs.
+    * Note that after 10 seconds the wordpress setup routine starts inside the wordpress container,
     which is defined in `wp-entrypoint.sh`.
 * Check if container is running `docker container ls` or `docker ps`.
-* Start shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
-* Be sure to run the WooCommerce plugin setup wizard once logged in. Note that we do not use the Jetpack Plugin yet.
-* For tests with a lot of orders, use [this plugin](https://github.com/75nineteen/order-simulator-woocommerce).
-* Performance measurement: 1000 orders need ~25 seconds for report generation
+* Open local shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
+* **Be sure** to run the WooCommerce plugin setup wizard once logged in at initial startup. Note that we **do not** use the Jetpack Plugin yet.
 
 ### WordPress development setup information
 * Locale: `de_DE`
 * Backend user: `admin:password`
-* Site URL `http://127.0.0.1:8000`
+* Site URL: [`http://127.0.0.1:8000`](http://127.0.0.1:8000)
+* Backend URL: [`http://127.0.0.1:8000/wp-admin`](http://127.0.0.1:8000/wp-admin)
 * Required plugins
     * Woocommerce
-* Used Theme
+* Default theme
     * Shophistic Lite
+* Currency: Euro
+
+### Further information
+* To get a shell inside the wordpress development container, simply use: `docker exec -ti <container_id> bash`.
+Your working directory inside the container is `/var/www/html`.
+* You can use the `wp` command as documented [here](https://wp-cli.org), 
+e.g. to enable/disable the current plugin type `wp plugin toggle wwf-donations-plugin` 
+* To run **unit tests**, cd into `wwf-donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
+* For tests with a lot of orders, use [this plugin](https://github.com/75nineteen/order-simulator-woocommerce).
+* Simple performance measurement: 1000 orders in a report time range need ~25 seconds during report generation
 
 ### Shutdown and cleanup
 **Warning:** This will remove the complete database and all existing data!

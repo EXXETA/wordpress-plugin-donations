@@ -6,7 +6,7 @@
  * @wordpress-plugin
  * Plugin Name: WWF-Donations-Plugin
  * Plugin URI: https://github.com/EXXETA/wordpress-plugin-donations
- * Description: A plugin to add a donation button to the cart page and integrating it into an existing WooCommerce wordpress setup
+ * Description: Plugin providing WWF donation products for a WooCommerce shop with a banner ready for integration into a wordpress system via shortcode and/or block.
  * Author: Marius Schuppert, EXXETA AG
  * Version: 1.0.0
  * License: GNU General Public License version 3
