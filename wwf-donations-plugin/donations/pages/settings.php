@@ -11,7 +11,7 @@
     $reportRecipient = \donations\SettingsManager::getOptionReportRecipientMail();
     ?>
     <form action="options.php" method="post">
-        <?php settings_fields('wp_donations'); ?>
+        <?php settings_fields(\donations\Plugin::$pluginSlug); ?>
 
         <table class="form-table" role="presentation">
             <tbody>
@@ -23,12 +23,12 @@
                             <span>Reporting Einstellungen</span>
                         </legend>
 
-                        <label for="wp_donations_reporting_interval_select">
+                        <label for="wwf_donations_reporting_interval_select">
                             Regelmäßige Spendenberichte generieren
                         </label>
-                        <select id="wp_donations_reporting_interval_select"
+                        <select id="wwf_donations_reporting_interval_select"
                                 class="postform"
-                                name="wp_donations_reporting_interval">
+                                name="wwf_donations_reporting_interval">
                             <?php foreach (\donations\SettingsManager::getReportingIntervals() as $value => $label): ?>
                                 <option value="<?php esc_attr_e($value) ?>"
                                     <?php
@@ -40,23 +40,23 @@
                         <br/>
                         <br/>
 
-                        <label for="wp_donations_reporting_live_days_in_past_input">
+                        <label for="wwf_donations_reporting_live_days_in_past_input">
                             Live-Berichte &ndash; Tage in die Vergangenheit
                         </label>
-                        <input type="number" id="wp_donations_reporting_live_days_in_past_input"
-                               name="wp_donations_reporting_live_days_in_past" min="1" max="150" step="1"
+                        <input type="number" id="wwf_donations_reporting_live_days_in_past_input"
+                               name="wwf_donations_reporting_live_days_in_past" min="1" max="150" step="1"
                                class="small-text"
                                value="<?php echo $currentLiveReportsDaysInPast ?>"/>
                         <br/>
                         <br/>
 
-                        <label for="wp_donations_reporting_recipient_mail_field">
+                        <label for="wwf_donations_reporting_recipient_mail_field">
                             Empfangsadresse der Spendenberichte
                         </label>
-                        <input id="wp_donations_reporting_recipient_mail_field" type="email" readonly
+                        <input id="wwf_donations_reporting_recipient_mail_field" type="email" readonly
                             <?php
                             // do not make it too easy to change mail:
-                            // name="wp_donations_reporting_recipient"
+                            // name="wwf_donations_reporting_recipient"
                             ?> size="75" value="<?php echo $reportRecipient ?>"/>
                     </fieldset>
                 </td>

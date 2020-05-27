@@ -33,7 +33,7 @@ php ../wp-cli.phar core download
 cd ..
 
 # setup development environment
-cd ./donations-plugin
+cd ./wwf-donations-plugin
 php ../composer.phar install
 
 npm i

@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
     </div>
     <form action="<?php echo admin_url('admin.php'); ?>" method="get">
-        <input type="hidden" name="page" value="wp-donations-current"/>
+        <input type="hidden" name="page" value="wwf-donations-current"/>
         <label for="donation_report_start_date">
             Startzeitpunkt:
             <input id="donation_report_start_date" name="donation_report_start_date"

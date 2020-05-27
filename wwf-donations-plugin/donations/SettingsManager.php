@@ -20,12 +20,12 @@ class SettingsManager
      * @var array option name => default value
      */
     private static $options = [
-        'wp_donations_reporting_interval' => self::REPORT_INTERVAL_MODE_MONTHLY,
-        'wp_donations_reporting_live_days_in_past' => 30,
-        'wp_donations_reporting_recipient' => 'Eshop-Spenden@wwf.de',
-        'wp_donations_reporting_last_generation_date' => null,
-        'wp_donations_reporting_last_check_date' => null,
-        'wp_donations_reporting_counter' => 0,
+        'wwf_donations_reporting_interval' => self::REPORT_INTERVAL_MODE_MONTHLY,
+        'wwf_donations_reporting_live_days_in_past' => 30,
+        'wwf_donations_reporting_recipient' => 'Eshop-Spenden@wwf.de',
+        'wwf_donations_reporting_last_generation_date' => null,
+        'wwf_donations_reporting_last_check_date' => null,
+        'wwf_donations_reporting_counter' => 0,
     ];
 
     private static $reportingIntervalOptions = [
@@ -50,12 +50,12 @@ class SettingsManager
                 update_option($key, $defaultValue);
             }
         }
-        register_setting('wp_donations',
-            'wp_donations_reporting_interval', 'esc_attr');
-        register_setting('wp_donations',
-            'wp_donations_reporting_live_days_in_past', 'esc_attr');
-        register_setting('wp_donations',
-            'wp_donations_reporting_recipient', 'esc_attr');
+        register_setting(Plugin::$pluginSlug,
+            'wwf_donations_reporting_interval', 'esc_attr');
+        register_setting(Plugin::$pluginSlug,
+            'wwf_donations_reporting_live_days_in_past', 'esc_attr');
+        register_setting(Plugin::$pluginSlug,
+            'wwf_donations_reporting_recipient', 'esc_attr');
     }
 
     /**
@@ -67,9 +67,9 @@ class SettingsManager
             // default value = monthly
             delete_option($key);
         }
-        unregister_setting('wp_donations', 'wp_donations_reporting_interval');
-        unregister_setting('wp_donations', 'wp_donations_reporting_live_days_in_past');
-        unregister_setting('wp_donations', 'wp_donations_reporting_recipient');
+        unregister_setting(Plugin::$pluginSlug, 'wwf_donations_reporting_interval');
+        unregister_setting(Plugin::$pluginSlug, 'wwf_donations_reporting_live_days_in_past');
+        unregister_setting(Plugin::$pluginSlug, 'wwf_donations_reporting_recipient');
     }
 
     /**
@@ -80,8 +80,8 @@ class SettingsManager
      */
     public static function getOptionCurrentReportingInterval(): string
     {
-        $default = self::$options['wp_donations_reporting_interval'];
-        $intervalMode = strval(get_option('wp_donations_reporting_interval', $default));
+        $default = self::$options['wwf_donations_reporting_interval'];
+        $intervalMode = strval(get_option('wwf_donations_reporting_interval', $default));
         if (!in_array($intervalMode, array_keys(self::$reportingIntervalOptions))) {
             return $default;
         }
@@ -93,8 +93,8 @@ class SettingsManager
      */
     public static function getOptionLiveReportDaysInPast(): int
     {
-        return intval(get_option('wp_donations_reporting_live_days_in_past',
-            self::$options['wp_donations_reporting_live_days_in_past']));
+        return intval(get_option('wwf_donations_reporting_live_days_in_past',
+            self::$options['wwf_donations_reporting_live_days_in_past']));
     }
 
     /**
@@ -102,8 +102,8 @@ class SettingsManager
      */
     public static function getOptionReportRecipientMail(): string
     {
-        return strval(get_option('wp_donations_reporting_recipient',
-            self::$options['wp_donations_reporting_recipient']));
+        return strval(get_option('wwf_donations_reporting_recipient',
+            self::$options['wwf_donations_reporting_recipient']));
     }
 
     /**
@@ -111,8 +111,8 @@ class SettingsManager
      */
     public static function getOptionReportLastGenerationDate(): ?\DateTime
     {
-        $storedValue = strval(get_option('wp_donations_reporting_last_generation_date',
-            self::$options['wp_donations_reporting_last_generation_date']));
+        $storedValue = strval(get_option('wwf_donations_reporting_last_generation_date',
+            self::$options['wwf_donations_reporting_last_generation_date']));
         if (!$storedValue) {
             return null;
         }
@@ -136,13 +136,13 @@ class SettingsManager
                 $dateTime = strtotime('now');
             }
         }
-        update_option('wp_donations_reporting_last_generation_date', $dateTime->format('c'));
+        update_option('wwf_donations_reporting_last_generation_date', $dateTime->format('c'));
     }
 
     public static function getOptionReportLastCheck(): ?\DateTime
     {
-        $storedValue = strval(get_option('wp_donations_reporting_last_check_date',
-            self::$options['wp_donations_reporting_last_check_date']));
+        $storedValue = strval(get_option('wwf_donations_reporting_last_check_date',
+            self::$options['wwf_donations_reporting_last_check_date']));
         if (!$storedValue) {
             return null;
         }
@@ -159,7 +159,7 @@ class SettingsManager
      */
     public static function setOptionReportLastCheck(): void
     {
-        update_option('wp_donations_reporting_last_check_date', date('c'));
+        update_option('wwf_donations_reporting_last_check_date', date('c'));
     }
 
     /**
@@ -169,8 +169,8 @@ class SettingsManager
      */
     public static function getOptionReportCounterIncremented(): int
     {
-        $incrementedCounter = intval(get_option('wp_donations_reporting_counter', 0)) + 1;
-        update_option('wp_donations_reporting_counter', $incrementedCounter);
+        $incrementedCounter = intval(get_option('wwf_donations_reporting_counter', 0)) + 1;
+        update_option('wwf_donations_reporting_counter', $incrementedCounter);
         return $incrementedCounter;
     }
 

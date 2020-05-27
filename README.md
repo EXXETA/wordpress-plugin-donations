@@ -8,7 +8,7 @@ for a non-profit organization. Automatically sending reports via mail.**
 ### Features
 - Seven donation products/campaigns
 - Providing easy banner content (for cart page):
-    - Shortcode: `[wp_donations_banner]`
+    - Shortcode: `[wwf_donations_banner]`
     - Gutenberg Block: `Spendemünzen`
 - Campaign reports
     - Automatically generating reports
@@ -55,7 +55,7 @@ You can view the WooCommerce product IDs in plugin report dashboard page in back
 - no reviews allowed
 - `catalog_visibility='hidden'`
 
-### Shortcode `wp_donations_banner`
+### Shortcode `wwf_donations_banner`
 You can configure the target donation campaign by providing a `campaign` argument. If no campaign
 is given, the *default* one is: `protect_species_coin`.
 
@@ -68,7 +68,7 @@ Valid values for `campaign` argument are:
 - `protect_climate_coin`
 - `protect_diversity_coin`
 
-Example of shortcode usage: `[wp_donations_banner campaign='protect_climate_coin']`
+Example of shortcode usage: `[wwf_donations_banner campaign='protect_climate_coin']`
 
 ### Reports
 You can configure three different report interval modes: `weekly`, `monthly`, `quarterly`.
@@ -93,9 +93,10 @@ a specific theme or framework.
 *NOTE*: Styles are included by wordpress only if the banner was placed into a page/post.
 
 **Minimum screen width:** `320px`
+**Maximum screen width:** `4k+`
 
 Banner main class: `.cart-donation-banner`
-CSS styles: `donations-plugin/styles/banner.css`
+CSS styles: `wwf-donations-plugin/styles/banner.css`
 
 ## Server and Wordpress requirements
 - PHP 7.3+
@@ -107,11 +108,10 @@ CSS styles: `donations-plugin/styles/banner.css`
 - WooCommerce is (initially) set up
     - Currency: Euro
 
-
 # Plugin Development
 
 This repository contains a docker-compose configuration for a reproducible
-environment during development. The directory `./donations-plugin` is mounted into the
+environment during development. The directory `./wwf-donations-plugin` will be mounted into the
 wordpress container.
 
 ## Requirements for development
@@ -127,7 +127,7 @@ run `docker-compose`-commands afterwards.
 
 * You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript.
  Note: You need at least the `openssl` extension of PHP.
-* cd into `donations-plugin` directory and execute `composer install` and `npm install`
+* cd into `wwf-donations-plugin` directory and execute `composer install` and `npm install`
 * Build CSS artifacts via `npm run build` (during development you can also use `npm run stylewatch`)
 * Build JS artifacts via `npm run build-js` (during development you can also use `npm run start`)
 * Start the whole stack (database + wordpress instance) in containers and find out the container ID of the wordpress instance via `docker ps`
@@ -136,8 +136,8 @@ run `docker-compose`-commands afterwards.
 * To get a shell inside the wordpress development container, simply use: `docker exec -ti <container_id> bash`.
 Your working directory inside the container is `/var/www/html`.
 * You can use the `wp` command as documented [here](https://wp-cli.org), 
-e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugin` 
-* To run **unit tests**, cd into `donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
+e.g. to enable/disable the current plugin type `wp plugin toggle wwf-donations-plugin` 
+* To run **unit tests**, cd into `wwf-donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
 
 ## Development
 
@@ -192,6 +192,6 @@ of this plugin.
 
 # License & Copyright
 
-All images in `donations-plugin/images/` are explicitly excluded of the licensing policy mentioned below.
+All images in `wwf-donations-plugin/images/` are explicitly excluded of the licensing policy mentioned below.
 
 This plugin is licensed under [GPL v3.0](./LICENSE).

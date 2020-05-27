@@ -23,7 +23,7 @@ which gzip &>/dev/null
 set -eu
 
 # build js artifacts
-cd donations-plugin
+cd wwf-donations-plugin
 
 #./vendor/phpunit/phpunit/phpunit test
 
@@ -41,9 +41,9 @@ else
 fi
 
 # copy project files
-find donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
+find wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
 
-cd release/donations-plugin
+cd release/wwf-donations-plugin
 php ../../composer.phar install --no-dev
 rm package.json
 rm package-lock.json
@@ -60,8 +60,11 @@ cp ../../README.md README_dev.md
 
 # build archives
 cd ..
-#zip -r wp-donations-plugin.zip donations-plugin
-#tar -cvf wp-donations-plugin.tar donations-plugin
-#gzip wp-donations-plugin.tar
+
+# Uncomment the following lines to generate archives of the release
+
+#zip -r wp-wwf-donations-plugin.zip wwf-donations-plugin
+#tar -cvf wp-wwf-donations-plugin.tar wwf-donations-plugin
+#gzip wp-wwf-donations-plugin.tar
 
 echo "OK"

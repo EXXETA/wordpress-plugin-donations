@@ -4,25 +4,25 @@ import {__} from '@wordpress/i18n';
 
 const campaigns = [
     {
-        label: __('Artenschutz', 'wp-donations-plugin'),
+        label: __('Artenschutz', 'wwf-donations-plugin'),
         value: 'protect_species_coin',
     }, {
-        label: __('Artenschutz HH DE', 'wp-donations-plugin'),
+        label: __('Artenschutz HH DE', 'wwf-donations-plugin'),
         value: 'protect_species_coin_hh_de',
     }, {
-        label: __('Artenschutz HH EN', 'wp-donations-plugin'),
+        label: __('Artenschutz HH EN', 'wwf-donations-plugin'),
         value: 'protect_species_coin_hh_en',
     }, {
-        label: __('Meeresschutz', 'wp-donations-plugin'),
+        label: __('Meeresschutz', 'wwf-donations-plugin'),
         value: 'protect_ocean_coin',
     }, {
-        label: __('Waldschutz', 'wp-donations-plugin'),
+        label: __('Waldschutz', 'wwf-donations-plugin'),
         value: 'protect_forest_coin',
     }, {
-        label: __('Klimaschutz', 'wp-donations-plugin'),
+        label: __('Klimaschutz', 'wwf-donations-plugin'),
         value: 'protect_climate_coin',
     }, {
-        label: __('Biologischer Vielfaltsschutz', 'wp-donations-plugin'),
+        label: __('Biologischer Vielfaltsschutz', 'wwf-donations-plugin'),
         value: 'protect_diversity_coin',
     },
 ];
@@ -30,8 +30,8 @@ const campaigns = [
 export function bannerBlock() {
     const cartPageId = cart_page_id; // this value is provided by the wordpress plugin
 
-    registerBlockType('wp-donations-plugin/checkout-banner', {
-        title: __('Spendenbanner', 'wp-donations-plugin'),
+    registerBlockType('wwf-donations-plugin/checkout-banner', {
+        title: __('Spendenbanner', 'wwf-donations-plugin'),
         description: '',
         isPrivate: false,
         icon: 'cart',
@@ -48,13 +48,13 @@ export function bannerBlock() {
                 <PanelBody
                     title={__(
                         'Spende Banner',
-                        'wp-donations-plugin'
+                        'wwf-donations-plugin'
                     )}
                 >
                     <SelectControl
                         label={__(
                             'Zielkampagne',
-                            'wp-donations-plugin'
+                            'wwf-donations-plugin'
                         )}
                         value={attributes['donationMode']}
                         options={campaigns}

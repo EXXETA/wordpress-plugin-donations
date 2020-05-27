@@ -1,9 +1,9 @@
 .idea
 composer.phar
 wp-cli.phar
-donations-plugin/vendor
-donations-plugin/wp-content
-donations-plugin/build/*.map
+wwf-donations-plugin/vendor
+wwf-donations-plugin/wp-content
+wwf-donations-plugin/build/*.map
 node_modules
 wp
 release

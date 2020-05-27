@@ -19,11 +19,13 @@ class Plugin
      */
     private static $pluginFile;
     // shortcode of this plugin
-    public static $bannerShortCode = 'wp_donations_banner';
+    public static $bannerShortCode = 'wwf_donations_banner';
     // block name of this plugin
-    public static $blockTypeName = 'wp-donations-plugin/checkout-banner';
+    public static $blockTypeName = 'wwf-donations-plugin/checkout-banner';
     // parent menu slug of this plugin
-    public static $menuSlug = 'wp-donations-plugin';
+    public static $menuSlug = 'wwf-donations-plugin';
+    // plugin slug used by options
+    public static $pluginSlug = 'wwf_donations_plugin';
     // custom post type for report
     public static $customPostType = 'donation_report';
 
@@ -105,14 +107,14 @@ class Plugin
         }
 
         // register cron hook as action
-        if (!has_action('wp_donations_report_check')) {
-            add_action('wp_donations_report_check', [Plugin::class, 'do_report_check']);
+        if (!has_action('wwf_donations_report_check')) {
+            add_action('wwf_donations_report_check', [Plugin::class, 'do_report_check']);
         }
 
         // uncomment the following line for debugging and force-register the scheduled event
-        // wp_clear_scheduled_hook('wp_donations_report_check');
-        if (wp_next_scheduled('wp_donations_report_check') === false) {
-            $result = wp_schedule_event(time(), 'daily', 'wp_donations_report_check');
+        // wp_clear_scheduled_hook('wwf_donations_report_check');
+        if (wp_next_scheduled('wwf_donations_report_check') === false) {
+            $result = wp_schedule_event(time(), 'daily', 'wwf_donations_report_check');
             if (!$result) {
                 error_log(sprintf('%s: Error registering check job for report generation', self::$pluginFile));
             }
@@ -197,7 +199,7 @@ class Plugin
             unregister_block_type(self::$blockTypeName);
         }
         // cron clear
-        wp_clear_scheduled_hook('wp_donations_report_check');
+        wp_clear_scheduled_hook('wwf_donations_report_check');
     }
 
     /**
@@ -299,7 +301,7 @@ class Plugin
             }
         }
         if ($isStyleNeeded) {
-            wp_enqueue_style('wp-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'styles/banner.css');
+            wp_enqueue_style('wwf-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'styles/banner.css');
         }
     }
 
@@ -313,10 +315,10 @@ class Plugin
 
         // submenu page:
         add_submenu_page(self::$menuSlug, 'Aktuell', 'Aktuell', 'manage_options',
-            'wp-donations-current', [Plugin::class, 'handle_menu_current']);
+            'wwf-donations-current', [Plugin::class, 'handle_menu_current']);
         // add options menu
         add_options_page('Spenden', 'Spenden', 'manage_options',
-            'wp-donations-settings', [Plugin::class, 'handle_menu_settings']);
+            'wwf-donations-settings', [Plugin::class, 'handle_menu_settings']);
     }
 
     static function handle_menu_settings(): void

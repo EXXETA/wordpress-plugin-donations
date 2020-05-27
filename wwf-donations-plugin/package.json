@@ -1,5 +1,5 @@
 {
-  "name": "wordpress-donations-plugin",
+  "name": "wwf-donations-plugin",
   "version": "1.0.0",
   "description": "JS project setup for wordpress plugin",
   "main": "build/index.js",

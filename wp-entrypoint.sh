@@ -39,12 +39,12 @@ wp plugin install --activate debug-bar-cron
 wp plugin install --activate wp-mail-logging
 
 # link donations plugin to wp-content/plugins
-if [ ! -L /var/www/html/wp-content/plugins/donations-plugin ]; then
+if [ ! -L /var/www/html/wp-content/plugins/wwf-donations-plugin ]; then
   echo "creating symlink dir for plugin development"
-  ln -s /var/www/donations-plugin/ /var/www/html/wp-content/plugins/donations-plugin
+  ln -s /var/www/wwf-donations-plugin/ /var/www/html/wp-content/plugins/wwf-donations-plugin
 fi
 # .. and activate it
-wp plugin activate donations-plugin || true
+wp plugin activate wwf-donations-plugin || true
 # set proper theme
 wp theme install --activate shophistic-lite
 

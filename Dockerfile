@@ -13,9 +13,9 @@ RUN apt-get update; apt-get install --no-install-recommends -y libcap2-bin maria
 RUN setcap 'cap_net_bind_service=+ep' /usr/sbin/apache2; chown -R wordpresser:www-data /usr/src/wordpress
 COPY wp-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wp-entrypoint.sh; chown wordpresser:www-data /usr/local/bin/wp-entrypoint.sh; \
-    dos2unix /usr/local/bin/wp-entrypoint.sh; mkdir -p /var/www/donations-plugin;
+    dos2unix /usr/local/bin/wp-entrypoint.sh; mkdir -p /var/www/wwf-donations-plugin;
 
-VOLUME /var/www/donations-plugin
+VOLUME /var/www/wwf-donations-plugin
 
 USER wordpresser
 WORKDIR /var/www/html
