@@ -1,4 +1,4 @@
-# wp-donations-plugin
+# wwf-donations-plugin
 
 **Plugin for Wordpress to collect donations in a WooCommerce shop 
 for a non-profit organization. Automatically sending reports via mail.**
@@ -6,28 +6,29 @@ for a non-profit organization. Automatically sending reports via mail.**
 **NOTE:** Currently this plugin is in German language available only.
 
 ### Features
-- Six donation products/campaigns
+- Seven donation products/campaigns
 - Providing easy banner content (for cart page):
     - Shortcode: `[wp_donations_banner]`
     - Gutenberg Block: `Spendemünzen`
 - Campaign reports
     - Automatically generating reports
-    - mail delivery of report content
+    - Mail delivery of report content
     - Reports are persistent and transparently accessible in custom backend section
     - Three interval modes: *weekly*, *monthly*, *quarterly*
     - Custom report live preview
-- No privacy impact of this plugin
+    - Report generation is checked once a day
+- No impact on privacy of customers of this plugin
 
-# Installation
+# Installation procedure
 1. Be sure to meet the listed requirements for the web server and the wordpress installation.
 2. Extract provided archive of this plugin to `wp-content/plugins` directory.
 3. Activate this plugin in Wordpress plugin page.
-4. Configure plugin settings in `Settings > Donations`. 
+4. Configure plugin settings in `Settings > Spendenübersicht`. 
 
 # Setup
 - Install and activate this plugin in your wordpress installation.
 - Add the banner to your *WooCommerce* cart page by using a block (in "Gutenberg" editor) 
-or use a shortcode (documented below). Technically both ways lead to the same result.
+or as an alternative you use a shortcode (documented below). Technically both ways lead to the same markup/result.
 
 ### Products
 This plugin will create one new product category in a WooCommerce shop called "Spendemünzen" containing
@@ -38,7 +39,13 @@ six donation products (à 1 €) for different campaigns:
 - Protecting climate
 - Protecting diversity
 
+#### Special campaigns 
+- Protecting species HH EN
+- Protecting species HH DE
+
 You can view the WooCommerce product IDs in plugin report dashboard page in backend.
+
+*NOTE:* Products are not removed during uninstallation. You have to remove them yourself for a complete cleanup. 
 
 #### Product details
 - virtual
@@ -95,7 +102,7 @@ CSS styles: `donations-plugin/styles/banner.css`
 - MySQL/MariaDB 5.7+/10.3+
 - Required active Wordpress plugins:
     - `woocommerce`
-- Wordpress crons (= scheduled events) are set up
+- Wordpress crons (= scheduled events) are set up and are running at least once a day
 - Wordpress should be able to send mails via `wp_mail`
 - WooCommerce is (initially) set up
     - Currency: Euro
@@ -113,19 +120,22 @@ wordpress container.
 - `docker` and `docker-compose`
 - Composer for PHP
 - Wordpress crons (= scheduled events) are activated (simply by calling [wp-cron.php](http://127.0.0.1:8000/wp-cron.php))
-- npm
+- `npm`
 
 **NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository and 
-run `docker-compose` afterwards.
+run `docker-compose`-commands afterwards.
 
 * You need [Composer](https://getcomposer.org) as package manager for PHP and `npm` for JavaScript.
- Note: You need the `openssl` extension of PHP.
+ Note: You need at least the `openssl` extension of PHP.
 * cd into `donations-plugin` directory and execute `composer install` and `npm install`
-* Build JS artifacts via `npm run build` (during development you can also use `npm run start`)
+* Build CSS artifacts via `npm run build` (during development you can also use `npm run stylewatch`)
+* Build JS artifacts via `npm run build-js` (during development you can also use `npm run start`)
 * Start the whole stack (database + wordpress instance) in containers and find out the container ID of the wordpress instance via `docker ps`
-* Get a shell inside the wordpress development container it via: `docker exec -ti <container_id> bash`.
+
+### Further information
+* To get a shell inside the wordpress development container, simply use: `docker exec -ti <container_id> bash`.
 Your working directory inside the container is `/var/www/html`.
-* Use the `wp` command as documented [here](https://wp-cli.org), 
+* You can use the `wp` command as documented [here](https://wp-cli.org), 
 e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugin` 
 * To run **unit tests**, cd into `donations-plugin` and execute `./vendor/phpunit/phpunit/phpunit test`
 
@@ -169,8 +179,6 @@ e.g. to enable/disable the current plugin type `wp plugin toggle donations-plugi
 - Add copyright header to source files
 - Test with other themes
 - Test without WooCommerce
-- Versioning
-- Remove/Handle TODOs in Code
 
 ## Links
 * [Detailed Plugin Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/)
@@ -184,6 +192,6 @@ of this plugin.
 
 # License & Copyright
 
-All images in `donations-plugin/images/` are explicitly excluded of the licensing mentioned below.
+All images in `donations-plugin/images/` are explicitly excluded of the licensing policy mentioned below.
 
 This plugin is licensed under [GPL v3.0](./LICENSE).
