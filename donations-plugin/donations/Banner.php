@@ -107,7 +107,15 @@ class Banner
         // add collapsible content here
         $output .= sprintf('<div class="donation-campaign-collapsible" id="%s">', $infoAreaId);
         $output .= sprintf('<p class="donation-campaign-more-info">%s', $campaign->getFullText());
-        $output .= sprintf('&nbsp;<br/><br/><a href="#" id="%s" class="fade-out-link">Informationstext schlie&szlig;en</a></p>', $hideInfoAreaId);
+
+        $defaultClosingText = 'Informationstext schlie&szlig;en';
+        // FIXME make dependent of locale
+        if ($campaign->getSlug() == CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN) {
+            $defaultClosingText = 'Close information box';
+        }
+
+        $output .= sprintf('&nbsp;<br/><br/><a href="#" id="%s" class="fade-out-link">%s</a></p>',
+            $hideInfoAreaId, $defaultClosingText);
         $output .= '</div>'; // .donation-campaign-collapsible
 
         $output .= <<<SCRIPT

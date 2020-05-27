@@ -12,6 +12,32 @@ $breakpoint_large: 1024px;
 $breakpoint_xlarge: 1200px;
 $text-shadow-color: #000000;
 $fade-out-link-color: #999999;
+$xlarge-up-content-block-width: 38.2%;
+
+/* hide cart button text with this mixin */
+@mixin hide_cart_text() {
+  .cart-donation-banner .cart-donation-banner-background {
+    .cart-banner-content {
+      .donation-campaign-quantity-input {
+        margin: 0;
+      }
+
+      button.donation-campaign-submit {
+        vertical-align: bottom;
+        margin-left: 1rem;
+
+        .donation-campaign-cart-text {
+          display: none;
+        }
+
+        .cart-icon {
+          display: block;
+          margin-right: 0.25rem;
+        }
+      }
+    }
+  }
+}
 
 .cart-donation-banner {
   -webkit-box-sizing: initial;
@@ -131,9 +157,13 @@ $fade-out-link-color: #999999;
         display: inline;
         padding: 3px;
         border: 0;
-        margin-bottom: 1px;
+        margin: 0 0 4px 0;
         border-radius: 0.5rem;
         text-align: center;
+        background: $white-color;
+        color: $collapsible-link-color;
+        outline: none;
+        box-shadow: none;
       }
 
       button.donation-campaign-submit {
@@ -212,22 +242,7 @@ $fade-out-link-color: #999999;
 }
 
 @media (max-width: $breakpoint_small) {
-  .cart-donation-banner .cart-donation-banner-background {
-    .cart-banner-content {
-      button.donation-campaign-submit {
-        vertical-align: bottom;
-
-        .donation-campaign-cart-text {
-          display: none;
-        }
-
-        .cart-icon {
-          display: block;
-          margin-right: 0.25rem;
-        }
-      }
-    }
-  }
+  @include hide_cart_text;
 }
 
 @media (max-width: $breakpoint_medium) {
@@ -325,7 +340,7 @@ $fade-out-link-color: #999999;
 
 @media (min-width: $breakpoint_xlarge) {
   .cart-donation-banner .cart-donation-banner-background .cart-banner-content {
-    flex-basis: 35%;
+    flex-basis: $xlarge-up-content-block-width;
     text-align: left;
 
     .donation-campaign-description a {
@@ -338,21 +353,6 @@ $fade-out-link-color: #999999;
   }
 }
 
-@media (min-width: $breakpoint_xlarge) and (max-width: $breakpoint_xlarge + 100px) {
-  .cart-donation-banner .cart-donation-banner-background {
-    .cart-banner-content {
-      button.donation-campaign-submit {
-        vertical-align: bottom;
-        margin-left: 1rem;
-
-        .donation-campaign-cart-text {
-          display: none;
-        }
-
-        .cart-icon {
-          display: block;
-        }
-      }
-    }
-  }
+@media (min-width: $breakpoint_xlarge) and (max-width: $breakpoint_xlarge + 50px) {
+  @include hide_cart_text;
 }

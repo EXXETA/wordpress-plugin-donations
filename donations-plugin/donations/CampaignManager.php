@@ -17,8 +17,8 @@ class CampaignManager
      */
     private static $allCampaigns = [];
 
-    private static $genericFootNotesTextDE = "<br/>* Der gesamte Erlös der Baumtaler kommt ausgewählten Waldschutzprojekten des WWF zugute. Bitte beachten Sie, dass die Ausstellung einer Spendenquittung nicht möglich ist.<br/>"
-                                              . "<br/>** Der Baumtaler ist kein physisches Produkt, sondern die Möglichkeit der digitalen Spende für den WWF. Eine Auslieferung und Rückerstattung des Baumtalers ist daher nicht möglich.";
+    private static $genericFootNotesTextDE = "<br/>* Der gesamte Erlös der Umweltschutztaler kommt ausgewählten Projekten des WWF zugute. Bitte beachten Sie, dass die Ausstellung einer Spendenquittung nicht möglich ist.<br/>"
+                                              . "<br/>** Der Umweltschutztaler ist kein physisches Produkt, sondern die Möglichkeit der digitalen Spende für den WWF. Eine Auslieferung und Rückerstattung des Umweltschutztalers ist daher nicht möglich.";
 
     /**
      * values correspond to charity coin product slug
