@@ -9,6 +9,8 @@ namespace donations;
  *
  * wrapper class for banner rendering which is used by shortcode and gutenberg serverside rendered block.
  *
+ * TODO: make more generic and independent of Wordpress and wooCommerce logic
+ *
  * @package donations
  */
 class Banner
@@ -57,6 +59,15 @@ class Banner
         $product = CharityProductManager::getProductBySlug($this->campaign);
 
         $productId = get_option($product->getProductIdOptionKey());
+        $wcProduct = wc_get_product($productId);
+        $attachmentId = intval(get_option($product->getImageIdOptionKey()));
+
+        if ($wcProduct instanceof \WC_Product) {
+            $productAttachmentId = intval($wcProduct->get_image_id());
+            if ($productAttachmentId && $productAttachmentId > 0 && $productAttachmentId != $attachmentId) {
+                $attachmentId = $productAttachmentId;
+            }
+        }
 
         $randomString = uniqid();
         $moreInfoId = sprintf('donation-campaign-more-info-%s-%s', $campaign->getSlug(), $randomString);
@@ -78,8 +89,8 @@ class Banner
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
 
         // do not add a line break here!
-        $output .= sprintf('<img class="donation-campaign-logo" alt="donation target logo" src="%s" /><span class="times"></span>',
-            wp_get_attachment_image_url(get_option($product->getImageIdOptionKey())));
+        $output .= sprintf('<img class="donation-campaign-logo" alt="" src="%s" /><span class="times"></span>',
+            wp_get_attachment_image_url($attachmentId));
 
         if (strpos($cartUrl, '?page_id=') !== false) {
             // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly

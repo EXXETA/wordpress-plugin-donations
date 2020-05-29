@@ -66,6 +66,23 @@ class Plugin
     }
 
     /**
+     * @param CharityProduct $singleProduct
+     * @param \WC_Product $product
+     * @return void
+     */
+    public static function createAndHandleProductImage(CharityProduct $singleProduct, \WC_Product $product)
+    {
+        $imageId = self::uploadImage($singleProduct);
+        if ($imageId) {
+            update_option($singleProduct->getImageIdOptionKey(), $imageId);
+            $product->set_image_id($imageId);
+        } else {
+            error_log(sprintf('%s: problem uploading image "%s"', self::$pluginFile,
+                $singleProduct->getImagePath()));
+        }
+    }
+
+    /**
      * @return string
      */
     public static function getPluginFile(): string
@@ -177,20 +194,25 @@ class Plugin
                 $product->set_tax_status('none');
                 $product->set_catalog_visibility('hidden');
                 $product->set_virtual(true);
+                // TODO: make product private? does it harm anything?
 
                 // upload image
-                $imageId = self::uploadImage($singleProduct);
-                if ($imageId) {
-                    update_option($singleProduct->getImageIdOptionKey(), $imageId);
-                    $product->set_image_id($imageId);
-                } else {
-                    error_log(sprintf('%s: problem uploading image "%s"', self::$pluginFile,
-                        $singleProduct->getImagePath()));
-                }
+                self::createAndHandleProductImage($singleProduct, $product);
                 $product->save();
 
                 $productId = $product->get_id();
                 update_option($singleProduct->getProductIdOptionKey(), $productId);
+            }
+            // check if product image exists or it should be created newly
+            $product = wc_get_product($productId);
+            if ($product instanceof \WC_Product) {
+                // this should always be the case here!
+                $imageId = $product->get_image_id();
+                // check if attachment exists
+                if (!wp_attachment_is('image', $imageId)) {
+                    // create it otherwise
+                    self::createAndHandleProductImage($singleProduct, $product);
+                }
             }
         }
     }

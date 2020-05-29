@@ -31,13 +31,14 @@ wp plugin list
 
 wp plugin deactivate --quiet akismet hello || true
 wp plugin delete --quiet akismet hello || true
-wp maintenance-mode deactivate
+wp maintenance-mode deactivate || true
 
 # install and activate woocommerce plugin
 wp plugin install --activate woocommerce
 wp plugin install --activate debug-bar
 wp plugin install --activate debug-bar-cron
 wp plugin install --activate wp-mail-logging
+wp plugin install --activate wp-crontrol
 
 # link donations plugin to wp-content/plugins
 if [ ! -L /var/www/html/wp-content/plugins/wwf-donations-plugin ]; then
