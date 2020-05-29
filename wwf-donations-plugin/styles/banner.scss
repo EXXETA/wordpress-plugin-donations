@@ -45,6 +45,10 @@ $xlarge-up-content-block-width: 38.2%;
   box-sizing: initial;
   margin: 0.5rem auto;
 
+  * {
+    box-sizing: border-box;
+  }
+
   a {
     color: $white-color;
     font-weight: bold;
