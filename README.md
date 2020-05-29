@@ -6,7 +6,7 @@ for a non-profit organization. Automatically sending reports via mail.**
 **NOTE:** Currently this plugin is in German language available only.
 
 ### Features
-- Seven donation products/campaigns
+- Five donation products/campaigns
 - Providing easy banner content (for cart page):
     - Shortcode: `[wwf_donations_banner]`
     - Gutenberg Block: `Spendemünzen`
@@ -39,10 +39,6 @@ six donation products (à 1 €) for different campaigns:
 - Protecting climate
 - Protecting diversity
 
-#### Special campaigns 
-- Protecting species HH EN
-- Protecting species HH DE
-
 You can view the WooCommerce product IDs in plugin report dashboard page in backend.
 
 *NOTE:* Products are not removed during uninstallation. You have to remove them yourself for a complete cleanup. 
@@ -61,8 +57,6 @@ is given, the *default* one is: `protect_species_coin`.
 
 Valid values for `campaign` argument are:
 - `protect_species_coin`
-- `protect_species_coin_hh_en`
-- `protect_species_coin_hh_de`
 - `protect_ocean_coin`
 - `protect_forest_coin`
 - `protect_climate_coin`
@@ -84,7 +78,9 @@ All reports are persisted as a private custom post type integrated into the Word
 One time per day, a routine will check if time to generate a new report is reached. You can view the 
 date and time of the last check in plugin's report dashboard.
 
-**NOTE:** After plugin installation there will be generated one first (probably empty) report.
+**NOTE:** After plugin installation/(re-)activation there will be generated one first (probably empty) report.
+
+**NOTE:** You are free to modify the WooCommerce products in your shop. This plugin won't overwrite these.
 
 ### Banner design/styling
 This plugin is shipped with self-contained responsive CSS styles without dependencies to 

@@ -20,8 +20,6 @@ class CharityProductManager
     private static $allProducts = [];
 
     // available coin ids - no duplicates!
-    public static $PROTECT_SPECIES_COIN_HH_DE = 'protect_species_coin_hh_de';
-    public static $PROTECT_SPECIES_COIN_HH_EN = 'protect_species_coin_hh_en';
     public static $PROTECT_SPECIES_COIN = 'protect_species_coin';
     public static $PROTECT_OCEAN_COIN = 'protect_ocean_coin';
     public static $PROTECT_FOREST_COIN = 'protect_forest_coin';
@@ -34,8 +32,6 @@ class CharityProductManager
     public static function getAllCharityProductSlugs(): array
     {
         return [
-            self::$PROTECT_SPECIES_COIN_HH_DE,
-            self::$PROTECT_SPECIES_COIN_HH_EN,
             self::$PROTECT_SPECIES_COIN,
             self::$PROTECT_OCEAN_COIN,
             self::$PROTECT_FOREST_COIN,
@@ -83,8 +79,6 @@ class CharityProductManager
     private static function initProducts()
     {
         self::$allProducts = [
-            new CharityProduct(self::$PROTECT_SPECIES_COIN_HH_EN, "Your WWF-Donation", "One Euro for protection of endangered animal species", 1, "product_protect_species.png"),
-            new CharityProduct(self::$PROTECT_SPECIES_COIN_HH_DE, "Deine WWF-Spende", "Ein Euro für den Artenschutz", 1, "product_protect_species.png"),
             new CharityProduct(self::$PROTECT_SPECIES_COIN, "Deine WWF-Spende (Artenschutz)", "Ein Euro für den Artenschutz", 1, "product_protect_species.png"),
             new CharityProduct(self::$PROTECT_OCEAN_COIN, "Deine WWF-Spende (Meeresschutz)", "Ein Euro für den Meeresschutz", 1, "product_protect_oceans.png"),
             new CharityProduct(self::$PROTECT_FOREST_COIN, "Deine WWF-Spende (Waldschutz)", "Ein Euro für den Waldschutz", 1, "product_protect_forest.png"),

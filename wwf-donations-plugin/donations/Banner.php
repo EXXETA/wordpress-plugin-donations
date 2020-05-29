@@ -70,16 +70,9 @@ class Banner
         $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
         $output .= sprintf('<p class="donation-campaign-description">%s. ', $campaign->getDescription());
 
-        if ($campaign->getSlug() == CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN) {
-            // FIXME make dependent of locale
-            $output .= sprintf('Click <a id="%s" href="#" title="More information about the donation">here</a> for more information</p>',
-                $moreInfoId,
-            );
-        } else {
-            $output .= sprintf('Klicke <a id="%s" href="#" title="Mehr Informationen über die Spende">hier</a> für weitere Informationen</p>',
-                $moreInfoId,
-            );
-        }
+        $output .= sprintf('Klicke <a id="%s" href="#" title="Mehr Informationen über die Spende">hier</a> für weitere Informationen</p>',
+            $moreInfoId,
+        );
 
         $cartUrl = wc_get_cart_url();
         $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
@@ -110,10 +103,6 @@ class Banner
         $output .= sprintf('<p class="donation-campaign-more-info">%s', $campaign->getFullText());
 
         $defaultClosingText = 'Informationstext schlie&szlig;en';
-        // FIXME make dependent of locale
-        if ($campaign->getSlug() == CharityProductManager::$PROTECT_SPECIES_COIN_HH_EN) {
-            $defaultClosingText = 'Close information box';
-        }
 
         $output .= sprintf('&nbsp;<br/><br/><a href="#" id="%s" class="fade-out-link">%s</a></p>',
             $hideInfoAreaId, $defaultClosingText);

@@ -86,7 +86,7 @@ class Plugin
 
     public function registerPluginHooks(): void
     {
-        // plugin lifecycle hooks
+        // plugin lifecycle hooksactiva
         register_activation_hook(self::getPluginFile(), [Plugin::class, 'activate']);
         register_deactivation_hook(self::getPluginFile(), [Plugin::class, 'deactivate']);
         register_uninstall_hook(self::getPluginFile(), [Plugin::class, 'uninstall']);
@@ -150,7 +150,16 @@ class Plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
             /* @var $singleProduct CharityProduct */
 
-            if (empty(get_option($singleProduct->getProductIdOptionKey()))) {
+            $productId = get_option($singleProduct->getProductIdOptionKey());
+            $isDeleted = false;
+            // check if product was deleted
+            if (!empty($productId)) {
+                $product = wc_get_product($productId);
+                if ($product instanceof \WC_Product && $product->get_status() == 'trash') {
+                    $isDeleted = true;
+                }
+            }
+            if (empty($productId) || $isDeleted) {
                 $product = new WC_Product_Simple();
                 $product->set_name($singleProduct->getName());
                 $product->set_slug($singleProduct->getSlug());
