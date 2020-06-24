@@ -41,11 +41,12 @@ six donation products (à 1 €) for different campaigns:
 
 You can view the WooCommerce product IDs in plugin report dashboard page in backend.
 
-*NOTE:* Products are not removed during uninstallation. You have to remove them yourself for a complete cleanup. 
+*NOTE:* Products are not removed during uninstallation process. You have to remove them yourself for a complete cleanup. 
 
-#### Product details
+#### Product details (default)
 - virtual
-- no stock management
+- no stock management enabled
+- no backorders allowed
 - no taxation (`tax_status='none'`)
 - not sold individually
 - no reviews allowed
@@ -80,7 +81,8 @@ date and time of the last check in plugin's report dashboard.
 
 **NOTE:** After plugin installation/(re-)activation there will be generated one first (probably empty) report.
 
-**NOTE:** You are free to modify the WooCommerce products in your shop. This plugin won't overwrite these.
+**NOTE:** You are free to modify the WooCommerce products in your shop once this plugin is installed and activated. 
+This plugin won't overwrite your custom product configuration.
 
 ### Banner design/styling
 This plugin is shipped with self-contained responsive CSS styles without dependencies to 
@@ -115,7 +117,7 @@ wordpress container.
 - MySQL/MariaDB 5.7+/10.3+
 - `docker` and `docker-compose`
 - Composer for PHP
-- Wordpress crons (= scheduled events) are activated (simply by calling [wp-cron.php](http://127.0.0.1:8000/wp-cron.php))
+- Wordpress crons (= scheduled events) are activated (simply by calling [wp-cron.php](http://127.0.0.1/wp-cron.php))
 - `npm`
 
 **NOTE:** For an easy setup procedure, simply execute `setup.sh` in this repository and 
@@ -145,14 +147,14 @@ run `docker-compose`-commands afterwards.
     * Note that after 10 seconds the wordpress setup routine starts inside the wordpress container,
     which is defined in `wp-entrypoint.sh`.
 * Check if container is running `docker container ls` or `docker ps`.
-* Open local shop via web browser [http://127.0.0.1:8000](http://127.0.0.1:8000). Append `/wp-admin` to URL for backend access.
+* Open local shop via web browser [http://127.0.0.1](http://127.0.0.1). Append `/wp-admin` to URL for backend access.
 * **Be sure** to run the WooCommerce plugin setup wizard once logged in at initial startup. Note that we **do not** use the Jetpack Plugin yet.
 
 ### WordPress development setup information
 * Locale: `de_DE`
 * Backend user: `admin:password`
-* Site URL: [`http://127.0.0.1:8000`](http://127.0.0.1:8000)
-* Backend URL: [`http://127.0.0.1:8000/wp-admin`](http://127.0.0.1:8000/wp-admin)
+* Site URL: [`http://127.0.0.1`](http://127.0.0.1)
+* Backend URL: [`http://127.0.0.1/wp-admin`](http://127.0.0.1/wp-admin)
 * Required plugins
     * Woocommerce
 * Default theme
