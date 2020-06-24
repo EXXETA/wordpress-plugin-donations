@@ -8,7 +8,7 @@
  * Plugin URI: https://github.com/EXXETA/wordpress-plugin-donations
  * Description: Plugin providing WWF donation products for a WooCommerce shop with a banner ready for integration into a wordpress system via shortcode and/or block.
  * Author: Marius Schuppert, EXXETA AG
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GNU General Public License version 3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
  * Requires PHP: 7.3

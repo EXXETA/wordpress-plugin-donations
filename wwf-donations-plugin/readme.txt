@@ -9,12 +9,27 @@ Tested up to: 5.4
 License: GNU General Public License version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
-TODO
+Plugin for Wordpress to collect donations in a WooCommerce shop for a non-profit organization. Automatically sending reports via mail.
 
 == Description ==
 
-TODO
+**Plugin for Wordpress to collect donations in a WooCommerce shop for a non-profit organization. Automatically sending reports via mail.**
+
+**NOTE:** Currently this plugin is in German language available only.
+
+### Features
+- Five donation products/campaigns
+- Providing easy banner content (for cart page):
+    - Shortcode: `[wwf_donations_banner]`
+    - Gutenberg Block: `Spendemünzen`
+- Campaign reports
+    - Automatically generating reports
+    - Mail delivery of report content
+    - Reports are persistent and transparently accessible in custom backend section
+    - Three interval modes: *weekly*, *monthly*, *quarterly*
+    - Custom report live preview
+    - Report generation is checked once a day
+- No impact on privacy of customers of this plugin
 
 == Installation ==
 
@@ -25,15 +40,13 @@ TODO
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= I want to have more information about this plugin =
 
-An answer to that question.
-
-TODO
+[Read docs here](https://github.com/EXXETA/wordpress-plugin-donations).
 
 == Screenshots ==
 
-TODO
+Have a look [here](https://github.com/EXXETA/wordpress-plugin-donations/tree/master/screenshots).
 
 1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
 the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
