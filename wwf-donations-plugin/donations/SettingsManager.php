@@ -161,7 +161,7 @@ class SettingsManager
     {
         $storedValue = strval(get_option(self::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE,
             self::$options[self::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE]));
-        if (!$storedValue) {
+        if (!$storedValue || empty($storedValue)) {
             return null;
         }
         try {
