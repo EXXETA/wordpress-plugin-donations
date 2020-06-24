@@ -76,6 +76,7 @@ class Plugin
         if ($imageId) {
             update_option($singleProduct->getImageIdOptionKey(), $imageId);
             $product->set_image_id($imageId);
+            $product->save();
         } else {
             error_log(sprintf('%s: problem uploading image "%s"', self::$pluginFile,
                 $singleProduct->getImagePath()));
@@ -165,7 +166,7 @@ class Plugin
         }
         // add default products
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
-            /* @var $singleProduct CharityProduct */
+            /*@var $singleProduct CharityProduct */
 
             $productId = get_option($singleProduct->getProductIdOptionKey());
             $isDeleted = false;
@@ -178,15 +179,19 @@ class Plugin
             }
             if (empty($productId) || $isDeleted) {
                 $product = new WC_Product_Simple();
+                $product->set_defaults();
                 $product->set_name($singleProduct->getName());
                 $product->set_slug($singleProduct->getSlug());
                 $product->set_description($singleProduct->getDescription());
+                $product->set_short_description($singleProduct->getDescription());
+                $product->set_weight(0);
                 // prices
                 $product->set_regular_price($singleProduct->getPrice());
                 $product->set_sale_price($singleProduct->getPrice());
                 // disable stock management
                 $product->set_manage_stock(false);
                 $product->set_sold_individually(false);
+                $product->set_backorders(false);
                 // disable reviews
                 $product->set_reviews_allowed(false);
                 // set category id
@@ -238,7 +243,7 @@ class Plugin
      */
     static function uninstall(): void
     {
-        // remove products of this plugin
+        // remove products of this plugin during uninstallation
         // TODO atm deletion of products + custom category is skipped
 //        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
 //            /* @var $singleProduct CharityProduct */

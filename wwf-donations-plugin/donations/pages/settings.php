@@ -50,14 +50,14 @@
                         <br/>
                         <br/>
 
-                        <label for="wwf_donations_reporting_recipient_mail_field">
+                        <label for="wwf_donations_reporting_recipient_field">
                             Empfangsadresse der Spendenberichte
                         </label>
-                        <input id="wwf_donations_reporting_recipient_mail_field" type="email" readonly
+                        <input id="wwf_donations_reporting_recipient_field" type="email" readonly
                             <?php
                             // do not make it too easy to change mail:
                             // name="wwf_donations_reporting_recipient"
-                            ?> size="75" value="<?php echo $reportRecipient ?>"/>
+                            ?> size="75" maxlength="250" value="<?php echo $reportRecipient ?>"/>
                     </fieldset>
                 </td>
             </tr>

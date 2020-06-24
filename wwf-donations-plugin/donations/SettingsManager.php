@@ -49,14 +49,17 @@ class SettingsManager
         if (!current_user_can('manage_options')) {
             return;
         }
+
         // ensure options are present
         foreach (self::$options as $key => $defaultValue) {
             $optionValue = get_option($key, 'no-init');
-            if ($optionValue == 'no-init') {
+            if ($optionValue == 'no-init'
+                || ($key === self::WWF_DONATIONS_REPORTING_RECIPIENT && $optionValue != $defaultValue)) {
                 // set default value
                 update_option($key, $defaultValue);
             }
         }
+
         register_setting(Plugin::$pluginSlug,
             self::WWF_DONATIONS_REPORTING_INTERVAL, 'esc_attr');
         register_setting(Plugin::$pluginSlug,
