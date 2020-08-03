@@ -11,6 +11,7 @@
     $reportRecipient = \donations\SettingsManager::getOptionReportRecipientMail();
     $isBannerShownInMiniCart = \donations\SettingsManager::getOptionMiniBannerIsShownInMiniCart();
     $currentMiniBannerCampaign = \donations\SettingsManager::getOptionMiniBannerCampaign();
+    $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getOptionMiniBannerCampaignTarget();
     ?>
     <form action="options.php" method="post">
         <?php settings_fields(\donations\Plugin::$pluginSlug); ?>
@@ -96,6 +97,15 @@
                                 ><?php esc_attr_e($campaign->getName()) ?></option>
                             <?php endforeach ?>
                         </select>
+                        <br/>
+                        <br/>
+                        <label for="">
+                            Zielseite für WWF-Kampagneninformationen
+                        </label>
+                        <?php wp_dropdown_pages([
+                            'name' => 'wwf_donations_mini_banner_campaign_target_page',
+                            'selected' => $currentMiniBannerInfoTargetPage
+                        ]); ?>
                         <br/>
                         <br/>
                     </fieldset>

@@ -24,6 +24,7 @@ class SettingsManager
     const WWF_DONATIONS_REPORTING_COUNTER = 'wwf_donations_reporting_counter';
     const WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART = 'wwf_donations_mini_banner_show_mini_cart';
     const WWF_DONATIONS_MINI_BANNER_CAMPAIGN = 'wwf_donations_mini_banner_campaign';
+    const WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE = 'wwf_donations_mini_banner_campaign_target_page';
 
     /**
      * @var array option name => default value
@@ -37,6 +38,7 @@ class SettingsManager
         self::WWF_DONATIONS_REPORTING_COUNTER => 0,
         self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART => 0,
         self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN => null,
+        self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE => null,
     ];
 
     private static $reportingIntervalOptions = [
@@ -58,7 +60,12 @@ class SettingsManager
         foreach (self::$options as $key => $defaultValue) {
             $optionValue = get_option($key, 'no-init');
             if ($optionValue == 'no-init'
-                || ($key === self::WWF_DONATIONS_REPORTING_RECIPIENT && $optionValue != $defaultValue)) {
+                || ($key === self::WWF_DONATIONS_REPORTING_RECIPIENT && $optionValue != $defaultValue) // do not allow different report recipient as defined
+                || ($key === self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE && !$optionValue)) { // auto-"repair" campaign target page - if something went wrong (= $optionValue is empty/0/null)
+                // dynamically set cart page as default
+                if ($key === self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE) {
+                    $defaultValue = wc_get_page_id('cart');
+                }
                 // set default value
                 update_option($key, $defaultValue);
             }
@@ -75,6 +82,8 @@ class SettingsManager
             self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART, 'esc_attr');
         register_setting(Plugin::$pluginSlug,
             self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN, 'esc_attr');
+        register_setting(Plugin::$pluginSlug,
+            self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, 'esc_attr');
     }
 
     /**
@@ -206,7 +215,8 @@ class SettingsManager
      *
      * @return bool
      */
-    public static function getOptionMiniBannerIsShownInMiniCart(): bool {
+    public static function getOptionMiniBannerIsShownInMiniCart(): bool
+    {
         return boolval(get_option(self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART,
             self::$options[self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART]));
     }
@@ -214,9 +224,14 @@ class SettingsManager
     /**
      * @return string campaign slug or possible "null"
      */
-    public static function getOptionMiniBannerCampaign(): ?string {
+    public static function getOptionMiniBannerCampaign(): ?string
+    {
         return strval(get_option(self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN,
             self::$options[self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN]));
+    }
+
+    public static function getOptionMiniBannerCampaignTarget(): ?int {
+        return intval(get_option(self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, wc_get_page_id('cart')));
     }
 
     /**
