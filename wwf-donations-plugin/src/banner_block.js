@@ -45,7 +45,7 @@ export function bannerBlock() {
             return (
                 <PanelBody
                     title={__(
-                        'Spende Banner',
+                        'WWF-Spendenbanner',
                         'wwf-donations-plugin'
                     )}
                 >
@@ -87,7 +87,7 @@ export function bannerBlock() {
             return (
                 <PanelBody
                     title={__(
-                        'Spende Banner (mini)',
+                        'WWF-Spendenbanner (mini)',
                         'wwf-donations-plugin'
                     )}
                 >
