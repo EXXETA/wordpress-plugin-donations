@@ -5,6 +5,8 @@ for the non-profit organization [WWF](https://www.wwf.de/). Automatically sendin
  
 **NOTE:** Currently this plugin is in German language available only.
 
+Do you have questions, want to request a feature or do you found a bug? [-> Create issues!](https://github.com/EXXETA/wordpress-plugin-donations/issues)
+
 ### Features
 - **Five donation campaigns** are officially supported
 - Providing banner content in two variants (small and normal) for easy integration into your shop:
@@ -16,7 +18,7 @@ for the non-profit organization [WWF](https://www.wwf.de/). Automatically sendin
     - Reports are persisted and transparently accessible in custom backend section
     - Custom "live" report preview
 - Easy integration into WooCommerce "Mini cart" widget
-- No impact on privacy of customers of this plugin
+- No impact on privacy of customers by using this plugin
 
 ## Server and WordPress requirements
 - PHP 7.3+
@@ -123,6 +125,16 @@ Officialy this plugin is developed and tested with the Theme `Shophistic Lite`.
 - CSS styles: `wwf-donations-plugin/styles/banner.css`
 - SCSS styles (for development/modifications): `wwf-donations-plugin/styles/banner.scss`
 
+## Screenshots
+
+![](./screenshots/campaign_banners.png)
+
+![](./screenshots/gutenberg_editor_view.png)
+
+![](./screenshots/live_report_view.png)
+
+![](./screenshots/plugin_settings.png)
+
 # Development
 
 ## Requirements for development
@@ -210,9 +222,15 @@ e.g. to enable/disable the current plugin type `wp plugin toggle wwf-donations-p
 * [WP CLI](https://wp-cli.org)
 * [Wordpress JS build setup for Gutenberg Blocks](https://developer.wordpress.org/block-editor/tutorials/javascript/js-build-setup/)
 
-## Release
+## Release workflow
 Execute `release.sh` in this repository to get a production-ready distributable .zip-archive 
 of this plugin.
+Change version number in:
+- `wwf-donations-plugin/wwf-donations-plugin.php`
+- `wwf-donations-plugin/package.json` + `npm i` 
+- `wwf-donations-plugin/composer.json` + `composer u` 
+- Add changelog messages to the bottom of `wwf-donations-plugin/readme.txt`
+
 
 # License & Copyright
 

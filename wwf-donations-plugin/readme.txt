@@ -76,12 +76,16 @@ Have a look [here](https://github.com/EXXETA/wordpress-plugin-donations/tree/mas
 
 == Changelog ==
 
-= 1.0 =
+= 1.1.0 =
+* Mini Banner Version + Shortcode + Settings added
 
+= 1.0 =
 * Initial release
 
-
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Mini Banner Version + Shortcode + Settings added
 
 = 1.0 =
 Initial release
