@@ -93,6 +93,10 @@ You can use the `campaign` argument, too.
 
 If no campaign is specified explicitly, the default one or the one defined in plugin's settings page will be used. 
 
+*Note:* If you update the Mini-Cart integration settings of this plugin, you need to clear the browser's localstorage cache manually to see your changes immediately
+(`Dev Tools -> Application -> Local Storage -> Delete the entry which is prefixed by 'wc_cart_hash...' and reload the page`).
+
+
 ### Reports
 You can configure three different report interval modes: `weekly`, `monthly`, `quarterly`.
 

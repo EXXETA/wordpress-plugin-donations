@@ -12,6 +12,14 @@
     $isBannerShownInMiniCart = \donations\SettingsManager::getOptionMiniBannerIsShownInMiniCart();
     $currentMiniBannerCampaign = \donations\SettingsManager::getOptionMiniBannerCampaign();
     $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getOptionMiniBannerCampaignTarget();
+
+    if (isset($_GET['settings-updated'])) {
+        ?>
+        <div class='notice notice-warning'>
+            <p><strong>Der Session-Storage (WooCommerce Fragment Cache) des Browsers muss ggfs. geleert werden</strong>, damit die Änderungen sofort sichtbar werden oder ein Fenster im "Privaten Modus" verwenden!</p>
+        </div>
+        <?php
+    }
     ?>
     <form action="options.php" method="post">
         <?php settings_fields(\donations\Plugin::$pluginSlug); ?>
