@@ -93,10 +93,6 @@ You can use the `campaign` argument, too.
 
 If no campaign is specified explicitly, the default one or the one defined in plugin's settings page will be used. 
 
-*Note:* If you update the Mini-Cart integration settings of this plugin, you need to clear the browser's localstorage cache manually to see your changes immediately
-(`Dev Tools -> Application -> Local Storage -> Delete the entry which is prefixed by 'wc_cart_hash...' and reload the page`).
-
-
 ### Reports
 You can configure three different report interval modes: `weekly`, `monthly`, `quarterly`.
 
@@ -111,10 +107,27 @@ All reports are persisted as a private custom post type integrated into the Word
 One time per day, a routine will check if the time to generate a new report has been reached. You can view the 
 date and time of the last check in plugin's report dashboard.
 
+### Plugin's settings
+This plugin enables you to modify certain aspects of the donations campaign integration:
+
+![](./screenshots/plugin_settings.png)
+
+- **Reporting interval:** {weekly, monthly, quarterly}
+- **Report preview default days in past:** This can be overwritten in the preview section.
+- (readonly) **Recipient's mail address:** You can't change this value and you must not.
+- **Show Mini-Banner in Mini-Cart:**\* yes/no flag.
+- **Campaign of mini-banner:**\* Default is "protect diversity"
+- **Target page of "more information" link in Mini-Banner:**\* Default is the WooCommerce "Cart page".
+
+\* If you change these settings, in order to see the effects, you need to clear 
+your browser's cookies and the local storage one time. E.g. by doing the following:
+ `Dev Tools -> Application -> Local Storage -> Delete the entry which is prefixed by 'wc_cart_hash...' and reload the page`.
+
+
 ### (Custom) banner design/styling
 This plugin is shipped with self-contained responsive CSS styles without dependencies to 
 a specific theme or framework. Although the styles should work in most setups there are situations when
-you want to modify the styles, e.g. if you use special fonts. Feel free to overwrite the styles as you want
+you want to modify the styles, e.g. if you use special fonts or a special theme. Feel free to overwrite the styles as you want
 as long as there are no major differences in regard to contents and copyright.
 
 Officialy this plugin is developed and tested with the Theme `Shophistic Lite`. 
@@ -136,8 +149,6 @@ Officialy this plugin is developed and tested with the Theme `Shophistic Lite`.
 ![](./screenshots/gutenberg_editor_view.png)
 
 ![](./screenshots/live_report_view.png)
-
-![](./screenshots/plugin_settings.png)
 
 # Development
 

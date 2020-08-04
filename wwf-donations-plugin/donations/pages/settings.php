@@ -16,7 +16,8 @@
     if (isset($_GET['settings-updated'])) {
         ?>
         <div class='notice notice-warning'>
-            <p><strong>Der Session-Storage (WooCommerce Fragment Cache) des Browsers muss ggfs. geleert werden</strong>, damit die Änderungen sofort sichtbar werden oder ein Fenster im "Privaten Modus" verwenden!</p>
+            <p><strong>Nach Änderungen, die das Mini-Banner betreffen, müssen die Cookies, der Local-Storage sowie der Session-Storage des Browsers ggfs. geleert werden</strong>,
+                damit die Änderungen sofort sichtbar werden. Alternativ kann ein Fenster im "Privaten Modus" verwendet werden!</p>
         </div>
         <?php
     }
