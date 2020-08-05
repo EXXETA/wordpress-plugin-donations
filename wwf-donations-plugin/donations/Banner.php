@@ -182,9 +182,9 @@ SCRIPT;
      *
      * @param string $cartUrl
      * @param string &$output
-     * @param bool $productId
+     * @param int $productId
      */
-    protected function applyWooCartFormData(string $cartUrl, string &$output, bool $productId)
+    protected function applyWooCartFormData(string $cartUrl, string &$output, int $productId)
     {
         if (strpos($cartUrl, '?page_id=') !== false) {
             // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly
