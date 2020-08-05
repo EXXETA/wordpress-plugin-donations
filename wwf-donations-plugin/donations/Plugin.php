@@ -18,10 +18,13 @@ class Plugin
      * @var string
      */
     private static $pluginFile;
-    // shortcode of this plugin
+    // shortcode of this plugin's banner (large)
     public static $bannerShortCode = 'wwf_donations_banner';
+    // shortcode of this plugin's banner (small)
+    public static $miniBannerShortCode = 'wwf_donations_banner_small';
     // block name of this plugin
     public static $blockTypeName = 'wwf-donations-plugin/checkout-banner';
+    public static $blockTypeNameMini = 'wwf-donations-plugin/banner-mini';
     // parent menu slug of this plugin
     public static $menuSlug = 'wwf-donations-plugin';
     // plugin slug used by options
@@ -112,8 +115,11 @@ class Plugin
         add_action('init', [Plugin::class, 'setup_report_post_type'], 0);
         // register gutenberg block
         add_action('init', [Plugin::class, 'setup_banner_block']);
-        // register shortcode
+        // register shortcode (large banner)
         add_shortcode(self::$bannerShortCode, [Plugin::class, 'setup_banner_shortcode']);
+        // register shortcode (small banner)
+        add_shortcode(self::$miniBannerShortCode, [Plugin::class, 'setup_banner_shortcode_small']);
+
         // register styles
         add_action('wp_enqueue_scripts', [Plugin::class, 'handle_styles']);
 
@@ -135,6 +141,20 @@ class Plugin
             $result = wp_schedule_event(time(), 'daily', 'wwf_donations_report_check');
             if (!$result) {
                 error_log(sprintf('%s: Error registering check job for report generation', self::$pluginFile));
+            }
+        }
+
+        // handle "mini-cart" addon
+        $closure = function () {
+            // the {@link MiniBanner} class will select its default based on user settings in wp
+            echo do_shortcode('[' . self::$miniBannerShortCode . ']');
+        };
+
+        if (SettingsManager::getOptionMiniBannerIsShownInMiniCart()) {
+            add_action('woocommerce_after_mini_cart', $closure);
+        } else {
+            if (has_action('woocommerce_after_mini_cart', $closure) > 0) {
+                remove_action('woocommerce_after_mini_cart', $closure);
             }
         }
     }
@@ -229,10 +249,12 @@ class Plugin
     {
         // atm there is nothing to do here
         remove_shortcode(self::$bannerShortCode);
+        remove_shortcode(self::$miniBannerShortCode);
 
         if (function_exists('unregister_block_type')) {
             // Gutenberg is active.
             unregister_block_type(self::$blockTypeName);
+            unregister_block_type(self::$blockTypeNameMini);
         }
         // cron clear
         wp_clear_scheduled_hook('wwf_donations_report_check');
@@ -291,6 +313,10 @@ class Plugin
             'editor_script' => 'checkout-charity-banner',
             'render_callback' => [Plugin::class, 'render_cart_block']
         ]);
+        register_block_type(self::$blockTypeNameMini, [
+            'editor_script' => 'charity-banner-mini',
+            'render_callback' => [Plugin::class, 'render_cart_block_mini']
+        ]);
     }
 
     static function render_cart_block($attributes = [], $content = ''): string
@@ -304,12 +330,31 @@ class Plugin
         return $banner->render();
     }
 
+    static function render_cart_block_mini($attributes = [], $content = ''): string
+    {
+        if (!isset($attributes['donationMode'])) {
+            $campaign = null;
+        } else {
+            $campaign = $attributes['donationMode'];
+        }
+        $banner = new MiniBanner($campaign, plugin_dir_url(self::getPluginFile()));
+        return $banner->render();
+    }
+
     static function setup_banner_shortcode($atts): string
     {
         $shortCodeAtts = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
         return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::getPluginFile())))->render();
+    }
+
+    static function setup_banner_shortcode_small($atts): string
+    {
+        $shortCodeAtts = shortcode_atts([
+            'campaign' => null,
+        ], $atts, self::$miniBannerShortCode);
+        return (new MiniBanner($shortCodeAtts['campaign'], plugin_dir_url(self::getPluginFile())))->render();
     }
 
     static function handle_styles(): void
@@ -319,25 +364,31 @@ class Plugin
             return;
         }
         $post = get_post();
-        $isStyleNeeded = false;
-        if ($post !== null) {
+        $isStyleAndScriptIncluded = false;
+
+        if (SettingsManager::getOptionMiniBannerIsShownInMiniCart()) {
+            $isStyleAndScriptIncluded = true;
+        }
+        if (!$isStyleAndScriptIncluded && $post !== null) {
             // only add banner styles if the block of this plugin is used
             if (has_blocks($post->post_content)) {
                 $blocks = parse_blocks($post->post_content);
                 foreach ($blocks as $singleBlock) {
-                    if ($singleBlock['blockName'] === self::$blockTypeName) {
-                        $isStyleNeeded = true;
+                    if (in_array($singleBlock['blockName'], [self::$blockTypeName, self::$blockTypeNameMini])) {
+                        $isStyleAndScriptIncluded = true;
                         break;
                     }
                 }
             }
             // AND/OR only add banner styles if the shortcode is used
-            if (has_shortcode($post->post_content, self::$bannerShortCode)) {
-                $isStyleNeeded = true;
+            if (has_shortcode($post->post_content, self::$bannerShortCode)
+                || has_shortcode($post->post_content, self::$miniBannerShortCode)) {
+                $isStyleAndScriptIncluded = true;
             }
         }
-        if ($isStyleNeeded) {
+        if ($isStyleAndScriptIncluded) {
             wp_enqueue_style('wwf-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'styles/banner.css');
+            wp_enqueue_script('wwf-donations-mini-banner', plugin_dir_url(self::getPluginFile()) . 'scripts/mini-banner.js', ['jquery'], false, true);
         }
     }
 
@@ -458,11 +509,9 @@ class Plugin
             $allProductIds[] = get_option($charityProduct->getProductIdOptionKey());
         }
 
-        // TODO add correct iban information
         $output = '<div class="notice notice-info"><p>';
         $output .= 'Dieses Plugin erweitert den Shop mit mehreren Produkten, um Gelder für 
                     Wohltätigkeitsorganisationen zu sammeln.<br/>';
-        // TODO name shortcode and/or Gutenberg Block
         $output .= sprintf('Produkt-IDs: <strong>%s</strong>', join(', ', $allProductIds)) . '<br/>';
         $output .= 'Bitte überweisen Sie in regelmäßigen Abständen die Beträge der eingenommenen Spenden 
                     unter Angabe des jeweilig gewünschten Spendenzwecks zusätzlich zum angegebenen Verwendungszweck

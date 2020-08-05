@@ -16,7 +16,7 @@ const campaigns = [
         label: __('Klimaschutz', 'wwf-donations-plugin'),
         value: 'protect_climate_coin',
     }, {
-        label: __('Biologischer Vielfaltsschutz', 'wwf-donations-plugin'),
+        label: __('Schutz biologischer Vielfalt', 'wwf-donations-plugin'),
         value: 'protect_diversity_coin',
     },
 ];
@@ -25,7 +25,7 @@ export function bannerBlock() {
     const cartPageId = cart_page_id; // this value is provided by the wordpress plugin
 
     registerBlockType('wwf-donations-plugin/checkout-banner', {
-        title: __('Spendenbanner', 'wwf-donations-plugin'),
+        title: __('WWF-Spendenbanner', 'wwf-donations-plugin'),
         description: '',
         isPrivate: false,
         icon: 'cart',
@@ -45,7 +45,49 @@ export function bannerBlock() {
             return (
                 <PanelBody
                     title={__(
-                        'Spende Banner',
+                        'WWF-Spendenbanner',
+                        'wwf-donations-plugin'
+                    )}
+                >
+                    <SelectControl
+                        label={__(
+                            'Zielkampagne',
+                            'wwf-donations-plugin'
+                        )}
+                        value={attributes['donationMode']}
+                        options={campaigns}
+                        onChange={(value) =>
+                            setAttributes({
+                                donationMode: value,
+                            })
+                        }
+                    />
+                </PanelBody>
+            )
+        },
+    });
+    registerBlockType('wwf-donations-plugin/banner-mini', {
+        title: __('WWF-Spendenbanner (mini)', 'wwf-donations-plugin'),
+        description: '',
+        isPrivate: false,
+        icon: 'cart',
+        category: 'widgets',
+        attributes: {
+            donationMode: {
+                type: 'string',
+            }
+        },
+        keywords: ['donation', 'charity', 'cart', 'banner', 'mini'],
+        edit: (props) => {
+            const {setAttributes, isSelected, attributes} = props;
+            // set proper initial value
+            if(!attributes['donationMode']) {
+                attributes['donationMode'] = 'protect_diversity_coin';
+            }
+            return (
+                <PanelBody
+                    title={__(
+                        'WWF-Spendenbanner (mini)',
                         'wwf-donations-plugin'
                     )}
                 >

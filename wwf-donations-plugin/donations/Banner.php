@@ -16,6 +16,14 @@ namespace donations;
 class Banner
 {
     /**
+     * define the index of the default campaign which is also used as fallback of
+     * CharityProductManager::getAllCharityProductSlugs()
+     *
+     * @var int
+     */
+    protected $defaultCampaignIndex = 2;
+
+    /**
      * this is always a value out of CharityProductManager::getAllCampaignTypes()
      *
      * @var string
@@ -44,7 +52,7 @@ class Banner
         if (!$isValid) {
             // select default campaign - if input values were invalid
             // use fallback, take third of campaign types = protect species
-            $bannerType = CampaignManager::getAllCampaignTypes()[2];
+            $bannerType = CampaignManager::getAllCampaignTypes()[$this->defaultCampaignIndex];
         }
         $this->campaign = $bannerType;
         $this->pluginUrl = $pluginUrl;
@@ -56,18 +64,18 @@ class Banner
     public function render(): string
     {
         $campaign = CampaignManager::getCampaignBySlug($this->campaign);
+        if (!$campaign) {
+            error_log(sprintf("Invalid campaign for slug '%s'", $this->campaign));
+            return "";
+        }
         $product = CharityProductManager::getProductBySlug($this->campaign);
-
+        if (!$product) {
+            error_log(sprintf("Invalid product for campaign slug '%s'", $this->campaign));
+            return "";
+        }
         $productId = get_option($product->getProductIdOptionKey());
         $wcProduct = wc_get_product($productId);
-        $attachmentId = intval(get_option($product->getImageIdOptionKey()));
-
-        if ($wcProduct instanceof \WC_Product) {
-            $productAttachmentId = intval($wcProduct->get_image_id());
-            if ($productAttachmentId && $productAttachmentId > 0 && $productAttachmentId != $attachmentId) {
-                $attachmentId = $productAttachmentId;
-            }
-        }
+        $attachmentId = $this->getImageAttachmentIdByProduct($product, $wcProduct);
 
         $randomString = uniqid();
         $moreInfoId = sprintf('donation-campaign-more-info-%s-%s', $campaign->getSlug(), $randomString);
@@ -92,15 +100,8 @@ class Banner
         $output .= sprintf('<img class="donation-campaign-logo" alt="" src="%s" /><span class="times"></span>',
             wp_get_attachment_image_url($attachmentId));
 
-        if (strpos($cartUrl, '?page_id=') !== false) {
-            // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly
-            $cartPageId = wc_get_page_id('cart');
-            $output .= sprintf('<input type="hidden" value="%d" name="page_id" />', $cartPageId);
-        }
+        $this->applyWooCartFormData($cartUrl, $output, $productId);
 
-        // NOTE: input names are very important to create a valid form action for WooCommerce cart
-        $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $productId);
-        $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
         $output .= '<button class="donation-campaign-submit" type="submit">';
         $output .= sprintf('<img class="cart-icon" src="%s" alt="" /><span class="donation-campaign-cart-text">%s</span>',
             $this->pluginUrl . 'images/icon_cart.svg', $campaign->getButtonDescription());
@@ -140,5 +141,59 @@ SCRIPT;
         $output .= '</div>'; // .cart-donation-banner
 
         return $output;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCampaign(): string
+    {
+        return $this->campaign;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluginUrl(): string
+    {
+        return $this->pluginUrl;
+    }
+
+    /**
+     * @param CharityProduct $product
+     * @param $wcProduct
+     * @return int
+     */
+    protected function getImageAttachmentIdByProduct(CharityProduct $product, $wcProduct): int
+    {
+        $attachmentId = intval(get_option($product->getImageIdOptionKey()));
+
+        if ($wcProduct instanceof \WC_Product) {
+            $productAttachmentId = intval($wcProduct->get_image_id());
+            if ($productAttachmentId && $productAttachmentId > 0 && $productAttachmentId != $attachmentId) {
+                $attachmentId = $productAttachmentId;
+            }
+        }
+        return $attachmentId;
+    }
+
+    /**
+     * this method uses the &$output reference directly
+     *
+     * @param string $cartUrl
+     * @param string &$output
+     * @param int $productId
+     */
+    protected function applyWooCartFormData(string $cartUrl, string &$output, int $productId)
+    {
+        if (strpos($cartUrl, '?page_id=') !== false) {
+            // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly
+            $cartPageId = wc_get_page_id('cart');
+            $output .= sprintf('<input type="hidden" value="%d" name="page_id" />', $cartPageId);
+        }
+
+        // NOTE: input names are very important to create a valid form action for WooCommerce cart
+        $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $productId);
+        $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
     }
 }

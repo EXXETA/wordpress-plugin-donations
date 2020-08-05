@@ -1,42 +1,64 @@
 === Wordpress Donations Plugin For WooCommerce ===
-Contributors: -
+Contributors: Exxeta AG
 Donate link: https://github.com/EXXETA/wordpress-plugin-donations
-Tags: woocommerce, donation, charity
+Tags: woocommerce, donation, charity, wwf
 Requires at least: 5.3
-Stable tag: 5.3
-Requires PHP: 7.3
+Stable tag: 5.4
 Tested up to: 5.4
+Requires PHP: 7.3
 License: GNU General Public License version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Plugin for Wordpress to collect donations in a WooCommerce shop for a non-profit organization. Automatically sending reports via mail.
+**Plugin for WordPress to collect donations in a WooCommerce shop
+for the non-profit organization [WWF](https://www.wwf.de/). Automatically sending mail reports.**
+
 
 == Description ==
 
-**Plugin for Wordpress to collect donations in a WooCommerce shop for a non-profit organization. Automatically sending reports via mail.**
+**Plugin for WordPress to collect donations in a WooCommerce shop
+for the non-profit organization [WWF](https://www.wwf.de/). Automatically sending mail reports.**
 
 **NOTE:** Currently this plugin is in German language available only.
 
 ### Features
-- Five donation products/campaigns
-- Providing easy banner content (for cart page):
-    - Shortcode: `[wwf_donations_banner]`
-    - Gutenberg Block: `Spendemünzen`
-- Campaign reports
-    - Automatically generating reports
-    - Mail delivery of report content
-    - Reports are persistent and transparently accessible in custom backend section
-    - Three interval modes: *weekly*, *monthly*, *quarterly*
-    - Custom report live preview
-    - Report generation is checked once a day
+- **Five donation campaigns** are officially supported
+- Providing banner content for easy integration:
+    - Shortcodes: `[wwf_donations_banner]` and `[wwf_donations_banner_small]`. See below for more information.
+    - Equivalent Gutenberg editor blocks: `WWF-Spendenbanner`, `WWF-Spendenbanner (mini)`
+- **Campaign reporting**
+    - Automatic generation of reports in the following time ranges: *weekly*, *monthly*, *quarterly*
+    - Automatic mail delivery to WWF Germany of report content
+    - Reports are persisted and transparently accessible in custom backend section
+    - Custom "live" report preview
+- Easy integration into WooCommerce "Mini cart" widget
 - No impact on privacy of customers of this plugin
 
 == Installation ==
 
-1. Be sure to meet the listed requirements for the web server and the wordpress installation.
+## Server and WordPress requirements
+- PHP 7.3+
+- MySQL/MariaDB 5.7+/10.3+
+- Required active WordPress plugins:
+    - `woocommerce`
+- WordPress crons (= scheduled events) are set up and are running at least once a day.
+- **Important:** WordPress should be able to send mails via `wp_mail`. If you are not sure about this,
+e.g. check [this article](https://wphelp.de/wordpress-email) and test successful mail delivery.
+- WooCommerce is (initially) set up
+    - Currency: Euro
+
+
+1. Be sure to meet the listed requirements for the web server and the WordPress installation, *before* you proceed.
 2. Extract provided archive of this plugin to `wp-content/plugins` directory.
-3. Activate this plugin in Wordpress plugin page.
-4. Configure plugin settings in `Settings > Donations`.
+3. Install and activate this plugin in WordPress plugin management section.
+4. Configure plugin settings in `Einstellungen > Spendenübersicht`.
+5. Add the banner to your *WooCommerce* cart page by using a block (in "Gutenberg" editor)
+   or as an alternative you can use a WordPress shortcode (documented below).
+   Technically both ways lead to the same markup/result.
+6. Read this documentation carefully to understand how this plugin is supposed to work.
+7. You'll get regular donation reports and you *must* transfer the donated money to the [WWF Germany](https://www.wwf.de/).
+More information (including bank account) is given in the plugin's dashboard.
+
+**NOTE:** After plugin installation/(re-)activation there will be generated one first (probably empty) report.
 
 == Frequently Asked Questions ==
 
@@ -44,24 +66,26 @@ Plugin for Wordpress to collect donations in a WooCommerce shop for a non-profit
 
 [Read docs here](https://github.com/EXXETA/wordpress-plugin-donations).
 
+= I found a bug or I have a question =
+
+[Create an issue here](https://github.com/EXXETA/wordpress-plugin-donations/issues).
+
 == Screenshots ==
 
 Have a look [here](https://github.com/EXXETA/wordpress-plugin-donations/tree/master/screenshots).
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
-
 == Changelog ==
 
-= 1.0 =
+= 1.1.0 =
+* Mini Banner Version + Shortcode + Settings added
 
+= 1.0 =
 * Initial release
 
-
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Mini Banner Version + Shortcode + Settings added
 
 = 1.0 =
 Initial release
