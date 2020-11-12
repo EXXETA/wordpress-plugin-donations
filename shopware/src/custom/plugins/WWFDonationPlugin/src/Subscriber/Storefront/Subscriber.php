@@ -1,6 +1,6 @@
 <?php
 
-namespace DockwareSamplePlugin\Subscriber\Storefront;
+namespace WWFDonationPlugin\Subscriber\Storefront;
 
 use Shopware\Storefront\Event\StorefrontRenderEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

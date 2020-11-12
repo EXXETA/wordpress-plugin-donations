@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace DockwareSamplePlugin;
+namespace WWFDonationPlugin;
 
 use Shopware\Core\Framework\Plugin;
+use Shopware\Core\Framework\Plugin\Context\InstallContext;
 
-class DockwareSamplePlugin extends Plugin
+class WWFDonationPlugin extends Plugin
 {
 
     public function install(InstallContext $context): void

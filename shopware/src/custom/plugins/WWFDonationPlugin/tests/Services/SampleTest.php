@@ -1,6 +1,6 @@
 <?php
 
-namespace DockwareSamplePlugin\Tests\Services;
+namespace WWFDonationPlugin\Tests\Services;
 
 use PHPUnit\Framework\TestCase;
 

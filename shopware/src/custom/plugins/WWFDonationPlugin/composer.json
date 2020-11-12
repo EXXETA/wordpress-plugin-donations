@@ -1,10 +1,10 @@
 {
-    "name": "dockware/sample-plugin",
-    "description": "Dockware Sample Plugin",
+    "name": "wwf/donation-plugin",
+    "description": "WWF Donation Plugin Germany Shopware",
     "type": "shopware-platform-plugin",
-    "license": "MIT",
+    "license": "GPLv3",
     "extra": {
-        "shopware-plugin-class": "DockwareSamplePlugin\\DockwareSamplePlugin",
+        "shopware-plugin-class": "WWFDonationPlugin\\WWFDonationPlugin",
         "plugin-icon": "src/Resources/config/plugin.png",
         "author": "Dockware",
         "copyright": "(c) by shopware AG",
@@ -36,15 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "DockwareSamplePlugin\\": "src/"
+            "WWFDonationPlugin\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DockwareSamplePlugin\\Tests\\": "tests/"
+            "WWFDonationPlugin\\Tests\\": "tests/"
         }
     },
-    "views": [
-        "@Storefront"
-    ]
 }

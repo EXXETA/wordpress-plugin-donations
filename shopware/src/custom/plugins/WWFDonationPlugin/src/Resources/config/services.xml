@@ -6,7 +6,7 @@
 
     <services>
 
-        <service id="DockwareSamplePlugin\Subscriber\Storefront\Subscriber" class="DockwareSamplePlugin\Subscriber\Storefront\Subscriber">
+        <service id="WWFDonationPlugin\Subscriber\Storefront\Subscriber" class="WWFDonationPlugin\Subscriber\Storefront\Subscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
         
