@@ -1,0 +1,50 @@
+{
+    "name": "dockware/sample-plugin",
+    "description": "Dockware Sample Plugin",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "extra": {
+        "shopware-plugin-class": "DockwareSamplePlugin\\DockwareSamplePlugin",
+        "plugin-icon": "src/Resources/config/plugin.png",
+        "author": "Dockware",
+        "copyright": "(c) by shopware AG",
+        "label": {
+            "de-DE": "Dockware Sample Plugin",
+            "en-GB": "Dockware Sample Plugin"
+        },
+        "description": {
+            "de-DE": "Deutsche Beschreibung des Plugins",
+            "en-GB": "English Description of Plugin"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://store.shopware.com/shopware-ag.html",
+            "en-GB": "https://store.shopware.com/en/shopware-ag.html"
+        },
+        "supportLink": {
+            "de-DE": "https://docs.shopware.com/de",
+            "en-GB": "https://docs.shopware.com/en"
+        }
+    },
+    "require": {
+        "php": ">= 7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8.3.4",
+        "phpstan/phpstan": "^0.12.18",
+        "shopware/core": "*",
+        "shopware/storefront": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "DockwareSamplePlugin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DockwareSamplePlugin\\Tests\\": "tests/"
+        }
+    },
+    "views": [
+        "@Storefront"
+    ]
+}
