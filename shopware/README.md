@@ -6,3 +6,4 @@ Run: `composer install` both in `./shopware/src` and in `./shopware/src/custom/p
 
 For development run `docker-compose up` and sync changes of plugin's code via SFTP into the container. 
 
+## TODO

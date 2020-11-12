@@ -10,5 +10,45 @@
             <label>Active</label>
             <label lang="de-DE">Aktiviert</label>
         </input-field>
+
+        <input-field type="single-select">
+            <name>reportMethod</name>
+            <label>Donation report interval</label>
+            <label lang="de-DE">Regelmäßige Spendenberichte generieren</label>
+            <options>
+                <option>
+                    <id>quarterly</id>
+                    <name>Quarterly</name>
+                    <name lang="de-DE">Quartalsweise</name>
+                </option>
+                <option>
+                    <id>monthly</id>
+                    <name>Monthly</name>
+                    <name lang="de-DE">Monatlich</name>
+                </option>
+                <option>
+                    <id>weekly</id>
+                    <name>Weekly</name>
+                    <name lang="de-DE">Wöchentlich</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="int">
+            <name>liveReportDaysInPast</name>
+            <label>Live-Reporting - Days in past</label>
+            <label lang="de-DE">Live-Berichte - Tage in die Vergangenheit</label>
+            <defaultValue>30</defaultValue>
+            <copyable>true</copyable>
+        </input-field>
+
+        <input-field type="text">
+            <name>targetEmail</name>
+            <label>Mail-Recipient of donation reports</label>
+            <label lang="de-DE">Empfangsadresse der Spendenberichte</label>
+            <defaultValue>eshop-spenden@wwf.de</defaultValue>
+            <disabled>true</disabled>
+            <copyable>true</copyable>
+        </input-field>
     </card>
 </config>

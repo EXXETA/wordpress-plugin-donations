@@ -4,12 +4,23 @@ namespace WWFDonationPlugin;
 
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
+use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
 class WWFDonationPlugin extends Plugin
 {
 
     public function install(InstallContext $context): void
     {
-        // your code you need to execute while installation
+        // TODO add installation routine
+    }
+
+    public function uninstall(UninstallContext $uninstallContext): void
+    {
+        parent::uninstall($uninstallContext);
+
+        if ($uninstallContext->keepUserData()) {
+            // TODO do something different when the user want to keep the plugin's data
+            return;
+        }
     }
 }
