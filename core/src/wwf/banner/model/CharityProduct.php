@@ -1,9 +1,11 @@
 <?php
 
-namespace exxeta\wwf\banner;
+namespace exxeta\wwf\banner\model;
 
 /**
  * Class CharityProduct
+ *
+ * @package exxeta\wwf\banner\model
  */
 class CharityProduct
 {

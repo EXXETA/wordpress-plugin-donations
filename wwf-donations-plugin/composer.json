@@ -5,8 +5,7 @@
   "minimum-stability": "stable",
   "require-dev": {
     "wp-coding-standards/wpcs": "*",
-    "woocommerce/woocommerce": "4.6.0",
-    "phpunit/phpunit": "^9"
+    "woocommerce/woocommerce": "4.6.0"
   },
   "require": {
     "exxeta/wwf-donations-shop-banner-core": "*"

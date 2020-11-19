@@ -1,14 +1,13 @@
 <?php
 
-
-namespace exxeta\wwf\banner;
+namespace exxeta\wwf\banner\model;
 
 /**
  * Class ReportResultModel
  *
  * Plain old PHP object of the report results
  *
- * @package exxeta\wwf\banner
+ * @package exxeta\wwf\banner\model
  */
 class ReportResultModel
 {

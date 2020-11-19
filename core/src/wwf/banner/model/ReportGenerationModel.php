@@ -1,14 +1,13 @@
 <?php
 
-
-namespace exxeta\wwf\banner;
+namespace exxeta\wwf\banner\model;
 
 /**
  * Class ReportGenerationModel
  *
  * this object encapsulates values we need during donation report generation
  *
- * @package donations
+ * @package exxeta\wwf\banner\model
  */
 class ReportGenerationModel
 {

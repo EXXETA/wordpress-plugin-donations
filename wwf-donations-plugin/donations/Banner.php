@@ -4,6 +4,8 @@
 namespace donations;
 
 
+use exxeta\wwf\banner\model\CharityProduct;
+
 /**
  * Class Banner
  *
@@ -73,7 +75,7 @@ class Banner
             error_log(sprintf("Invalid product for campaign slug '%s'", $this->campaign));
             return "";
         }
-        $productId = get_option($product->getProductIdOptionKey());
+        $productId = get_option($product->getProductIdSettingKey());
         $wcProduct = wc_get_product($productId);
         $attachmentId = $this->getImageAttachmentIdByProduct($product, $wcProduct);
 
@@ -166,7 +168,7 @@ SCRIPT;
      */
     protected function getImageAttachmentIdByProduct(CharityProduct $product, $wcProduct): int
     {
-        $attachmentId = intval(get_option($product->getImageIdOptionKey()));
+        $attachmentId = intval(get_option($product->getImageIdSettingKey()));
 
         if ($wcProduct instanceof \WC_Product) {
             $productAttachmentId = intval($wcProduct->get_image_id());

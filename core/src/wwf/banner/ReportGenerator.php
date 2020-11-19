@@ -1,26 +1,32 @@
 <?php
 
+namespace exxeta\wwf\banner;
 
-namespace donations;
-
+use DateInterval;
+use DateTime;
+use Exception;
+use exxeta\wwf\banner\model\ReportGenerationModel;
 
 /**
  * Class ReportGenerator
  *
  * logic for donation report generation
  *
- * @package donations
+ * @package exxeta\wwf\banner
  */
-class ReportGenerator
+final class ReportGenerator
 {
-
     /**
      * main method for report generation
      *
      * @param ReportGenerationModel $reportGenerationModel
-     * @throws \Exception
+     * @param DonationPluginInterface $donationPlugin
+     * @param ReportHandler $reportHandler
+     * @throws Exception
      */
-    public static function generateReport(ReportGenerationModel $reportGenerationModel): void
+    public static function generateReport(ReportGenerationModel $reportGenerationModel,
+                                          DonationPluginInterface $donationPlugin,
+                                          ReportHandler $reportHandler): void
     {
         // the time should be set properly in report generation model, but to be sure, we repeat it here
         $timeRangeStart = $reportGenerationModel->getStartDate()
@@ -29,7 +35,7 @@ class ReportGenerator
             ->setTime(23, 59, 59);
 
         if ($timeRangeStart > $timeRangeEnd) {
-            error_log(Plugin::getPluginFile() . ': invalid time range');
+            error_log(${$donationPlugin->getSettingsManager()}::getPluginName() . ': invalid time range');
             return;
         }
         $reportingInterval = $reportGenerationModel->getIntervalMode();
@@ -39,8 +45,8 @@ class ReportGenerator
         $results = [];
         $sum = 0.0;
         $totalOrderCounter = 0;
-        foreach (CampaignManager::getAllCampaignTypes() as $campaignSlug) {
-            $reportResult = CampaignManager::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
+        foreach (${$donationPlugin->getCampaignManager()}::getAllCampaignTypes() as $campaignSlug) {
+            $reportResult = ${$donationPlugin->getCampaignManager()}::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
             $results[$campaignSlug] = $reportResult->getAmount();
             $totalOrderCounter = $reportResult->getOrderCountTotal();
             $sum += $results[$campaignSlug];
@@ -54,15 +60,18 @@ class ReportGenerator
         // - 'sum'
         // - 'isRegular' - boolean
         // - 'totalOrderCount' - float
+        // - 'pluginInstance' - instance of a DonationPluginInterface
         // - 'content' - set later after body was rendered
+        // - 'shopUrl' - url to the shop
+        // - 'shopName' - name of the shop
         $args = [];
 
         /**
-         * @param \DateTime $startDate
-         * @param \DateTime $endDate
+         * @param DateTime $startDate
+         * @param DateTime $endDate
          * @return string
          */
-        $timeRangeString = function (\DateTime $startDate, \DateTime $endDate): string {
+        $timeRangeString = function (DateTime $startDate, DateTime $endDate): string {
             $startStringFormat = 'd/m';
             if ($startDate->format('Y') !== $endDate->format('Y')) {
                 $startStringFormat = 'd/m/Y';
@@ -70,15 +79,15 @@ class ReportGenerator
             return $startDate->format($startStringFormat) . ' - ' . $endDate->format('d/m/Y');
         };
 
-        $args['counter'] = SettingsManager::getReportCounterIncremented();
+        $args['counter'] = ${$donationPlugin->getSettingsManager()}::getReportCounterIncremented();
 
         if (!$isRegular) {
             $args['subject'] = 'Manueller Bericht #' . $args['counter'] . ': Spenden | '
-                . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . get_bloginfo('name');
+                . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . $reportHandler->getMailSubjectSuffix();
         } else {
             $args['subject'] = 'Automatischer Bericht #' . $args['counter'] . ': Spenden | '
-                . SettingsManager::getReportingIntervals()[$reportingInterval]
-                . ' | ' . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . get_bloginfo('name');
+                . ${$donationPlugin->getSettingsManager()}::getReportingIntervals()[$reportingInterval]
+                . ' | ' . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . $reportHandler->getMailSubjectSuffix();
         }
 
         $args['revenues'] = $results;
@@ -87,77 +96,76 @@ class ReportGenerator
         $args['sum'] = $sum;
         $args['isRegular'] = $isRegular;
         $args['totalOrderCount'] = $totalOrderCounter;
+        $args['pluginInstance'] = $donationPlugin;
+        $args['shopName'] = $reportHandler->getShopName();
+        $args['shopUrl'] = $reportHandler->getShopUrl();
+        $args['shopSystem'] = $reportHandler->getShopSystem();
 
         // get mail body content - used for report post type also
         ob_start();
-        include(plugin_dir_path(Plugin::getPluginFile()) . 'donations/mail/content.php');
+        $donationPlugin->includeContentTemplate();
         $mailBody = ob_get_contents();
         ob_end_clean();
         $args['content'] = $mailBody;
 
         // render full mail template
         ob_start();
-        include(plugin_dir_path(Plugin::getPluginFile()) . 'donations/mail/report.php');
+        $donationPlugin->includeReportTemplate();
         $mailContent = ob_get_contents();
         ob_end_clean();
 
-        wp_insert_post([
-            'post_title' => $args['subject'],
-            'post_content' => $mailBody,
-            'post_type' => Plugin::$customPostType,
-            'post_status' => 'publish',
-            'comment_status' => 'closed',
-            'ping_status' => 'closed',
-        ]);
+        $reportHandler->storeReportRecord($args, $mailBody);
 
-        $recipient = SettingsManager::getReportRecipientMail();
+        $recipient = ${$donationPlugin->getSettingsManager()}::getReportRecipientMail();
 
         if ($reportGenerationModel->isSendMail()) {
             $headers = ['Content-Type: text/html; charset=UTF-8'];
-            wp_mail($recipient, esc_html($args['subject']), $mailContent, $headers);
+            $reportHandler->sendMail($recipient, $args['subject'], $mailContent, $headers);
         }
         // update last execution time
         if ($reportGenerationModel->isRegular()) {
-            $lastExecutionDate = ($timeRangeEnd)->add(new \DateInterval('P1D'));
+            $lastExecutionDate = ($timeRangeEnd)->add(new DateInterval('P1D'));
             $lastExecutionDate->setTime(0, 0, 0);
-            SettingsManager::setReportLastGeneration($lastExecutionDate);
+            ${$donationPlugin->getSettingsManager()}::setReportLastGeneration($lastExecutionDate);
         }
     }
 
     /**
      * light-weight method to decide if its time for donation report generation
      *
-     * @throws \Exception
+     * @param DonationPluginInterface $donationPlugin
+     * @param ReportHandler $reportHandler
+     * @throws Exception
      */
-    public static function checkReportGeneration(): void
+    public static function checkReportGeneration(DonationPluginInterface $donationPlugin, ReportHandler $reportHandler): void
     {
         // calculate next execution date
-        $today = (new \DateTime('now'))->setTime(0, 0, 0);
-        $mode = SettingsManager::getCurrentReportingInterval();
-        $lastExecutionDate = SettingsManager::getReportLastGenerationDate();
+        $today = (new DateTime('now'))->setTime(0, 0, 0);
+        $mode = ${$donationPlugin->getSettingsManager()}::getCurrentReportingInterval();
+        $lastExecutionDate = ${$donationPlugin->getSettingsManager()}::getReportLastGenerationDate();
 
+        $pluginName = ${$donationPlugin->getSettingsManager()}::getPluginName();
         try {
-            $nextExecutionDate = self::calculateNextExecutionDate($mode, $lastExecutionDate);
-        } catch (\Exception $ex) {
-            error_log(Plugin::getPluginFile() . ': problem calculating nextExecutionDate for report generation');
+            $nextExecutionDate = static::calculateNextExecutionDate($mode, $lastExecutionDate);
+        } catch (Exception $ex) {
+            error_log($pluginName . ': problem calculating nextExecutionDate for report generation');
             return;
         }
         if ($nextExecutionDate <= $today) {
             try {
-                $model = self::getReportModel($mode, $nextExecutionDate);
-            } catch (\Exception $ex) {
-                error_log(Plugin::getPluginFile() . ': problem calculating report model for report generation');
+                $model = static::getReportModel($mode, $nextExecutionDate);
+            } catch (Exception $ex) {
+                error_log($pluginName . ': problem calculating report model for report generation');
                 return;
             }
             if ($model instanceof ReportGenerationModel) {
                 // trigger report generation
-                self::generateReport($model);
+                self::generateReport($model, $donationPlugin, $reportHandler);
             } else {
-                error_log(Plugin::getPluginFile() . ': problem calculating report model for report generation');
+                error_log($pluginName . ': problem calculating report model for report generation');
                 return;
             }
         }
-        // nothing to do here
     }
 
     /**
@@ -174,18 +182,18 @@ class ReportGenerator
      * this method is covered by unit tests
      *
      * @param string $mode
-     * @param \DateTime|null $lastExecution
-     * @return \DateTime
-     * @throws \Exception
+     * @param DateTime|null $lastExecution
+     * @return DateTime
+     * @throws Exception
      * @see ReportGenerationTest
-     *
      */
-    public static function calculateNextExecutionDate(string $mode, ?\DateTime $lastExecution): \DateTime
+    public static function calculateNextExecutionDate(string $mode,
+                                                      ?DateTime $lastExecution): DateTime
     {
-        $today = (new \DateTime('now'))->setTime(0, 0, 0);
+        $today = (new DateTime('now'))->setTime(0, 0, 0);
         switch ($mode) {
-            case SettingsManager::REPORT_INTERVAL_MODE_WEEKLY:
-                $currentMonday = (new \DateTime('monday this week'))
+            case AbstractSettingsManager::REPORT_INTERVAL_MODE_WEEKLY:
+                $currentMonday = (new DateTime('monday this week'))
                     ->setTime(0, 0, 0);
                 // check if last week was covered
                 if (!$lastExecution) {
@@ -193,19 +201,19 @@ class ReportGenerator
                 }
                 return (clone $lastExecution)->modify('next monday')
                     ->setTime(0, 0, 0);
-            case SettingsManager::REPORT_INTERVAL_MODE_MONTHLY:
-                $firstDayOfThisMonth = (new \DateTime('first day of this month'))
+            case AbstractSettingsManager::REPORT_INTERVAL_MODE_MONTHLY:
+                $firstDayOfThisMonth = (new DateTime('first day of this month'))
                     ->setTime(0, 0, 0);
                 if (!$lastExecution) {
                     return $firstDayOfThisMonth;
                 }
                 return (clone $lastExecution)->modify('first day of next month')
                     ->setTime(0, 0, 0);
-            case SettingsManager::REPORT_INTERVAL_MODE_QUARTERLY:
-                $firstOfJanuary = (new \DateTime('first day of january this year'));
-                $firstOfApril = (new \DateTime('first day of april this year'));
-                $firstOfJuly = (new \DateTime('first day of july this year'));
-                $firstOfOctober = (new \DateTime('first day of october this year'));
+            case AbstractSettingsManager::REPORT_INTERVAL_MODE_QUARTERLY:
+                $firstOfJanuary = (new DateTime('first day of january this year'));
+                $firstOfApril = (new DateTime('first day of april this year'));
+                $firstOfJuly = (new DateTime('first day of july this year'));
+                $firstOfOctober = (new DateTime('first day of october this year'));
 
                 if (!$lastExecution) {
                     switch (intval($today->format('m'))) {
@@ -235,22 +243,22 @@ class ReportGenerator
                     case 1:
                     case 2:
                     case 3:
-                        return (new \DateTime(sprintf('first day of april %d', $year)))
+                        return (new DateTime(sprintf('first day of april %d', $year)))
                             ->setTime(0, 0, 0);
                     case 4:
                     case 5:
                     case 6:
-                        return (new \DateTime(sprintf('first day of july %d', $year)))
+                        return (new DateTime(sprintf('first day of july %d', $year)))
                             ->setTime(0, 0, 0);
                     case 7:
                     case 8:
                     case 9:
-                        return (new \DateTime(sprintf('first day of october %d', $year)))
+                        return (new DateTime(sprintf('first day of october %d', $year)))
                             ->setTime(0, 0, 0);
                     case 10:
                     case 11:
                     case 12:
-                        return (new \DateTime(sprintf('first day of january %d', $year + 1)))
+                        return (new DateTime(sprintf('first day of january %d', $year + 1)))
                             ->setTime(0, 0, 0);
                     default:
                         error_log(sprintf('invalid month "%s"', $today->format('m')));
@@ -264,42 +272,42 @@ class ReportGenerator
 
     /**
      * @param string $mode
-     * @param \DateTime $nextExecutionDate output of #calculateNextExecutionDate
+     * @param DateTime $nextExecutionDate output of #calculateNextExecutionDate
      * @return ReportGenerationModel|null
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function getReportModel(string $mode, \DateTime $nextExecutionDate): ?ReportGenerationModel
+    public static function getReportModel(string $mode, DateTime $nextExecutionDate): ?ReportGenerationModel
     {
         // execution required
         $executionYear = $nextExecutionDate->format('Y');
         switch ($mode) {
-            case SettingsManager::REPORT_INTERVAL_MODE_WEEKLY:
+            case AbstractSettingsManager::REPORT_INTERVAL_MODE_WEEKLY:
                 $startDate = (clone $nextExecutionDate)
-                    ->sub(new \DateInterval('P1W'))
+                    ->sub(new DateInterval('P1W'))
                     ->modify('monday this week');
                 $endDate = (clone $nextExecutionDate)
-                    ->sub(new \DateInterval('P1W'))
+                    ->sub(new DateInterval('P1W'))
                     ->modify('sunday this week');
                 break;
-            case SettingsManager::REPORT_INTERVAL_MODE_MONTHLY:
+            case AbstractSettingsManager::REPORT_INTERVAL_MODE_MONTHLY:
                 // to subtract one month safely, use "highest" day of month = 28
                 $dayOfMonth = intval($nextExecutionDate->format('d'));
                 if (($dayOfMonth > 28 && $dayOfMonth < 32)) {
                     $nextExecutionDate->setDate($executionYear, $nextExecutionDate->format('m'), 28);
                 }
                 $startDate = (clone $nextExecutionDate)
-                    ->sub(new \DateInterval('P1M'))
+                    ->sub(new DateInterval('P1M'))
                     ->modify('first day of this month');
                 $endDate = (clone $nextExecutionDate)
-                    ->sub(new \DateInterval('P1M'))
+                    ->sub(new DateInterval('P1M'))
                     ->modify('last day of this month');
                 break;
-            case SettingsManager::REPORT_INTERVAL_MODE_QUARTERLY:
-                $firstJanuaryOfYear = new \DateTime(sprintf('%s-01-01 00:00:00', $executionYear));
-                $firstJanuaryOfNextYear = new \DateTime(sprintf('%s-01-01 00:00:00', intval($executionYear) + 1));
-                $firstAprilOfYear = new \DateTime(sprintf('%s-04-01 00:00:00', $executionYear));
-                $firstJulyOfYear = new \DateTime(sprintf('%s-07-01 00:00:00', $executionYear));
-                $firstOctoberOfYear = new \DateTime(sprintf('%s-10-01 00:00:00', $executionYear));
+            case AbstractSettingsManager::REPORT_INTERVAL_MODE_QUARTERLY:
+                $firstJanuaryOfYear = new DateTime(sprintf('%s-01-01 00:00:00', $executionYear));
+                $firstJanuaryOfNextYear = new DateTime(sprintf('%s-01-01 00:00:00', intval($executionYear) + 1));
+                $firstAprilOfYear = new DateTime(sprintf('%s-04-01 00:00:00', $executionYear));
+                $firstJulyOfYear = new DateTime(sprintf('%s-07-01 00:00:00', $executionYear));
+                $firstOctoberOfYear = new DateTime(sprintf('%s-10-01 00:00:00', $executionYear));
                 // "normalize" execution date to first of quarter
                 if ($firstJanuaryOfYear < $nextExecutionDate && $firstAprilOfYear > $nextExecutionDate) {
                     $nextExecutionDate = $firstJanuaryOfYear;
@@ -321,10 +329,10 @@ class ReportGenerator
                 }
 
                 $startDate = (clone $nextExecutionDate)
-                    ->sub(new \DateInterval('P3M'))
+                    ->sub(new DateInterval('P3M'))
                     ->modify('first day of this month');
                 $endDate = (clone $nextExecutionDate)
-                    ->sub(new \DateInterval('P1M'))
+                    ->sub(new DateInterval('P1M'))
                     ->modify('last day of this month');
                 break;
             default:

@@ -47,7 +47,7 @@ class MiniBanner extends Banner
             error_log(sprintf("Invalid product for campaign slug '%s'", $this->getCampaign()));
             return "";
         }
-        $productId = get_option($product->getProductIdOptionKey());
+        $productId = get_option($product->getProductIdSettingKey());
         $wcProduct = wc_get_product($productId);
         $attachmentId = $this->getImageAttachmentIdByProduct($product, $wcProduct);
 

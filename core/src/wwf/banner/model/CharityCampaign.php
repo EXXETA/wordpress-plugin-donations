@@ -1,13 +1,12 @@
 <?php
 
-
-namespace exxeta\wwf\banner;
+namespace exxeta\wwf\banner\model;
 
 /**
  * Class CharityCampaign
  * representation of a campaign
  *
- * @package donations
+ * @package exxeta\wwf\banner\model
  */
 class CharityCampaign
 {

@@ -4,6 +4,11 @@
 namespace donations;
 
 
+use exxeta\wwf\banner\DonationPlugin;
+use exxeta\wwf\banner\DonationPluginInterface;
+use exxeta\wwf\banner\model\CharityProduct;
+use exxeta\wwf\banner\model\ReportGenerationModel;
+use exxeta\wwf\banner\ReportGenerator;
 use WC_Product_Simple;
 use WP_Term;
 
@@ -77,13 +82,23 @@ class Plugin
     {
         $imageId = self::uploadImage($singleProduct);
         if ($imageId) {
-            update_option($singleProduct->getImageIdOptionKey(), $imageId);
+            update_option($singleProduct->getImageIdSettingKey(), $imageId);
             $product->set_image_id($imageId);
             $product->save();
         } else {
             error_log(sprintf('%s: problem uploading image "%s"', self::$pluginFile,
                 $singleProduct->getImagePath()));
         }
+    }
+
+    /**
+     * Get generic instance of a donation plugin mostly to use it with the generic core library
+     *
+     * @return DonationPluginInterface
+     */
+    public static function getDonationPlugin(): DonationPluginInterface
+    {
+        return new DonationPlugin(CharityProductManager::class, CampaignManager::class, SettingsManager::class);
     }
 
     /**
@@ -188,7 +203,7 @@ class Plugin
         foreach (CharityProductManager::getAllProducts() as $singleProduct) {
             /*@var $singleProduct CharityProduct */
 
-            $productId = get_option($singleProduct->getProductIdOptionKey());
+            $productId = get_option($singleProduct->getProductIdSettingKey());
             $isDeleted = false;
             // check if product was deleted
             if (!empty($productId)) {
@@ -226,7 +241,7 @@ class Plugin
                 $product->save();
 
                 $productId = $product->get_id();
-                update_option($singleProduct->getProductIdOptionKey(), $productId);
+                update_option($singleProduct->getProductIdSettingKey(), $productId);
             }
             // check if product image exists or it should be created newly
             $product = wc_get_product($productId);
@@ -506,7 +521,7 @@ class Plugin
         $allProductIds = [];
         foreach (CharityProductManager::getAllProducts() as $charityProduct) {
             /* @var $charityProduct CharityProduct */
-            $allProductIds[] = get_option($charityProduct->getProductIdOptionKey());
+            $allProductIds[] = get_option($charityProduct->getProductIdSettingKey());
         }
 
         $output = '<div class="notice notice-info"><p>';
@@ -561,13 +576,13 @@ class Plugin
     {
         $mode = SettingsManager::getCurrentReportingInterval();
         ReportGenerator::generateReport(new ReportGenerationModel($timeRangeStart, $timeRangeEnd, $mode,
-            $isRegular, true));
+            $isRegular, true), Plugin::getDonationPlugin(), new WooReportHandler());
     }
 
     static function do_report_check(): void
     {
         try {
-            ReportGenerator::checkReportGeneration();
+            ReportGenerator::checkReportGeneration(Plugin::getDonationPlugin(), new WooReportHandler());
             SettingsManager::setReportLastCheck();
         } catch (\Exception $ex) {
             error_log(Plugin::getPluginFile() . ': error encountered during check for report generation');
