@@ -3,6 +3,7 @@
   "description": "Core files of banner generation independent of a shop system",
   "type": "library",
   "version": "0.9.0",
+  "prefer-stable": true,
   "license": "GPLv3",
   "authors": [
     {
@@ -17,7 +18,7 @@
   },
   "autoload": {
     "psr-4": {
-      "exxeta\\": "src"
+      "exxeta\\": "src/"
     }
   }
 }

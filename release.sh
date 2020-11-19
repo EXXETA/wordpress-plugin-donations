@@ -22,10 +22,13 @@ which gzip &>/dev/null
 
 set -eu
 
+# execute unit tests of core lib
+#cd core
+#./vendor/phpunit/phpunit/phpunit test
+#cd ..
+
 # build js artifacts
 cd wwf-donations-plugin
-
-#./vendor/phpunit/phpunit/phpunit test
 
 npm i
 npm run build
@@ -36,6 +39,7 @@ cd ..
 if [ ! -d release ]; then
   mkdir release
 else
+  echo "removing release directory due to rebuild"
   rm -rf release
   mkdir release
 fi
@@ -49,10 +53,8 @@ rm package.json
 rm package-lock.json
 rm composer.lock
 
-# remove js sources
+# remove js sources from release output
 rm -rf src
-# remove php unit tests
-rm -rf test
 
 # copy license and readme
 cp ../../LICENSE .

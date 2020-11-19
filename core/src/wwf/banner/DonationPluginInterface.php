@@ -3,7 +3,10 @@
 
 namespace exxeta\wwf\banner;
 
-
+/**
+ * Interface DonationPluginInterface
+ * @package exxeta\wwf\banner
+ */
 interface DonationPluginInterface
 {
     /**
@@ -29,11 +32,15 @@ interface DonationPluginInterface
 
     /**
      * inclusion of report content template takes place here
+     *
+     * @param array $args
      */
-    public function includeContentTemplate(): void;
+    public function includeContentTemplate(array $args): void;
 
     /**
      * inclusion of report template takes place here
+     *
+     * @param array $args
      */
-    public function includeReportTemplate(): void;
+    public function includeReportTemplate(array $args): void;
 }

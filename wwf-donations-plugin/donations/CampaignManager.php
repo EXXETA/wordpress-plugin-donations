@@ -32,7 +32,7 @@ class CampaignManager extends AbstractCampaignManager
         $reportResultModel = new ReportResultModel($startDate, $endDate);
 
         $sum = 0;
-        $productId = CharityProductManager::getProductIdBySlug($campaignSlug);
+        $productId = CharityProductManager::getProductIdBySlug($campaignSlug, SettingsManager::class);
         if (!$productId) {
             error_log(sprintf('no product id found in wooCommerce shop for campaign "%s"', $campaignSlug));
             return $reportResultModel;

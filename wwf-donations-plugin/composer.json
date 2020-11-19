@@ -3,17 +3,21 @@
   "version": "1.1.0",
   "type": "project",
   "minimum-stability": "stable",
+  "prefer-stable": true,
   "require-dev": {
     "wp-coding-standards/wpcs": "*",
     "woocommerce/woocommerce": "4.6.0"
   },
   "require": {
-    "exxeta/wwf-donations-shop-banner-core": "*"
+    "exxeta/wwf-donations-shop-banner-core": "0.9.*"
   },
   "repositories": [
     {
       "type": "path",
-      "url": "../core"
+      "url": "../core",
+      "options": {
+        "symlink": false
+      }
     }
   ],
   "autoload": {

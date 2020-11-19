@@ -40,7 +40,7 @@
     <?php foreach ($args['revenues'] as $slug => $revenue) : ?>
         <tr>
             <td style="border: 1px solid #eee;padding-left: 12px;" width="70%">
-                <strong><?php echo ${$args['pluginInstance']->getCampaignManager()}::getCampaignBySlug($slug)->getName() ?></strong>
+                <strong><?php echo call_user_func($args['pluginInstance']->getCampaignManager() . '::getCampaignBySlug', $slug)->getName() ?></strong>
             </td>
             <td style="border: 1px solid #eee;padding-left: 12px;" width="30%">
                 <?php echo number_format($revenue, 2) ?> &euro;
@@ -58,7 +58,7 @@
 
 <p style="margin-top: 12px;">
     <strong>Bericht erstellt am:</strong> <?php echo gmdate('F j, Y H:i:s') ?><br/>
-    <strong>Bericht manuell erstellt:</strong> <?php echo $args['isRegular'] ? 'Nein' : 'Ja' ?>
+    <strong>Bericht manuell erstellt:</strong> <?php echo $args['isRegular'] ? 'Nein' : 'Ja' ?><br/>
     <strong>Bericht erstellt mit:</strong> <?php echo $args['shopSystem'] ?>
 </p>
 

@@ -80,13 +80,14 @@ class SettingsManager extends AbstractSettingsManager
      *
      * @return int|null
      */
-    public static function getMiniBannerCampaignTarget(): ?int {
+    public static function getMiniBannerCampaignTarget(): ?int
+    {
         return intval(static::getSetting(self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, wc_get_page_id('cart')));
     }
 
     public static function getSetting(string $settingKey, $defaultValue)
     {
-       return get_option($settingKey, $defaultValue);
+        return get_option($settingKey, $defaultValue);
     }
 
     public static function updateSetting(string $settingKey, $value): void

@@ -47,16 +47,20 @@ class DonationPlugin implements DonationPluginInterface
 
     /**
      * You should not change this
+     *
+     * @param array $args
      */
-    public final function includeContentTemplate(): void
+    public final function includeContentTemplate(array $args): void
     {
         include(__DIR__ . '/template/content.php');
     }
 
     /**
      * You should not change this
+     *
+     * @param array $args
      */
-    public final function includeReportTemplate(): void
+    public final function includeReportTemplate(array $args): void
     {
         include(__DIR__ . '/template/report.php');
     }

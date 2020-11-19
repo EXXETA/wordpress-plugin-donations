@@ -90,7 +90,7 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     {
         foreach (static::getAllProducts() as $singleProduct) {
             if ($singleProduct->getSlug() === $slug) {
-                $productId = ${$settingManager}::getSetting($singleProduct->getProductIdSettingKey(), null);
+                $productId = call_user_func($settingManager . '::' . 'getSetting', $singleProduct->getProductIdSettingKey(), null);
                 if ($productId > 0) {
                     return $productId;
                 } else {

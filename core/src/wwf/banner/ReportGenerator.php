@@ -35,7 +35,8 @@ final class ReportGenerator
             ->setTime(23, 59, 59);
 
         if ($timeRangeStart > $timeRangeEnd) {
-            error_log(${$donationPlugin->getSettingsManager()}::getPluginName() . ': invalid time range');
+            $pluginName = call_user_func($donationPlugin->getSettingsManager() . '::getPluginName()');
+            error_log($pluginName . ': invalid time range');
             return;
         }
         $reportingInterval = $reportGenerationModel->getIntervalMode();
@@ -45,8 +46,8 @@ final class ReportGenerator
         $results = [];
         $sum = 0.0;
         $totalOrderCounter = 0;
-        foreach (${$donationPlugin->getCampaignManager()}::getAllCampaignTypes() as $campaignSlug) {
-            $reportResult = ${$donationPlugin->getCampaignManager()}::getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
+        foreach (call_user_func($donationPlugin->getCampaignManager() . '::getAllCampaignTypes') as $campaignSlug) {
+            $reportResult = call_user_func($donationPlugin->getCampaignManager() . '::getRevenueOfCampaignInTimeRange', $campaignSlug, $timeRangeStart, $timeRangeEnd);
             $results[$campaignSlug] = $reportResult->getAmount();
             $totalOrderCounter = $reportResult->getOrderCountTotal();
             $sum += $results[$campaignSlug];
@@ -79,14 +80,14 @@ final class ReportGenerator
             return $startDate->format($startStringFormat) . ' - ' . $endDate->format('d/m/Y');
         };
 
-        $args['counter'] = ${$donationPlugin->getSettingsManager()}::getReportCounterIncremented();
+        $args['counter'] = call_user_func($donationPlugin->getSettingsManager() . '::getReportCounterIncremented');
 
         if (!$isRegular) {
             $args['subject'] = 'Manueller Bericht #' . $args['counter'] . ': Spenden | '
                 . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . $reportHandler->getMailSubjectSuffix();
         } else {
             $args['subject'] = 'Automatischer Bericht #' . $args['counter'] . ': Spenden | '
-                . ${$donationPlugin->getSettingsManager()}::getReportingIntervals()[$reportingInterval]
+                . call_user_func($donationPlugin->getSettingsManager() . '::getReportingIntervals')[$reportingInterval]
                 . ' | ' . $timeRangeString($timeRangeStart, $timeRangeEnd) . ' | ' . $reportHandler->getMailSubjectSuffix();
         }
 
@@ -103,20 +104,20 @@ final class ReportGenerator
 
         // get mail body content - used for report post type also
         ob_start();
-        $donationPlugin->includeContentTemplate();
+        $donationPlugin->includeContentTemplate($args);
         $mailBody = ob_get_contents();
         ob_end_clean();
         $args['content'] = $mailBody;
 
         // render full mail template
         ob_start();
-        $donationPlugin->includeReportTemplate();
+        $donationPlugin->includeReportTemplate($args);
         $mailContent = ob_get_contents();
         ob_end_clean();
 
         $reportHandler->storeReportRecord($args, $mailBody);
 
-        $recipient = ${$donationPlugin->getSettingsManager()}::getReportRecipientMail();
+        $recipient = call_user_func($donationPlugin->getSettingsManager() . '::getReportRecipientMail');
 
         if ($reportGenerationModel->isSendMail()) {
             $headers = ['Content-Type: text/html; charset=UTF-8'];
@@ -126,7 +127,7 @@ final class ReportGenerator
         if ($reportGenerationModel->isRegular()) {
             $lastExecutionDate = ($timeRangeEnd)->add(new DateInterval('P1D'));
             $lastExecutionDate->setTime(0, 0, 0);
-            ${$donationPlugin->getSettingsManager()}::setReportLastGeneration($lastExecutionDate);
+            call_user_func($donationPlugin->getSettingsManager() . '::setReportLastGeneration', $lastExecutionDate);
         }
     }
 
@@ -141,10 +142,10 @@ final class ReportGenerator
     {
         // calculate next execution date
         $today = (new DateTime('now'))->setTime(0, 0, 0);
-        $mode = ${$donationPlugin->getSettingsManager()}::getCurrentReportingInterval();
-        $lastExecutionDate = ${$donationPlugin->getSettingsManager()}::getReportLastGenerationDate();
+        $mode = call_user_func($donationPlugin->getSettingsManager() . '::getCurrentReportingInterval');
+        $lastExecutionDate = call_user_func($donationPlugin->getSettingsManager() . '::getReportLastGenerationDate');
 
-        $pluginName = ${$donationPlugin->getSettingsManager()}::getPluginName();
+        $pluginName = call_user_func($donationPlugin->getSettingsManager() . '::getPluginName');
         try {
             $nextExecutionDate = static::calculateNextExecutionDate($mode, $lastExecutionDate);
         } catch (Exception $ex) {
