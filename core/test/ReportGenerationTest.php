@@ -2,9 +2,9 @@
 
 namespace test;
 
-use donations\ReportGenerationModel;
 use donations\ReportGenerator;
 use donations\SettingsManager;
+use exxeta\wwf\banner\ReportGenerationModel;
 use PHPUnit\Framework\TestCase;
 
 /**
