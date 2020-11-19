@@ -3,6 +3,8 @@
 
 namespace donations;
 
+use exxeta\wwf\banner\AbstractSettingsManager;
+
 /**
  * Class SettingsManager
  *
@@ -10,43 +12,8 @@ namespace donations;
  *
  * @package donations
  */
-class SettingsManager
+class SettingsManager extends AbstractSettingsManager
 {
-    public const REPORT_INTERVAL_MODE_WEEKLY = 'weekly';
-    public const REPORT_INTERVAL_MODE_MONTHLY = 'monthly';
-    public const REPORT_INTERVAL_MODE_QUARTERLY = 'quarterly';
-    // option keys
-    const WWF_DONATIONS_REPORTING_LAST_CHECK_DATE = 'wwf_donations_reporting_last_check_date';
-    const WWF_DONATIONS_REPORTING_INTERVAL = 'wwf_donations_reporting_interval';
-    const WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST = 'wwf_donations_reporting_live_days_in_past';
-    const WWF_DONATIONS_REPORTING_RECIPIENT = 'wwf_donations_reporting_recipient';
-    const WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE = 'wwf_donations_reporting_last_generation_date';
-    const WWF_DONATIONS_REPORTING_COUNTER = 'wwf_donations_reporting_counter';
-    const WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART = 'wwf_donations_mini_banner_show_mini_cart';
-    const WWF_DONATIONS_MINI_BANNER_CAMPAIGN = 'wwf_donations_mini_banner_campaign';
-    const WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE = 'wwf_donations_mini_banner_campaign_target_page';
-
-    /**
-     * @var array option name => default value
-     */
-    private static $options = [
-        self::WWF_DONATIONS_REPORTING_INTERVAL => self::REPORT_INTERVAL_MODE_MONTHLY,
-        self::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST => 30,
-        self::WWF_DONATIONS_REPORTING_RECIPIENT => 'Eshop-Spenden@wwf.de',
-        self::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE => null,
-        self::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE => null,
-        self::WWF_DONATIONS_REPORTING_COUNTER => 0,
-        self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART => 0,
-        self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN => null,
-        self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE => null,
-    ];
-
-    private static $reportingIntervalOptions = [
-        self::REPORT_INTERVAL_MODE_WEEKLY => 'Wöchentlich',
-        self::REPORT_INTERVAL_MODE_MONTHLY => 'Monatlich',
-        self::REPORT_INTERVAL_MODE_QUARTERLY => 'Quartalsweise',
-    ];
-
     /**
      * is called during 'admin_init' hook
      */
@@ -57,7 +24,7 @@ class SettingsManager
         }
 
         // ensure options are present
-        foreach (self::$options as $key => $defaultValue) {
+        foreach (static::$settings as $key => $defaultValue) {
             $optionValue = get_option($key, 'no-init');
             if ($optionValue == 'no-init'
                 || ($key === self::WWF_DONATIONS_REPORTING_RECIPIENT && $optionValue != $defaultValue) // do not allow different report recipient as defined
@@ -94,7 +61,7 @@ class SettingsManager
         unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_REPORTING_INTERVAL);
         unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST);
         unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_REPORTING_RECIPIENT);
-        foreach (self::$options as $key => $defaultValue) {
+        foreach (self::$settings as $key => $defaultValue) {
             // default value = monthly
             if (in_array($key, [
                 self::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE,
@@ -109,136 +76,26 @@ class SettingsManager
     }
 
     /**
-     * method to get the currently chosen report interval mode of this plugin.
-     * Only valid values are returned: weekly, monthly, quarterly
+     * wordpress-specific override for AbstractSettingsManager
      *
-     * @return string
+     * @return int|null
      */
-    public static function getOptionCurrentReportingInterval(): string
-    {
-        $default = self::$options[self::WWF_DONATIONS_REPORTING_INTERVAL];
-        $intervalMode = strval(get_option(self::WWF_DONATIONS_REPORTING_INTERVAL, $default));
-        if (!in_array($intervalMode, array_keys(self::$reportingIntervalOptions))) {
-            return $default;
-        }
-        return $intervalMode;
+    public static function getMiniBannerCampaignTarget(): ?int {
+        return intval(static::getSetting(self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, wc_get_page_id('cart')));
     }
 
-    /**
-     * @return int
-     */
-    public static function getOptionLiveReportDaysInPast(): int
+    public static function getSetting(string $settingKey, $defaultValue)
     {
-        return intval(get_option(self::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST,
-            self::$options[self::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST]));
+       return get_option($settingKey, $defaultValue);
     }
 
-    /**
-     * @return string
-     */
-    public static function getOptionReportRecipientMail(): string
+    public static function updateSetting(string $settingKey, $value): void
     {
-        return strval(get_option(self::WWF_DONATIONS_REPORTING_RECIPIENT,
-            self::$options[self::WWF_DONATIONS_REPORTING_RECIPIENT]));
+        update_option($settingKey, $value);
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public static function getOptionReportLastGenerationDate(): ?\DateTime
+    public static function getPluginName()
     {
-        $storedValue = strval(get_option(self::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE,
-            self::$options[self::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE]));
-        if (!$storedValue) {
-            return null;
-        }
-        try {
-            return new \DateTime($storedValue);
-        } catch (\Exception $ex) {
-            error_log(sprintf('%s: invalid date value "%s"', Plugin::getPluginFile(), $storedValue));
-            return null;
-        }
-    }
-
-    /**
-     * @param \DateTime|null $dateTime
-     */
-    public static function setOptionReportLastGeneration(?\DateTime $dateTime): void
-    {
-        if (!$dateTime || !$dateTime instanceof \DateTime) {
-            try {
-                $dateTime = new \DateTime();
-            } catch (\Exception $ex) {
-                $dateTime = strtotime('now');
-            }
-        }
-        update_option(self::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE, $dateTime->format('c'));
-    }
-
-    public static function getOptionReportLastCheck(): ?\DateTime
-    {
-        $storedValue = strval(get_option(self::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE,
-            self::$options[self::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE]));
-        if (!$storedValue || empty($storedValue)) {
-            return null;
-        }
-        try {
-            return new \DateTime($storedValue);
-        } catch (\Exception $ex) {
-            error_log(sprintf('%s: invalid date value "%s"', Plugin::getPluginFile(), $storedValue));
-            return null;
-        }
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function setOptionReportLastCheck(): void
-    {
-        update_option(self::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE, date('c'));
-    }
-
-    /**
-     * report counter
-     *
-     * @return int
-     */
-    public static function getOptionReportCounterIncremented(): int
-    {
-        $incrementedCounter = intval(get_option(self::WWF_DONATIONS_REPORTING_COUNTER, 0)) + 1;
-        update_option(self::WWF_DONATIONS_REPORTING_COUNTER, $incrementedCounter);
-        return $incrementedCounter;
-    }
-
-    /**
-     * show mini banner in mini cart of woocommerce
-     *
-     * @return bool
-     */
-    public static function getOptionMiniBannerIsShownInMiniCart(): bool
-    {
-        return boolval(get_option(self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART,
-            self::$options[self::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART]));
-    }
-
-    /**
-     * @return string campaign slug or possible "null"
-     */
-    public static function getOptionMiniBannerCampaign(): ?string
-    {
-        return strval(get_option(self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN,
-            self::$options[self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN]));
-    }
-
-    public static function getOptionMiniBannerCampaignTarget(): ?int {
-        return intval(get_option(self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, wc_get_page_id('cart')));
-    }
-
-    /**
-     * @return array str => str, value => label
-     */
-    public static function getReportingIntervals(): array
-    {
-        return self::$reportingIntervalOptions;
+        return Plugin::getPluginFile();
     }
 }

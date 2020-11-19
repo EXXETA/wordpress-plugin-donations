@@ -70,7 +70,7 @@ class ReportGenerator
             return $startDate->format($startStringFormat) . ' - ' . $endDate->format('d/m/Y');
         };
 
-        $args['counter'] = SettingsManager::getOptionReportCounterIncremented();
+        $args['counter'] = SettingsManager::getReportCounterIncremented();
 
         if (!$isRegular) {
             $args['subject'] = 'Manueller Bericht #' . $args['counter'] . ': Spenden | '
@@ -110,7 +110,7 @@ class ReportGenerator
             'ping_status' => 'closed',
         ]);
 
-        $recipient = SettingsManager::getOptionReportRecipientMail();
+        $recipient = SettingsManager::getReportRecipientMail();
 
         if ($reportGenerationModel->isSendMail()) {
             $headers = ['Content-Type: text/html; charset=UTF-8'];
@@ -120,7 +120,7 @@ class ReportGenerator
         if ($reportGenerationModel->isRegular()) {
             $lastExecutionDate = ($timeRangeEnd)->add(new \DateInterval('P1D'));
             $lastExecutionDate->setTime(0, 0, 0);
-            SettingsManager::setOptionReportLastGeneration($lastExecutionDate);
+            SettingsManager::setReportLastGeneration($lastExecutionDate);
         }
     }
 
@@ -133,8 +133,8 @@ class ReportGenerator
     {
         // calculate next execution date
         $today = (new \DateTime('now'))->setTime(0, 0, 0);
-        $mode = SettingsManager::getOptionCurrentReportingInterval();
-        $lastExecutionDate = SettingsManager::getOptionReportLastGenerationDate();
+        $mode = SettingsManager::getCurrentReportingInterval();
+        $lastExecutionDate = SettingsManager::getReportLastGenerationDate();
 
         try {
             $nextExecutionDate = self::calculateNextExecutionDate($mode, $lastExecutionDate);

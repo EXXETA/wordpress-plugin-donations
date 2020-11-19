@@ -150,7 +150,7 @@ class Plugin
             echo do_shortcode('[' . self::$miniBannerShortCode . ']');
         };
 
-        if (SettingsManager::getOptionMiniBannerIsShownInMiniCart()) {
+        if (SettingsManager::getMiniBannerIsShownInMiniCart()) {
             add_action('woocommerce_after_mini_cart', $closure);
         } else {
             if (has_action('woocommerce_after_mini_cart', $closure) > 0) {
@@ -366,7 +366,7 @@ class Plugin
         $post = get_post();
         $isStyleAndScriptIncluded = false;
 
-        if (SettingsManager::getOptionMiniBannerIsShownInMiniCart()) {
+        if (SettingsManager::getMiniBannerIsShownInMiniCart()) {
             $isStyleAndScriptIncluded = true;
         }
         if (!$isStyleAndScriptIncluded && $post !== null) {
@@ -521,19 +521,19 @@ class Plugin
         $output .= '<strong>Verwendungszweck:</strong> 20ISAZ2002';
         $output .= '</p></div>';
 
-        $currentReportMode = SettingsManager::getOptionCurrentReportingInterval();
+        $currentReportMode = SettingsManager::getCurrentReportingInterval();
         $interval = SettingsManager::getReportingIntervals()[$currentReportMode];
-        $recipient = SettingsManager::getOptionReportRecipientMail();
+        $recipient = SettingsManager::getReportRecipientMail();
 
         $output .= '<div class="notice notice-info"><p>';
         $output .= '<strong>Automatisches Erzeugen von Spendenberichten:</strong> ' . $interval . '<br/>';
-        $lastGenerationDate = SettingsManager::getOptionReportLastGenerationDate();
+        $lastGenerationDate = SettingsManager::getReportLastGenerationDate();
         $output .= sprintf('<strong>Letztes Berichtsdatum:</strong> %s<br/>',
             $lastGenerationDate ? $lastGenerationDate->format('Y-m-d') : '-');
         $nextExecutionDate = ReportGenerator::calculateNextExecutionDate($currentReportMode, $lastGenerationDate);
         $output .= sprintf('<strong>Nächste Berichtserzeugung:</strong> %s<br/>',
             $nextExecutionDate ? $nextExecutionDate->format('Y-m-d') : '-');
-        $lastCheckDate = SettingsManager::getOptionReportLastCheck();
+        $lastCheckDate = SettingsManager::getReportLastCheck();
         $output .= sprintf('<strong>Letzte Überprüfung:</strong> %s<br/>',
             $lastCheckDate ? get_date_from_gmt(date('Y-m-d H:i:s', $lastCheckDate->getTimestamp()), 'F j, Y H:i:s') : '-');
 
@@ -559,7 +559,7 @@ class Plugin
     static function do_report_generate(\DateTime $timeRangeStart = null, \DateTime $timeRangeEnd = null,
                                        $isRegular = false): void
     {
-        $mode = SettingsManager::getOptionCurrentReportingInterval();
+        $mode = SettingsManager::getCurrentReportingInterval();
         ReportGenerator::generateReport(new ReportGenerationModel($timeRangeStart, $timeRangeEnd, $mode,
             $isRegular, true));
     }
@@ -568,7 +568,7 @@ class Plugin
     {
         try {
             ReportGenerator::checkReportGeneration();
-            SettingsManager::setOptionReportLastCheck();
+            SettingsManager::setReportLastCheck();
         } catch (\Exception $ex) {
             error_log(Plugin::getPluginFile() . ': error encountered during check for report generation');
             return;

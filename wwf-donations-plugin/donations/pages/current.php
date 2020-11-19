@@ -1,6 +1,6 @@
 <?php
 $today = new DateTime('now');
-$defaultDaysInPast = \donations\SettingsManager::getOptionLiveReportDaysInPast();
+$defaultDaysInPast = \donations\SettingsManager::getLiveReportDaysInPast();
 
 // handle vars
 if (isset($_GET['donation_report_start_date'])) {

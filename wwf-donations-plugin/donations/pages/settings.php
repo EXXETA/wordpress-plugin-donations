@@ -6,12 +6,12 @@
         echo "Diesem Benutzer fehlen die Berechtigungen, um die Spendeneinstellungen zu ändern.";
         return;
     }
-    $currentReportingInterval = \donations\SettingsManager::getOptionCurrentReportingInterval();
-    $currentLiveReportsDaysInPast = \donations\SettingsManager::getOptionLiveReportDaysInPast();
-    $reportRecipient = \donations\SettingsManager::getOptionReportRecipientMail();
-    $isBannerShownInMiniCart = \donations\SettingsManager::getOptionMiniBannerIsShownInMiniCart();
-    $currentMiniBannerCampaign = \donations\SettingsManager::getOptionMiniBannerCampaign();
-    $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getOptionMiniBannerCampaignTarget();
+    $currentReportingInterval = \donations\SettingsManager::getCurrentReportingInterval();
+    $currentLiveReportsDaysInPast = \donations\SettingsManager::getLiveReportDaysInPast();
+    $reportRecipient = \donations\SettingsManager::getReportRecipientMail();
+    $isBannerShownInMiniCart = \donations\SettingsManager::getMiniBannerIsShownInMiniCart();
+    $currentMiniBannerCampaign = \donations\SettingsManager::getMiniBannerCampaign();
+    $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getMiniBannerCampaignTarget();
 
     if (isset($_GET['settings-updated'])) {
         ?>

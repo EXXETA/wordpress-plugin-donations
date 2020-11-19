@@ -24,7 +24,7 @@ class MiniBanner extends Banner
     {
         if ($campaign === null) {
             // use preconfigured value - but allow specific overwrite
-            $bannerType = SettingsManager::getOptionMiniBannerCampaign();
+            $bannerType = SettingsManager::getMiniBannerCampaign();
             if ($bannerType === null || $bannerType == "null") {
                 // use default
                 $bannerType = CampaignManager::getAllCampaignTypes()[$this->defaultCampaignIndex];
@@ -57,7 +57,7 @@ class MiniBanner extends Banner
         $output .= sprintf('<img class="campaign-logo" alt="" src="%s" />', wp_get_attachment_image_url($attachmentId));
         $output .= '</div>';
         $output .= '<div class="desc-area">';
-        $optionMiniBannerCampaignTarget = SettingsManager::getOptionMiniBannerCampaignTarget();
+        $optionMiniBannerCampaignTarget = SettingsManager::getMiniBannerCampaignTarget();
         if (!$optionMiniBannerCampaignTarget) {
             // use "cart" as default - if nothing is defined
             $optionMiniBannerCampaignTarget = wc_get_page_id('cart');
