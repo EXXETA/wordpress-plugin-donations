@@ -1,7 +1,7 @@
 <?php
 
 
-namespace donations;
+namespace exxeta\wwf\banner;
 
 /**
  * Class CharityCampaign

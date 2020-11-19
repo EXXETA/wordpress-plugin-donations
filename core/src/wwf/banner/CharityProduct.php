@@ -1,6 +1,6 @@
 <?php
 
-namespace donations;
+namespace exxeta\wwf\banner;
 
 /**
  * Class CharityProduct
@@ -35,7 +35,8 @@ class CharityProduct
     private $imagePath;
 
     /**
-     * AbstractProduct constructor.
+     * CharityProduct constructor.
+     *
      * @param string $slug
      * @param string $name
      * @param string $description
@@ -54,7 +55,7 @@ class CharityProduct
     /**
      * @return string
      */
-    public function getProductIdOptionKey(): string
+    public function getProductIdSettingKey(): string
     {
         return $this->getSlug() . "_product_id";
     }
@@ -62,7 +63,7 @@ class CharityProduct
     /**
      * @return string
      */
-    public function getImageIdOptionKey(): string
+    public function getImageIdSettingKey(): string
     {
         return $this->getSlug() . "_image_id";
     }

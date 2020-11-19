@@ -1,9 +1,15 @@
 <?php
 
 
-namespace donations;
+namespace exxeta\wwf\banner;
 
-
+/**
+ * Class ReportResultModel
+ *
+ * Plain old PHP object of the report results
+ *
+ * @package exxeta\wwf\banner
+ */
 class ReportResultModel
 {
     /**
