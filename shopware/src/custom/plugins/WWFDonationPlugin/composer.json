@@ -2,6 +2,7 @@
     "name": "wwf-germany/donation-plugin",
     "description": "WWF Donation Plugin Germany Shopware",
     "type": "shopware-platform-plugin",
+    "version": "0.1.0",
     "license": "GPLv3",
     "authors": [
         {
@@ -15,8 +16,8 @@
     ],
     "extra": {
         "shopware-plugin-class": "WWFDonationPlugin\\WWFDonationPlugin",
-        "author": "EXXETA AG, Marius Schuppert",
         "plugin-icon": "Resources/config/plugin.png",
+        "author": "EXXETA AG, Marius Schuppert",
         "label": {
             "de-DE": "WWF Donation Plugin",
             "en-GB": "WWF Donation Plugin"

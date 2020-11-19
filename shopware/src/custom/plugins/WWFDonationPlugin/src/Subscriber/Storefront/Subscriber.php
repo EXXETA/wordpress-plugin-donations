@@ -27,7 +27,7 @@ class Subscriber implements EventSubscriberInterface
             'dockware' => 1,
         );
 
-        $event->setParameter('dockware', $data);
+        $event->setParameter('wwf_donation_plugin', $data);
     }
 
 }
