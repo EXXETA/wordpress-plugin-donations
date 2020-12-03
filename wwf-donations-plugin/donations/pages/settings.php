@@ -7,12 +7,13 @@
         echo "Diesem Benutzer fehlen die Berechtigungen, um die Spendeneinstellungen zu ändern.";
         return;
     }
-    $currentReportingInterval = \donations\SettingsManager::getCurrentReportingInterval();
-    $currentLiveReportsDaysInPast = \donations\SettingsManager::getLiveReportDaysInPast();
-    $reportRecipient = \donations\SettingsManager::getReportRecipientMail();
-    $isBannerShownInMiniCart = \donations\SettingsManager::getMiniBannerIsShownInMiniCart();
-    $currentMiniBannerCampaign = \donations\SettingsManager::getMiniBannerCampaign();
-    $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getMiniBannerCampaignTargetPageId();
+    $settingsManager = \donations\Plugin::getDonationPlugin()->getSettingsManagerInstance();
+    $currentReportingInterval = $settingsManager->getCurrentReportingInterval();
+    $currentLiveReportsDaysInPast = $settingsManager->getLiveReportDaysInPast();
+    $reportRecipient = $settingsManager->getReportRecipientMail();
+    $isBannerShownInMiniCart = $settingsManager->getMiniBannerIsShownInMiniCart();
+    $currentMiniBannerCampaign = $settingsManager->getMiniBannerCampaign();
+    $currentMiniBannerInfoTargetPage = $settingsManager->getMiniBannerCampaignTargetPageId();
 
     if (isset($_GET['settings-updated'])) {
         ?>
@@ -44,7 +45,7 @@
                         <select id="wwf_donations_reporting_interval_select"
                                 class="postform"
                                 name="wwf_donations_reporting_interval">
-                            <?php foreach (\donations\SettingsManager::getReportingIntervals() as $value => $label): ?>
+                            <?php foreach ($settingsManager->getReportingIntervals() as $value => $label): ?>
                                 <option value="<?php esc_attr_e($value) ?>"
                                     <?php
                                     echo $currentReportingInterval == $value ? ' selected="selected"' : '';

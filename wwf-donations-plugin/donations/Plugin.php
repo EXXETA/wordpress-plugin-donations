@@ -51,7 +51,7 @@ class Plugin
     public function __construct(string $pluginFile)
     {
         self::$pluginFile = $pluginFile;
-        self::$donationPlugin = new DonationPlugin(new CharityProductManager(), new SettingsManager(), null);
+        self::$donationPlugin = new DonationPlugin($pluginFile, new CharityProductManager(), new SettingsManager(), null);
     }
 
     /**
@@ -173,7 +173,7 @@ class Plugin
             echo do_shortcode('[' . self::$miniBannerShortCode . ']');
         };
 
-        if (SettingsManager::getMiniBannerIsShownInMiniCart()) {
+        if (static::getDonationPlugin()->getSettingsManagerInstance()->getMiniBannerIsShownInMiniCart()) {
             add_action('woocommerce_after_mini_cart', $closure);
         } else {
             if (has_action('woocommerce_after_mini_cart', $closure) > 0) {
@@ -393,7 +393,7 @@ class Plugin
         $post = get_post();
         $isStyleAndScriptIncluded = false;
 
-        if (SettingsManager::getMiniBannerIsShownInMiniCart()) {
+        if (static::getDonationPlugin()->getSettingsManagerInstance()->getMiniBannerIsShownInMiniCart()) {
             $isStyleAndScriptIncluded = true;
         }
         if (!$isStyleAndScriptIncluded && $post !== null) {
@@ -548,19 +548,21 @@ class Plugin
         $output .= '<strong>Verwendungszweck:</strong> 20ISAZ2002';
         $output .= '</p></div>';
 
-        $currentReportMode = SettingsManager::getCurrentReportingInterval();
-        $interval = SettingsManager::getReportingIntervals()[$currentReportMode];
-        $recipient = SettingsManager::getReportRecipientMail();
+        $settingsManager = static::getDonationPlugin()->getSettingsManagerInstance();
+
+        $currentReportMode = $settingsManager->getCurrentReportingInterval();
+        $interval = $settingsManager->getReportingIntervals()[$currentReportMode];
+        $recipient = $settingsManager->getReportRecipientMail();
 
         $output .= '<div class="notice notice-info"><p>';
         $output .= '<strong>Automatisches Erzeugen von Spendenberichten:</strong> ' . $interval . '<br/>';
-        $lastGenerationDate = SettingsManager::getReportLastGenerationDate();
+        $lastGenerationDate = $settingsManager->getReportLastGenerationDate();
         $output .= sprintf('<strong>Letztes Berichtsdatum:</strong> %s<br/>',
             $lastGenerationDate ? $lastGenerationDate->format('Y-m-d') : '-');
         $nextExecutionDate = ReportGenerator::calculateNextExecutionDate($currentReportMode, $lastGenerationDate);
         $output .= sprintf('<strong>Nächste Berichtserzeugung:</strong> %s<br/>',
             $nextExecutionDate ? $nextExecutionDate->format('Y-m-d') : '-');
-        $lastCheckDate = SettingsManager::getReportLastCheck();
+        $lastCheckDate = $settingsManager->getReportLastCheck();
         $output .= sprintf('<strong>Letzte Überprüfung:</strong> %s<br/>',
             $lastCheckDate ? get_date_from_gmt(date('Y-m-d H:i:s', $lastCheckDate->getTimestamp()), 'F j, Y H:i:s') : '-');
 
@@ -586,7 +588,7 @@ class Plugin
     static function do_report_generate(\DateTime $timeRangeStart = null, \DateTime $timeRangeEnd = null,
                                        $isRegular = false): void
     {
-        $mode = SettingsManager::getCurrentReportingInterval();
+        $mode = static::getDonationPlugin()->getSettingsManagerInstance()->getCurrentReportingInterval();
         ReportGenerator::generateReport(new ReportGenerationModel($timeRangeStart, $timeRangeEnd, $mode,
             $isRegular, true), Plugin::getDonationPlugin(), new WooReportHandler());
     }
@@ -595,7 +597,7 @@ class Plugin
     {
         try {
             ReportGenerator::checkReportGeneration(Plugin::getDonationPlugin(), new WooReportHandler());
-            SettingsManager::setReportLastCheck();
+            static::getDonationPlugin()->getSettingsManagerInstance()->setReportLastCheck();
         } catch (\Exception $ex) {
             error_log(Plugin::getPluginFile() . ': error encountered during check for report generation');
             return;
