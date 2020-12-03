@@ -16,11 +16,11 @@ class MiniBanner extends Banner
     /**
      * MiniBanner constructor.
      *
-     * @param DonationPluginInterface $donationPlugin
      * @param BannerHandlerInterface $bannerHandler
+     * @param DonationPluginInterface $donationPlugin
      * @param string|null $campaign
      */
-    public function __construct(DonationPluginInterface $donationPlugin, BannerHandlerInterface $bannerHandler,
+    public function __construct(BannerHandlerInterface $bannerHandler, DonationPluginInterface $donationPlugin,
                                 ?string $campaign)
     {
         if ($campaign === null) {
