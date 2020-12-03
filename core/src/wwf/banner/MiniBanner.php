@@ -51,7 +51,12 @@ class MiniBanner extends Banner
             return '';
         }
 
-        $output = sprintf('<div class="cart-donation-mini-banner %s">', $campaign->getClass());
+        if ($this->getDonationPlugin()->getCustomClass()) {
+            $output = sprintf('<div class="cart-donation-mini-banner %s %s">',
+                $campaign->getClass(), $this->getDonationPlugin()->getCustomClass());
+        } else {
+            $output = sprintf('<div class="cart-donation-mini-banner %s">', $campaign->getClass());
+        }
         $output .= '<div class="coin-area">';
         $output .= sprintf('<img class="campaign-logo" alt="" src="%s" />', $this->getBannerHandler()->getLogoImageUrl($product));
         $output .= '</div>';

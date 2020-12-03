@@ -31,6 +31,14 @@ interface DonationPluginInterface
     public function getSettingsManager(): string;
 
     /**
+     * returns a custom css class name that should be added to the banner markup to enable external plugins
+     * with custom styling capabilities.
+     *
+     * @return string|null
+     */
+    public function getCustomClass(): ?string;
+
+    /**
      * inclusion of report content template takes place here
      *
      * @param array $args

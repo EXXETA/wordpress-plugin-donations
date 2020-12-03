@@ -3,13 +3,14 @@
 
 namespace donations;
 
+use exxeta\wwf\banner\BannerHandlerInterface;
 use exxeta\wwf\banner\model\CharityProduct;
 
 /**
  * Class WooBannerHandler
  * @package donations
  */
-class WooBannerHandler implements \exxeta\wwf\banner\BannerHandlerInterface
+class WooBannerHandler implements BannerHandlerInterface
 {
     /**
      * @var string
@@ -91,7 +92,7 @@ class WooBannerHandler implements \exxeta\wwf\banner\BannerHandlerInterface
 
     public function getMiniBannerTargetPageUrl($pageId): string
     {
-        return get_page_uri($pageId);
+        return get_page_link($pageId);
     }
 
     public function getCartPageId(): int

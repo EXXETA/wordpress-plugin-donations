@@ -85,7 +85,12 @@ class Banner
         $hideInfoAreaId = sprintf('donation-campaign-hide-more-info-area-%s-%s', $campaign->getSlug(), $randomString);
 
         // start to generate output
-        $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
+        if ($this->getDonationPlugin()->getCustomClass()) {
+            $output = sprintf('<div class="cart-donation-banner %s %s">',
+                $campaign->getClass(), $this->getDonationPlugin()->getCustomClass());
+        } else {
+            $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
+        }
         $output .= sprintf('<div class="cart-donation-banner-background %s">', $campaign->getClass());
         $output .= '<div class="cart-banner-content">';
         $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());

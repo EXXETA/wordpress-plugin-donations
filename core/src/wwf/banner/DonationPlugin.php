@@ -15,6 +15,11 @@ class DonationPlugin implements DonationPluginInterface
     private $charityProductManager;
     private $campaignManager;
     private $settingsManager;
+    /**
+     * a custom css class added to the (mini-)banner markup
+     * @var string|null
+     */
+    private $customClass = null;
 
     /**
      * DonationPlugin constructor.
@@ -23,11 +28,14 @@ class DonationPlugin implements DonationPluginInterface
      * @param $campaignManager
      * @param $settingsManager
      */
-    public function __construct($charityProductManager, $campaignManager, $settingsManager)
+    public function __construct($charityProductManager, $campaignManager, $settingsManager, ?string $customClass)
     {
         $this->charityProductManager = $charityProductManager;
         $this->campaignManager = $campaignManager;
         $this->settingsManager = $settingsManager;
+        if ($customClass) {
+            $this->customClass = $customClass;
+        }
     }
 
     public function getCharityProductManager(): string
@@ -43,6 +51,14 @@ class DonationPlugin implements DonationPluginInterface
     public function getSettingsManager(): string
     {
         return $this->settingsManager;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomClass(): ?string
+    {
+        return $this->customClass;
     }
 
     /**
