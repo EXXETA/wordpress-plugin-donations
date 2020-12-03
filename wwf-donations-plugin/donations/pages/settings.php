@@ -11,13 +11,15 @@
     $reportRecipient = \donations\SettingsManager::getReportRecipientMail();
     $isBannerShownInMiniCart = \donations\SettingsManager::getMiniBannerIsShownInMiniCart();
     $currentMiniBannerCampaign = \donations\SettingsManager::getMiniBannerCampaign();
-    $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getMiniBannerCampaignTarget();
+    $currentMiniBannerInfoTargetPage = \donations\SettingsManager::getMiniBannerCampaignTargetPageId();
 
     if (isset($_GET['settings-updated'])) {
         ?>
         <div class='notice notice-warning'>
-            <p><strong>Nach Änderungen, die das Mini-Banner betreffen, müssen die Cookies, der Local-Storage sowie der Session-Storage des Browsers ggfs. geleert werden</strong>,
-                damit die Änderungen sofort sichtbar werden. Alternativ kann ein Fenster im "Privaten Modus" verwendet werden!</p>
+            <p><strong>Nach Änderungen, die das Mini-Banner betreffen, müssen die Cookies, der Local-Storage sowie der
+                    Session-Storage des Browsers ggfs. geleert werden</strong>,
+                damit die Änderungen sofort sichtbar werden. Alternativ kann ein Fenster im "Privaten Modus" verwendet
+                werden!</p>
         </div>
         <?php
     }
@@ -86,8 +88,8 @@
                         </label>
                         <input id="wwf_donations_mini_banner_show_mini_cart" type="checkbox"
                                value="1"
-                               <?php checked(true, $isBannerShownInMiniCart, true) ?>
-                               name="wwf_donations_mini_banner_show_mini_cart" />
+                            <?php checked(true, $isBannerShownInMiniCart, true) ?>
+                               name="wwf_donations_mini_banner_show_mini_cart"/>
                         <br/>
                         <br/>
                         <label for="wwf_donations_mini_banner_campaign">
@@ -96,7 +98,7 @@
                         <select id="wwf_donations_mini_banner_campaign"
                                 class="postform"
                                 name="wwf_donations_mini_banner_campaign">
-                                <option value="null">Keine Auswahl (Standard: Biologische Artenvielfalt)</option>
+                            <option value="null">Keine Auswahl (Standard: Biologische Artenvielfalt)</option>
                             <?php foreach (\donations\CampaignManager::getAllCampaigns() as $campaign): ?>
                                 <? /* @var \donations\CharityCampaign $campaign */ ?>
                                 <option value="<?php esc_attr_e($campaign->getSlug()) ?>"

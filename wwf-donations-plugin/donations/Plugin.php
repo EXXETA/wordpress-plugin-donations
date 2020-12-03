@@ -4,8 +4,10 @@
 namespace donations;
 
 
+use exxeta\wwf\banner\Banner;
 use exxeta\wwf\banner\DonationPlugin;
 use exxeta\wwf\banner\DonationPluginInterface;
+use exxeta\wwf\banner\MiniBanner;
 use exxeta\wwf\banner\model\CharityProduct;
 use exxeta\wwf\banner\model\ReportGenerationModel;
 use exxeta\wwf\banner\ReportGenerator;
@@ -341,7 +343,8 @@ class Plugin
         } else {
             $campaign = $attributes['donationMode'];
         }
-        $banner = new Banner($campaign, plugin_dir_url(self::getPluginFile()));
+        $bannerHandler = new WooBannerHandler(plugin_dir_url(self::getPluginFile()));
+        $banner = new Banner($bannerHandler, static::getDonationPlugin(), $campaign);
         return $banner->render();
     }
 
@@ -352,7 +355,8 @@ class Plugin
         } else {
             $campaign = $attributes['donationMode'];
         }
-        $banner = new MiniBanner($campaign, plugin_dir_url(self::getPluginFile()));
+        $bannerHandler = new WooBannerHandler(plugin_dir_url(self::getPluginFile()));
+        $banner = new MiniBanner($bannerHandler, static::getDonationPlugin(), $campaign);
         return $banner->render();
     }
 
@@ -361,7 +365,7 @@ class Plugin
         $shortCodeAtts = shortcode_atts([
             'campaign' => CampaignManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
-        return (new Banner($shortCodeAtts['campaign'], plugin_dir_url(self::getPluginFile())))->render();
+        return (new Banner(new WooBannerHandler(plugin_dir_url(self::getPluginFile())), static::getDonationPlugin(), $shortCodeAtts['campaign']))->render();
     }
 
     static function setup_banner_shortcode_small($atts): string
@@ -369,7 +373,7 @@ class Plugin
         $shortCodeAtts = shortcode_atts([
             'campaign' => null,
         ], $atts, self::$miniBannerShortCode);
-        return (new MiniBanner($shortCodeAtts['campaign'], plugin_dir_url(self::getPluginFile())))->render();
+        return (new MiniBanner(new WooBannerHandler(plugin_dir_url(self::getPluginFile())), static::getDonationPlugin(), $shortCodeAtts['campaign']))->render();
     }
 
     static function handle_styles(): void
