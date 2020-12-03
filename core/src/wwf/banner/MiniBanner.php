@@ -25,7 +25,7 @@ class MiniBanner extends Banner
     {
         if ($campaign === null) {
             // use preconfigured value - but allow specific overwrite
-            $bannerType = call_user_func($donationPlugin->getSettingsManager() . '::getMiniBannerCampaign');
+            $bannerType = $donationPlugin->getSettingsManagerInstance()->getMiniBannerCampaign();
             if ($bannerType === null || $bannerType == "null") {
                 // use default as fallback
                 $bannerType = $donationPlugin->getCharityProductManagerInstance()->getAllCampaignTypes()[$this->getDefaultCampaignIndex()];
@@ -61,7 +61,8 @@ class MiniBanner extends Banner
         $output .= '</div>';
 
         $output .= '<div class="desc-area">';
-        $optionMiniBannerCampaignTarget = call_user_func($this->getDonationPlugin()->getSettingsManager() . '::getMiniBannerCampaignTargetPageId');
+
+        $optionMiniBannerCampaignTarget = $this->getDonationPlugin()->getSettingsManagerInstance()->getMiniBannerCampaignTargetPageId();
         if (!$optionMiniBannerCampaignTarget) {
             // use "cart" as default - if nothing is defined
             $optionMiniBannerCampaignTarget = $this->getBannerHandler()->getCartPageId();

@@ -19,7 +19,7 @@ final class ReportGenerationTest extends TestCase
 {
     public function testAllIntervalModes(): void
     {
-        $modes = array_keys(AbstractSettingsManager::getReportingIntervals());
+        $modes = array_keys(AbstractSettingsManager::getDefaultReportingIntervals());
         foreach ($modes as $mode) {
             $nextDate = ReportGenerator::calculateNextExecutionDate($mode, null);
             $this->assertNotNull($nextDate);
@@ -211,7 +211,7 @@ final class ReportGenerationTest extends TestCase
 
     public function testAllDaysOfYearInAllModes(): void
     {
-        $modes = array_keys(AbstractSettingsManager::getReportingIntervals());
+        $modes = array_keys(AbstractSettingsManager::getDefaultReportingIntervals());
 
         foreach ($modes as $mode) {
             $startDate = new DateTime(sprintf('%s-1-1 0:0:0', (new DateTime('now'))->format('Y')));

@@ -12,9 +12,21 @@ namespace exxeta\wwf\banner;
  */
 class DonationPlugin implements DonationPluginInterface
 {
+    /**
+     * @var string
+     */
+    private $pluginName;
+
+    /**
+     * @var CharityProductManagerInterface
+     */
     private $charityProductManager;
-    private $campaignManager;
+
+    /**
+     * @var SettingsManagerInterface
+     */
     private $settingsManager;
+
     /**
      * a custom css class added to the (mini-)banner markup
      * @var string|null
@@ -24,31 +36,28 @@ class DonationPlugin implements DonationPluginInterface
     /**
      * DonationPlugin constructor.
      *
-     * @param $charityProductManager
-     * @param $campaignManager
-     * @param $settingsManager
+     * @param string $pluginName
+     * @param CharityProductManagerInterface $charityProductManager
+     * @param SettingsManagerInterface $settingsManager
+     * @param string|null $customClass optional css top-level class
      */
-    public function __construct($charityProductManager, $campaignManager, $settingsManager, ?string $customClass)
+    public function __construct(string $pluginName, CharityProductManagerInterface $charityProductManager,
+                                SettingsManagerInterface $settingsManager, ?string $customClass)
     {
+        $this->pluginName = $pluginName;
         $this->charityProductManager = $charityProductManager;
-        $this->campaignManager = $campaignManager;
         $this->settingsManager = $settingsManager;
         if ($customClass) {
             $this->customClass = $customClass;
         }
     }
 
-    public function getCharityProductManager(): string
+    public function getCharityProductManagerInstance(): CharityProductManagerInterface
     {
         return $this->charityProductManager;
     }
 
-    public function getCampaignManager(): string
-    {
-        return $this->campaignManager;
-    }
-
-    public function getSettingsManager(): string
+    public function getSettingsManagerInstance(): SettingsManagerInterface
     {
         return $this->settingsManager;
     }
@@ -79,5 +88,10 @@ class DonationPlugin implements DonationPluginInterface
     public final function includeReportTemplate(array $args): void
     {
         include(__DIR__ . '/template/report.php');
+    }
+
+    public function getPluginName(): string
+    {
+        return $this->pluginName;
     }
 }

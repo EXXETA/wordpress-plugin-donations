@@ -11,18 +11,14 @@ namespace exxeta\wwf\banner;
 interface DonationPluginInterface
 {
     /**
-     * returns the string of the Fully-Qualified-Class-Name (FQCN) of the plugin's CharityProductManagerInterface
-     *
-     * @return string
+     * @return CharityProductManagerInterface
      */
-    public function getCharityProductManager(): string;
+    public function getCharityProductManagerInstance(): CharityProductManagerInterface;
 
     /**
-     * returns the string of the Fully-Qualified-Class-Name (FQCN) of the plugin's SettingsManagerInterface
-     *
-     * @return string
+     * @return SettingsManagerInterface
      */
-    public function getSettingsManager(): string;
+    public function getSettingsManagerInstance(): SettingsManagerInterface;
 
     /**
      * returns a custom css class name that should be added to the banner markup to enable external plugins
@@ -45,4 +41,11 @@ interface DonationPluginInterface
      * @param array $args
      */
     public function includeReportTemplate(array $args): void;
+
+    /**
+     * method to get the plugin's name, e.g. for error log messages
+     *
+     * @return string
+     */
+    public function getPluginName(): string;
 }

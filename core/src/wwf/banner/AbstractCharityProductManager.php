@@ -156,15 +156,15 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
 
     /**
      * @param string $slug
-     * @param string $settingManager
+     * @param SettingsManagerInterface $settingManager
      * @return int|null
      */
-    public function getProductIdBySlug(string $slug, string $settingManager): ?int
+    public function getProductIdBySlug(string $slug, SettingsManagerInterface $settingManager): ?int
     {
         foreach ($this->getAllProducts() as $singleProduct) {
             /* @var $singleProduct CharityProduct */
             if ($singleProduct->getSlug() === $slug) {
-                $productId = call_user_func($settingManager . '::' . 'getSetting', $singleProduct->getProductIdSettingKey(), null);
+                $productId = $settingManager->getSetting($singleProduct->getProductIdSettingKey(), null);
                 if ($productId > 0) {
                     return $productId;
                 } else {

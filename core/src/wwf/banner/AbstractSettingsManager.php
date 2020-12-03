@@ -44,10 +44,10 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return string
      */
-    public static function getCurrentReportingInterval(): string
+    public function getCurrentReportingInterval(): string
     {
         $default = static::$settings[static::WWF_DONATIONS_REPORTING_INTERVAL];
-        $intervalMode = strval(static::getSetting(static::WWF_DONATIONS_REPORTING_INTERVAL, $default));
+        $intervalMode = strval($this->getSetting(static::WWF_DONATIONS_REPORTING_INTERVAL, $default));
         if (!in_array($intervalMode, array_keys(static::$reportingIntervalOptions))) {
             return $default;
         }
@@ -59,9 +59,9 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return int
      */
-    public static function getLiveReportDaysInPast(): int
+    public function getLiveReportDaysInPast(): int
     {
-        return intval(static::getSetting(static::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST,
+        return intval($this->getSetting(static::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST,
             static::$settings[static::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST]));
     }
 
@@ -70,9 +70,9 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return string
      */
-    public static function getReportRecipientMail(): string
+    public function getReportRecipientMail(): string
     {
-        return strval(static::getSetting(static::WWF_DONATIONS_REPORTING_RECIPIENT,
+        return strval($this->getSetting(static::WWF_DONATIONS_REPORTING_RECIPIENT,
             static::$settings[static::WWF_DONATIONS_REPORTING_RECIPIENT]));
     }
 
@@ -81,9 +81,9 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return DateTime|null
      */
-    public static function getReportLastGenerationDate(): ?DateTime
+    public function getReportLastGenerationDate(): ?DateTime
     {
-        $storedValue = strval(static::getSetting(static::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE,
+        $storedValue = strval($this->getSetting(static::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE,
             static::$settings[static::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE]));
         if (!$storedValue) {
             return null;
@@ -101,7 +101,7 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @param DateTime|null $dateTime
      */
-    public static function setReportLastGeneration(?DateTime $dateTime): void
+    public function setReportLastGeneration(?DateTime $dateTime): void
     {
         if (!$dateTime || !$dateTime instanceof DateTime) {
             try {
@@ -110,7 +110,7 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
                 $dateTime = strtotime('now');
             }
         }
-        static::updateSetting(static::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE, $dateTime->format('c'));
+        $this->updateSetting(static::WWF_DONATIONS_REPORTING_LAST_GENERATION_DATE, $dateTime->format('c'));
     }
 
     /**
@@ -119,9 +119,9 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return DateTime|null
      */
-    public static function getReportLastCheck(): ?DateTime
+    public function getReportLastCheck(): ?DateTime
     {
-        $storedValue = strval(static::getSetting(static::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE,
+        $storedValue = strval($this->getSetting(static::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE,
             static::$settings[static::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE]));
         if (!$storedValue || empty($storedValue)) {
             return null;
@@ -139,9 +139,9 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @throws Exception
      */
-    public static function setReportLastCheck(): void
+    public function setReportLastCheck(): void
     {
-        static::updateSetting(static::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE, date('c'));
+        $this->updateSetting(static::WWF_DONATIONS_REPORTING_LAST_CHECK_DATE, date('c'));
     }
 
     /**
@@ -150,10 +150,10 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return int
      */
-    public static function getReportCounterIncremented(): int
+    public function getReportCounterIncremented(): int
     {
-        $incrementedCounter = intval(static::getSetting(static::WWF_DONATIONS_REPORTING_COUNTER, 0)) + 1;
-        static::updateSetting(static::WWF_DONATIONS_REPORTING_COUNTER, $incrementedCounter);
+        $incrementedCounter = intval($this->getSetting(static::WWF_DONATIONS_REPORTING_COUNTER, 0)) + 1;
+        $this->updateSetting(static::WWF_DONATIONS_REPORTING_COUNTER, $incrementedCounter);
         return $incrementedCounter;
     }
 
@@ -162,18 +162,18 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return bool
      */
-    public static function getMiniBannerIsShownInMiniCart(): bool
+    public function getMiniBannerIsShownInMiniCart(): bool
     {
-        return boolval(static::getSetting(static::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART,
+        return boolval($this->getSetting(static::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART,
             static::$settings[static::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART]));
     }
 
     /**
      * @return string campaign slug or possible "null"
      */
-    public static function getMiniBannerCampaign(): ?string
+    public function getMiniBannerCampaign(): ?string
     {
-        return strval(static::getSetting(static::WWF_DONATIONS_MINI_BANNER_CAMPAIGN,
+        return strval($this->getSetting(static::WWF_DONATIONS_MINI_BANNER_CAMPAIGN,
             static::$settings[static::WWF_DONATIONS_MINI_BANNER_CAMPAIGN]));
     }
 
@@ -182,15 +182,25 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return int|null
      */
-    public static function getMiniBannerCampaignTargetPageId(): ?int
+    public function getMiniBannerCampaignTargetPageId(): ?int
     {
-        return intval(static::getSetting(static::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, null));
+        return intval($this->getSetting(static::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, null));
     }
 
     /**
      * @return array str => str, value => label
      */
-    public static function getReportingIntervals(): array
+    public function getReportingIntervals(): array
+    {
+        return static::$reportingIntervalOptions;
+    }
+
+    /**
+     * method for static access to the available reporting intervals
+     *
+     * @return string[]
+     */
+    public static function getDefaultReportingIntervals(): array
     {
         return static::$reportingIntervalOptions;
     }

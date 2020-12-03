@@ -3,8 +3,11 @@
 namespace exxeta\wwf\banner;
 
 
+use DateTime;
+
 /**
  * Interface SettingsManagerInterface
+ * TODO add docs from abstract settings manager class!
  *
  * this interface provides methods to manage settings of this plugin in a concrete instantiation.
  *
@@ -43,13 +46,20 @@ interface SettingsManagerInterface
     public static function uninstall();
 
     /**
+     * method to provide a (shop-specific) plugin name
+     *
+     * @return mixed
+     */
+    public static function getPluginName();
+
+    /**
      * shop-specific implementation to get a setting/option of this plugin
      *
      * @param string $settingKey
      * @param mixed $defaultValue
      * @return mixed but mostly string|int|boolean
      */
-    public static function getSetting(string $settingKey, $defaultValue);
+    public function getSetting(string $settingKey, $defaultValue);
 
     /**
      * shop-specific implementation to update a single setting/option of this plugin
@@ -58,12 +68,29 @@ interface SettingsManagerInterface
      * @param $value
      * @return mixed
      */
-    public static function updateSetting(string $settingKey, $value): void;
+    public function updateSetting(string $settingKey, $value): void;
 
-    /**
-     * method to provide a (shop-specific) plugin name
-     *
-     * @return mixed
-     */
-    public static function getPluginName();
+    public function getMiniBannerIsShownInMiniCart(): bool;
+
+    public function getMiniBannerCampaign(): ?string;
+
+    public function getMiniBannerCampaignTargetPageId(): ?int;
+
+    public function getReportingIntervals(): array;
+
+    public function getReportCounterIncremented(): int;
+
+    public function setReportLastCheck(): void;
+
+    public function getReportLastCheck(): ?DateTime;
+
+    public function setReportLastGeneration(?DateTime $dateTime): void;
+
+    public function getReportLastGenerationDate(): ?DateTime;
+
+    public function getReportRecipientMail(): string;
+
+    public function getLiveReportDaysInPast(): int;
+
+    public function getCurrentReportingInterval(): string;
 }

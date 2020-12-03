@@ -59,10 +59,10 @@ interface CharityProductManagerInterface
      * method to get a specific product id by its slug
      *
      * @param string $slug
-     * @param string $settingManager
+     * @param SettingsManagerInterface $settingManager
      * @return int|null
      */
-    public function getProductIdBySlug(string $slug, string $settingManager): ?int;
+    public function getProductIdBySlug(string $slug, SettingsManagerInterface $settingManager): ?int;
 
     /**
      * Method to get a campaign object by its slug
