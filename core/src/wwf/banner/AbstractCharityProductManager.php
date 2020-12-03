@@ -18,7 +18,15 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     private static $CHARITY_COINS_CATEGORY = "charity_coins";
 
     // field for all charity products
+    /**
+     * @var CharityProduct[]
+     */
     private static $allProducts = [];
+
+    /**
+     * @var CharityCampaign[]
+     */
+    private static $allCampaigns = [];
 
     // available coin ids - no duplicates!
     public static $PROTECT_SPECIES_COIN = 'protect_species_coin';
@@ -26,11 +34,6 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     public static $PROTECT_FOREST_COIN = 'protect_forest_coin';
     public static $PROTECT_CLIMATE_COIN = 'protect_climate_coin';
     public static $PROTECT_DIVERSITY_COIN = 'protect_diversity_coin';
-
-    /**
-     * @var CharityCampaign[]
-     */
-    private static $allCampaigns = [];
 
     private static $genericFootNotesTextDE = "<br/>* Der gesamte Erlös der Umweltschutztaler kommt ausgewählten Projekten des WWF zugute. Bitte beachten Sie, dass die Ausstellung einer Spendenquittung nicht möglich ist.<br/>"
     . "<br/>** Der Umweltschutztaler ist kein physisches Produkt, sondern die Möglichkeit der digitalen Spende für den WWF. Eine Auslieferung und Rückerstattung des Umweltschutztalers ist daher nicht möglich.";
@@ -40,11 +43,11 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
      */
     public function __construct()
     {
-        static::initCampaigns();
-        static::initProducts();
+        $this->initCampaigns();
+        $this->initProducts();
     }
 
-    public static function initCampaigns(): void
+    public function initCampaigns(): void
     {
         static::$allCampaigns = [
             new CharityCampaign(AbstractCharityProductManager::$PROTECT_SPECIES_COIN,
@@ -70,7 +73,7 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
         ];
     }
 
-    public static function initProducts(): void
+    public function initProducts(): void
     {
         static::$allProducts = [
             new CharityProduct(static::$PROTECT_SPECIES_COIN, "Deine WWF-Spende (Artenschutz)", "Ein Euro für den Artenschutz", 1, "product_protect_species.png"),
@@ -84,7 +87,7 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     /**
      * @return CharityCampaign[]
      */
-    public static function getAllCampaigns(): array
+    public function getAllCampaigns(): array
     {
         return static::$allCampaigns;
     }
@@ -95,9 +98,10 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
      * @param string $slug
      * @return CharityCampaign|null
      */
-    public static function getCampaignBySlug(string $slug): ?CharityCampaign
+    public function getCampaignBySlug(string $slug): ?CharityCampaign
     {
-        foreach (static::getAllCampaigns() as $singleCampaign) {
+        foreach ($this->getAllCampaigns() as $singleCampaign) {
+            /* @var $singleCampaign CharityCampaign */
             if ($slug === $singleCampaign->getSlug()) {
                 return $singleCampaign;
             }
@@ -108,7 +112,7 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     /**
      * @return string[]
      */
-    public static function getAllCharityProductSlugs(): array
+    public function getAllCharityProductSlugs(): array
     {
         return [
             static::$PROTECT_SPECIES_COIN,
@@ -122,7 +126,7 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     /**
      * @return CharityProduct[]
      */
-    public static function getAllProducts(): array
+    public function getAllProducts(): array
     {
         return static::$allProducts;
     }
@@ -130,14 +134,19 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     /**
      * @return string
      */
-    public static function getCategoryId(): string
+    public function getCategoryId(): string
     {
         return static::$CHARITY_COINS_CATEGORY;
     }
 
-    public static function getProductBySlug(string $slug): ?CharityProduct
+    /**
+     * @param string $slug
+     * @return CharityProduct|null
+     */
+    public function getProductBySlug(string $slug): ?CharityProduct
     {
-        foreach (static::getAllProducts() as $singleProduct) {
+        foreach ($this->getAllProducts() as $singleProduct) {
+            /* @var CharityProduct $singleProduct */
             if ($slug === $singleProduct->getSlug()) {
                 return $singleProduct;
             }
@@ -150,9 +159,10 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
      * @param string $settingManager
      * @return int|null
      */
-    public static function getProductIdBySlug(string $slug, string $settingManager): ?int
+    public function getProductIdBySlug(string $slug, string $settingManager): ?int
     {
-        foreach (static::getAllProducts() as $singleProduct) {
+        foreach ($this->getAllProducts() as $singleProduct) {
+            /* @var $singleProduct CharityProduct */
             if ($singleProduct->getSlug() === $slug) {
                 $productId = call_user_func($settingManager . '::' . 'getSetting', $singleProduct->getProductIdSettingKey(), null);
                 if ($productId > 0) {
@@ -170,8 +180,8 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
      *
      * @return array|string[]
      */
-    public static function getAllCampaignTypes(): array
+    public function getAllCampaignTypes(): array
     {
-        return static::getAllCharityProductSlugs();
+        return $this->getAllCharityProductSlugs();
     }
 }

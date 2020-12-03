@@ -21,9 +21,9 @@ class CharityProductManager extends AbstractCharityProductManager
     /**
      * @return array|false|\WP_Term
      */
-    public static function getCharityProductCategory()
+    public function getCharityProductCategory()
     {
-        return get_term_by('slug', static::getCategoryId(), static::getWooProductCategoryTaxonomy());
+        return get_term_by('slug', $this->getCategoryId(), static::getWooProductCategoryTaxonomy());
     }
 
     /**
@@ -45,14 +45,14 @@ class CharityProductManager extends AbstractCharityProductManager
      * @param \DateTime $endDate
      * @return ReportResultModel
      */
-    public static function getRevenueOfCampaignInTimeRange(string $campaignSlug,
-                                                           \DateTime $startDate,
-                                                           \DateTime $endDate): ReportResultModel
+    public function getRevenueOfCampaignInTimeRange(string $campaignSlug,
+                                                    \DateTime $startDate,
+                                                    \DateTime $endDate): ReportResultModel
     {
         $reportResultModel = new ReportResultModel($startDate, $endDate);
 
         $sum = 0;
-        $productId = CharityProductManager::getProductIdBySlug($campaignSlug, SettingsManager::class);
+        $productId = $this->getProductIdBySlug($campaignSlug, SettingsManager::class);
         if (!$productId) {
             error_log(sprintf('no product id found in wooCommerce shop for campaign "%s"', $campaignSlug));
             return $reportResultModel;

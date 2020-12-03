@@ -13,14 +13,14 @@ class Banner
 {
     /**
      * define the index of the default campaign which is also used as fallback of
-     * AbstractCharityProductManager::getAllCharityProductSlugs()
+     * AbstractCharityProductManager#getAllCharityProductSlugs()
      *
      * @var int
      */
     private $defaultCampaignIndex = 2;
 
     /**
-     * this is always a value out of AbstractCharityProductManager::getAllCampaignTypes()
+     * this is always a value out of AbstractCharityProductManager#getAllCampaignTypes()
      *
      * @var string
      */
@@ -49,7 +49,7 @@ class Banner
         $this->donationPlugin = $donationPlugin;
 
         $isValid = false;
-        $allCampaigns = call_user_func($donationPlugin->getCharityProductManager() . '::' . 'getAllCampaignTypes');
+        $allCampaigns = $donationPlugin->getCharityProductManagerInstance()->getAllCampaignTypes();
         foreach ($allCampaigns as $singleCampaign) {
             if ($singleCampaign === $bannerType) {
                 $isValid = true;
@@ -69,12 +69,13 @@ class Banner
      */
     public function render(): string
     {
-        $campaign = call_user_func($this->getDonationPlugin()->getCharityProductManager() . '::getCampaignBySlug', $this->campaign);
+        $charityProductManager = $this->getDonationPlugin()->getCharityProductManagerInstance();
+        $campaign = $charityProductManager->getCampaignBySlug($this->getCampaign());
         if (!$campaign) {
             error_log(sprintf("Invalid campaign for slug '%s'", $this->campaign));
             return '';
         }
-        $product = call_user_func($this->getDonationPlugin()->getCharityProductManager() . '::getProductBySlug', $this->campaign);
+        $product = $charityProductManager->getProductBySlug($this->campaign);
         if (!$product) {
             error_log(sprintf("Invalid product for campaign slug '%s'", $this->campaign));
             return '';

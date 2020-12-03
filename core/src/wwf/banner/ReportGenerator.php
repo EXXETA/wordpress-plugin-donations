@@ -46,8 +46,11 @@ final class ReportGenerator
         $results = [];
         $sum = 0.0;
         $totalOrderCounter = 0;
-        foreach (call_user_func($donationPlugin->getCharityProductManager() . '::getAllCampaignTypes') as $campaignSlug) {
-            $reportResult = call_user_func($donationPlugin->getCharityProductManager() . '::getRevenueOfCampaignInTimeRange', $campaignSlug, $timeRangeStart, $timeRangeEnd);
+
+        $charityProductManager = $donationPlugin->getCharityProductManagerInstance();
+
+        foreach ($charityProductManager->getAllCampaignTypes() as $campaignSlug) {
+            $reportResult = $charityProductManager->getRevenueOfCampaignInTimeRange($campaignSlug, $timeRangeStart, $timeRangeEnd);
             $results[$campaignSlug] = $reportResult->getAmount();
             $totalOrderCounter = $reportResult->getOrderCountTotal();
             $sum += $results[$campaignSlug];

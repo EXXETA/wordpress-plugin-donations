@@ -28,7 +28,7 @@ class MiniBanner extends Banner
             $bannerType = call_user_func($donationPlugin->getSettingsManager() . '::getMiniBannerCampaign');
             if ($bannerType === null || $bannerType == "null") {
                 // use default as fallback
-                $bannerType = call_user_func($donationPlugin->getCharityProductManager() . '::getAllCampaignTypes', $this->getDefaultCampaignIndex());
+                $bannerType = $donationPlugin->getCharityProductManagerInstance()->getAllCampaignTypes()[$this->getDefaultCampaignIndex()];
             }
         } else {
             $bannerType = $campaign;
@@ -38,14 +38,13 @@ class MiniBanner extends Banner
 
     public function render(): string
     {
-        $campaign = call_user_func($this->getDonationPlugin()->getCharityProductManager() . '::getCampaignBySlug',
-            $this->getCampaign());
+        $charityProductManager = $this->getDonationPlugin()->getCharityProductManagerInstance();
+        $campaign = $charityProductManager->getCampaignBySlug($this->getCampaign());
         if (!$campaign) {
             error_log(sprintf("Invalid campaign for slug '%s'", $this->getCampaign()));
             return '';
         }
-        $product = call_user_func($this->getDonationPlugin()->getCharityProductManager() . '::getProductBySlug',
-            $this->getCampaign());
+        $product = $charityProductManager->getProductBySlug($this->getCampaign());
         if (!$product) {
             error_log(sprintf("Invalid product for campaign slug '%s'", $this->getCampaign()));
             return '';

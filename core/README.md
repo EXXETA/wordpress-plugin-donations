@@ -15,10 +15,9 @@ which is the one defined by this package.
 1. You have to derive from all Interfaces in this package. For convenience you can extend from the more 
 generic *Abstract-* interface implementations.
 2. Implement these classes in your target shop system plugin:
-    * *CampaignManager* extending from *AbstractCampaignManager*
-        * This manager-class stores the available campaigns and provides methods for you to get the campaign information (e.g. description texts, slugs) from.
     * *CharityProductManager* extending from *AbstractCharityProductManager*
         * This manager-class stores the available products and provides methods to get the shop-specific objects and IDs.
+        * Also provides methods for you to get the campaign information (e.g. description texts, slugs) from.
     * *SettingsManager* extending from *AbstractSettingsManager*
         * This manager-class stores all the settings and options this plugin can use and provides shop-specific ways to get and store these values.
     * *BannerHandler* implementing *BannerHandlerInterface*
@@ -26,7 +25,7 @@ generic *Abstract-* interface implementations.
     * *ReportHandler* implementing *BannerHandlerInterface*
         * A handler-class to customize the general report generation process, which is implemented in the `ReportGenerator` class.
 3. Several code places need an instance of a *DonationPluginInterface*. This will help you:
-    `new DonationPlugin(CharityProductManager::class, CampaignManager::class, SettingsManager::class)` 
+    `new DonationPlugin(CharityProductManager::class, SettingsManager::class)` 
     (the arguments should be part of your plugin's namespace)
 4. Your plugin will need to create the campaigns/products in the target shop system as real products and probably you want to add
 product images as well (e.g. for the campaign-specific WWF coin-logo). In addition you'll probably need additional CSS styles or JavaScript and

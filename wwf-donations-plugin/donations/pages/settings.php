@@ -100,7 +100,7 @@
                                 class="postform"
                                 name="wwf_donations_mini_banner_campaign">
                             <option value="null">Keine Auswahl (Standard: Biologische Artenvielfalt)</option>
-                            <?php foreach (\donations\CharityProductManager::getAllCampaigns() as $campaign): ?>
+                            <?php foreach (\donations\Plugin::getDonationPlugin()->getCharityProductManagerInstance()->getAllCampaigns() as $campaign): ?>
                                 <? /* @var \exxeta\wwf\banner\model\CharityCampaign $campaign */ ?>
                                 <option value="<?php esc_attr_e($campaign->getSlug()) ?>"
                                     <?php

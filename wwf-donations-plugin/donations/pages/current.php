@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $reportTriggered = true;
     }
 }
+$charityProductManager = \donations\Plugin::getDonationPlugin()->getCharityProductManagerInstance();
 ?>
 <div class="wrap">
     <h2>Live-Spendenbericht</h2>
@@ -83,9 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sum = 0;
         $totalOrderCounter = 0;
         ?>
-        <?php foreach (\donations\CharityProductManager::getAllCampaigns() as $charityCampaign): ?>
+        <?php foreach ($charityProductManager->getAllCampaigns() as $charityCampaign): ?>
             <?php
-            $report = \donations\CharityProductManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
+            $report = $charityProductManager->getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
             $revenue = $report->getAmount();
             $totalOrderCounter = $report->getOrderCountTotal();
             $sum += $revenue;

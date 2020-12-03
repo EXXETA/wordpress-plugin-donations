@@ -40,12 +40,28 @@ class Plugin
     public static $customPostType = 'donation_report';
 
     /**
+     * @var DonationPluginInterface
+     */
+    private static $donationPlugin;
+
+    /**
      * Plugin constructor.
      * @param string $pluginFile
      */
     public function __construct(string $pluginFile)
     {
         self::$pluginFile = $pluginFile;
+        self::$donationPlugin = new DonationPlugin(new CharityProductManager(), new SettingsManager(), null);
+    }
+
+    /**
+     * Get generic instance of a donation plugin mostly to use it in combination with the generic core library
+     *
+     * @return DonationPluginInterface
+     */
+    public static function getDonationPlugin(): DonationPluginInterface
+    {
+        return static::$donationPlugin;
     }
 
     private static function uploadImage(CharityProduct $singleProduct): ?int
@@ -91,16 +107,6 @@ class Plugin
             error_log(sprintf('%s: problem uploading image "%s"', self::$pluginFile,
                 $singleProduct->getImagePath()));
         }
-    }
-
-    /**
-     * Get generic instance of a donation plugin mostly to use it with the generic core library
-     *
-     * @return DonationPluginInterface
-     */
-    public static function getDonationPlugin(): DonationPluginInterface
-    {
-        return new DonationPlugin(CharityProductManager::class, CampaignManager::class, SettingsManager::class);
     }
 
     /**
@@ -185,14 +191,15 @@ class Plugin
     static function activate(): void
     {
         // init all known products and store their IDs
-        $result = CharityProductManager::getCharityProductCategory();
+        $charityProductManager = static::getDonationPlugin()->getCharityProductManagerInstance();
+        $result = $charityProductManager->getCharityProductCategory();
         $termId = null;
         if (!$result instanceof WP_Term) {
             // create it
             $result = wp_insert_term("Spendemünzen", CharityProductManager::getWooProductCategoryTaxonomy(), [
                 'description' => 'Kategorie für Charity Coins',
                 'parent' => 0,
-                'slug' => CharityProductManager::getCategoryId(),
+                'slug' => $charityProductManager->getCategoryId(),
             ]);
             $termId = $result['term_id'];
         } else {
@@ -202,7 +209,7 @@ class Plugin
             error_log("Could not create default coin category");
         }
         // add default products
-        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+        foreach ($charityProductManager->getAllProducts() as $singleProduct) {
             /*@var $singleProduct CharityProduct */
 
             $productId = get_option($singleProduct->getProductIdSettingKey());
@@ -284,25 +291,26 @@ class Plugin
     {
         // remove products of this plugin during uninstallation
         // TODO atm deletion of products + custom category is skipped
-//        foreach (CharityProductManager::getAllProducts() as $singleProduct) {
+//        $charityProductManager = static::getDonationPlugin()->getCharityProductManagerInstance();
+//        foreach ($charityProductManager->getAllProducts() as $singleProduct) {
 //            /* @var $singleProduct CharityProduct */
-//            $productId = get_option($singleProduct->getProductIdOptionKey());
+//            $productId = get_option($singleProduct->getProductIdSettingKey());
 //            if (!empty($productId)) {
 //                // delete product
 //                $product = wc_get_product($productId);
 //                $product->delete();
 //            }
 //            // delete option
-//            delete_option($singleProduct->getProductIdOptionKey());
+//            delete_option($singleProduct->getProductIdSettingKey());
 //        }
 //
 //        // remove woo commerce product category which is technically a wordpress term - but only if it's not empty!
-//        $result = CharityProductManager::getCharityProductCategory();
+//        $result = $charityProductManager->getCharityProductCategory();
 //        if ($result instanceof WP_Term) {
-//            $productsInCategory = wc_get_term_product_ids($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+//            $productsInCategory = wc_get_term_product_ids($result->term_id, $charityProductManager->getWooProductCategoryTaxonomy());
 //            if (count($productsInCategory) === 0) {
 //                // we do only delete the category if its empty!
-//                wp_delete_term($result->term_id, CharityProductManager::getWooProductCategoryTaxonomy());
+//                wp_delete_term($result->term_id, $charityProductManager->getWooProductCategoryTaxonomy());
 //            }
 //        }
         SettingsManager::uninstall();
@@ -339,7 +347,7 @@ class Plugin
     static function render_cart_block($attributes = [], $content = ''): string
     {
         if (!isset($attributes['donationMode'])) {
-            $campaign = CharityProductManager::getAllCampaignTypes()[0];
+            $campaign = static::getDonationPlugin()->getCharityProductManagerInstance()->getAllCampaignTypes()[0];
         } else {
             $campaign = $attributes['donationMode'];
         }
@@ -363,7 +371,7 @@ class Plugin
     static function setup_banner_shortcode($atts): string
     {
         $shortCodeAtts = shortcode_atts([
-            'campaign' => CharityProductManager::getAllCampaignTypes()[0],
+            'campaign' => static::getDonationPlugin()->getCharityProductManagerInstance()->getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
         return (new Banner(new WooBannerHandler(plugin_dir_url(self::getPluginFile())), static::getDonationPlugin(), $shortCodeAtts['campaign']))->render();
     }
@@ -523,7 +531,7 @@ class Plugin
         }
 
         $allProductIds = [];
-        foreach (CharityProductManager::getAllProducts() as $charityProduct) {
+        foreach (static::getDonationPlugin()->getCharityProductManagerInstance()->getAllProducts() as $charityProduct) {
             /* @var $charityProduct CharityProduct */
             $allProductIds[] = get_option($charityProduct->getProductIdSettingKey());
         }
