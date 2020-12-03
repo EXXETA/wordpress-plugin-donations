@@ -1,51 +1,56 @@
 <?php
 
-
-namespace donations;
-
-
-use exxeta\wwf\banner\model\CharityProduct;
+namespace exxeta\wwf\banner;
 
 /**
  * Class Banner
  *
- * wrapper class for banner rendering which is used by shortcode and gutenberg serverside rendered block.
+ * generic wrapper class for banner rendering which is used by shortcode and gutenberg serverside rendered block.
  *
- * TODO: make more generic and independent of Wordpress and wooCommerce logic
- *
- * @package donations
+ * @package exxeta\wwf\banner
  */
 class Banner
 {
     /**
      * define the index of the default campaign which is also used as fallback of
-     * CharityProductManager::getAllCharityProductSlugs()
+     * AbstractCharityProductManager::getAllCharityProductSlugs()
      *
      * @var int
      */
-    protected $defaultCampaignIndex = 2;
+    private $defaultCampaignIndex = 2;
 
     /**
-     * this is always a value out of CharityProductManager::getAllCampaignTypes()
+     * this is always a value out of AbstractCharityProductManager::getAllCampaignTypes()
      *
      * @var string
      */
     private $campaign;
 
     /**
-     * @var string
+     * @var BannerHandlerInterface
      */
-    private $pluginUrl;
+    private $bannerHandler;
+
+    /**
+     * @var DonationPluginInterface
+     */
+    private $donationPlugin;
 
     /**
      * Banner constructor.
+     * @param BannerHandlerInterface $bannerHandler
+     * @param DonationPluginInterface $donationPlugin
      * @param string $bannerType
      */
-    public function __construct(string $bannerType, string $pluginUrl)
+    public function __construct(BannerHandlerInterface $bannerHandler, DonationPluginInterface $donationPlugin,
+                                string $bannerType)
     {
-        $isValid = false;
+        $this->bannerHandler = $bannerHandler;
+        $this->donationPlugin = $donationPlugin;
 
-        foreach (CampaignManager::getAllCampaignTypes() as $singleCampaign) {
+        $isValid = false;
+        $allCampaigns = call_user_func($donationPlugin->getCampaignManager() . '::' . 'getAllCampaignTypes');
+        foreach ($allCampaigns as $singleCampaign) {
             if ($singleCampaign === $bannerType) {
                 $isValid = true;
                 break;
@@ -54,10 +59,9 @@ class Banner
         if (!$isValid) {
             // select default campaign - if input values were invalid
             // use fallback, take third of campaign types = protect species
-            $bannerType = CampaignManager::getAllCampaignTypes()[$this->defaultCampaignIndex];
+            $bannerType = $allCampaigns[$this->getDefaultCampaignIndex()];
         }
         $this->campaign = $bannerType;
-        $this->pluginUrl = $pluginUrl;
     }
 
     /**
@@ -65,24 +69,20 @@ class Banner
      */
     public function render(): string
     {
-        $campaign = CampaignManager::getCampaignBySlug($this->campaign);
+        $campaign = call_user_func($this->getDonationPlugin()->getCampaignManager() . '::getCampaignBySlug', $this->campaign);
         if (!$campaign) {
             error_log(sprintf("Invalid campaign for slug '%s'", $this->campaign));
-            return "";
+            return '';
         }
-        $product = CharityProductManager::getProductBySlug($this->campaign);
+        $product = call_user_func($this->getDonationPlugin()->getCharityProductManager() . '::getProductBySlug', $this->campaign);
         if (!$product) {
             error_log(sprintf("Invalid product for campaign slug '%s'", $this->campaign));
-            return "";
+            return '';
         }
-        $productId = get_option($product->getProductIdSettingKey());
-        $wcProduct = wc_get_product($productId);
-        $attachmentId = $this->getImageAttachmentIdByProduct($product, $wcProduct);
-
         $randomString = uniqid();
         $moreInfoId = sprintf('donation-campaign-more-info-%s-%s', $campaign->getSlug(), $randomString);
-        $infoAreaId = sprintf("donation-campaign-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
-        $hideInfoAreaId = sprintf("donation-campaign-hide-more-info-area-%s-%s", $campaign->getSlug(), $randomString);
+        $infoAreaId = sprintf('donation-campaign-more-info-area-%s-%s', $campaign->getSlug(), $randomString);
+        $hideInfoAreaId = sprintf('donation-campaign-hide-more-info-area-%s-%s', $campaign->getSlug(), $randomString);
 
         // start to generate output
         $output = sprintf('<div class="cart-donation-banner %s">', $campaign->getClass());
@@ -95,18 +95,23 @@ class Banner
             $moreInfoId,
         );
 
-        $cartUrl = wc_get_cart_url();
-        $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">', $cartUrl);
+        // form starts here
+        $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">',
+            $this->getBannerHandler()->getCartUrl());
 
         // do not add a line break here!
         $output .= sprintf('<img class="donation-campaign-logo" alt="" src="%s" /><span class="times"></span>',
-            wp_get_attachment_image_url($attachmentId));
+            $this->getBannerHandler()->getLogoImageUrl($product));
 
-        $this->applyWooCartFormData($cartUrl, $output, $productId);
+        $this->getBannerHandler()->applyCartFormHook($output, $product);
+
+        // add quantity field
+        $output .= sprintf('<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="%s" />',
+            $this->getBannerHandler()->getFormQuantityInputName());
 
         $output .= '<button class="donation-campaign-submit" type="submit">';
-        $output .= sprintf('<img class="cart-icon" src="%s" alt="" /><span class="donation-campaign-cart-text">%s</span>',
-            $this->pluginUrl . 'images/icon_cart.svg', $campaign->getButtonDescription());
+        $output .= sprintf('<img class="cart-icon" src="%s" alt="cart icon" /><span class="donation-campaign-cart-text">%s</span>',
+            $this->getBannerHandler()->getCartImageUrl(), $campaign->getButtonDescription());
         $output .= '</button></form></div>';
 
         $output .= '</div>'; // .cart-banner-content
@@ -122,6 +127,7 @@ class Banner
             $hideInfoAreaId, $defaultClosingText);
         $output .= '</div>'; // .donation-campaign-collapsible
 
+        // this js needs to be plain js to support a wide variety of themes/browsers etc.
         $output .= <<<SCRIPT
 <script lang="js">
 (function() {
@@ -154,48 +160,26 @@ SCRIPT;
     }
 
     /**
-     * @return string
-     */
-    public function getPluginUrl(): string
-    {
-        return $this->pluginUrl;
-    }
-
-    /**
-     * @param CharityProduct $product
-     * @param $wcProduct
      * @return int
      */
-    protected function getImageAttachmentIdByProduct(CharityProduct $product, $wcProduct): int
+    public function getDefaultCampaignIndex(): int
     {
-        $attachmentId = intval(get_option($product->getImageIdSettingKey()));
-
-        if ($wcProduct instanceof \WC_Product) {
-            $productAttachmentId = intval($wcProduct->get_image_id());
-            if ($productAttachmentId && $productAttachmentId > 0 && $productAttachmentId != $attachmentId) {
-                $attachmentId = $productAttachmentId;
-            }
-        }
-        return $attachmentId;
+        return $this->defaultCampaignIndex;
     }
 
     /**
-     * this method uses the &$output reference directly
-     *
-     * @param string $cartUrl
-     * @param string &$output
-     * @param int $productId
+     * @return BannerHandlerInterface
      */
-    protected function applyWooCartFormData(string $cartUrl, string &$output, int $productId)
+    public function getBannerHandler(): BannerHandlerInterface
     {
-        if (strpos($cartUrl, '?page_id=') !== false) {
-            // "nice" urls are not enabled/supported, add page_id as hidden input field to redirect to cart properly
-            $cartPageId = wc_get_page_id('cart');
-            $output .= sprintf('<input type="hidden" value="%d" name="page_id" />', $cartPageId);
-        }
+        return $this->bannerHandler;
+    }
 
-        // NOTE: input names are very important to create a valid form action for WooCommerce cart
-        $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $productId);
-        $output .= '<input class="donation-campaign-quantity-input" type="number" value="1" min="1" name="quantity" />';
+    /**
+     * @return DonationPluginInterface
+     */
+    public function getDonationPlugin(): DonationPluginInterface
+    {
+        return $this->donationPlugin;
     }
 }

@@ -182,7 +182,7 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
      *
      * @return int|null
      */
-    public static function getMiniBannerCampaignTarget(): ?int
+    public static function getMiniBannerCampaignTargetPageId(): ?int
     {
         return intval(static::getSetting(static::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, null));
     }

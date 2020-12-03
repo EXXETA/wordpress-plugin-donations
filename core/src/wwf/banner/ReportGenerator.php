@@ -35,7 +35,7 @@ final class ReportGenerator
             ->setTime(23, 59, 59);
 
         if ($timeRangeStart > $timeRangeEnd) {
-            $pluginName = call_user_func($donationPlugin->getSettingsManager() . '::getPluginName()');
+            $pluginName = call_user_func($donationPlugin->getSettingsManager() . '::getPluginName');
             error_log($pluginName . ': invalid time range');
             return;
         }
