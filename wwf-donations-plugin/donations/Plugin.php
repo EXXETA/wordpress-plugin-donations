@@ -536,6 +536,7 @@ class Plugin
             $allProductIds[] = get_option($charityProduct->getProductIdSettingKey());
         }
 
+        // FIXME extract this!
         $output = '<div class="notice notice-info"><p>';
         $output .= 'Dieses Plugin erweitert den Shop mit mehreren Produkten, um Gelder für 
                     Wohltätigkeitsorganisationen zu sammeln.<br/>';

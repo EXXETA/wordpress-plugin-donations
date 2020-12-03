@@ -2,6 +2,7 @@
 
 namespace donations;
 
+use Automattic\WooCommerce\Admin\Overrides\Order;
 use exxeta\wwf\banner\AbstractCharityProductManager;
 use exxeta\wwf\banner\model\ReportResultModel;
 

@@ -86,3 +86,8 @@ Execute this command to run the unit tests of this package.
 
 ## TODO
 - How to handle assets (images + styles + scripts) in a "core"-way?
+- Extract information texts to core, too! + documentation
+- Add general plugin description (diagram?)
+- Customize build script and main project's README
+- Extract SCSS to core + documentation
+- Run code inspection + static code analysis tools
