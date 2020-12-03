@@ -2,6 +2,7 @@
     <h2>Spenden-Einstellungen</h2>
 
     <?php
+
     if (!current_user_can('manage_options')) {
         echo "Diesem Benutzer fehlen die Berechtigungen, um die Spendeneinstellungen zu ändern.";
         return;
@@ -99,8 +100,8 @@
                                 class="postform"
                                 name="wwf_donations_mini_banner_campaign">
                             <option value="null">Keine Auswahl (Standard: Biologische Artenvielfalt)</option>
-                            <?php foreach (\donations\CampaignManager::getAllCampaigns() as $campaign): ?>
-                                <? /* @var \donations\CharityCampaign $campaign */ ?>
+                            <?php foreach (\donations\CharityProductManager::getAllCampaigns() as $campaign): ?>
+                                <? /* @var \exxeta\wwf\banner\model\CharityCampaign $campaign */ ?>
                                 <option value="<?php esc_attr_e($campaign->getSlug()) ?>"
                                     <?php
                                     echo $campaign->getSlug() == $currentMiniBannerCampaign ? ' selected="selected"' : '';

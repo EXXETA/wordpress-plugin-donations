@@ -3,7 +3,10 @@
 namespace exxeta\wwf\banner;
 
 
+use DateTime;
+use exxeta\wwf\banner\model\CharityCampaign;
 use exxeta\wwf\banner\model\CharityProduct;
+use exxeta\wwf\banner\model\ReportResultModel;
 
 /**
  * Interface CharityProductManager
@@ -55,4 +58,24 @@ interface CharityProductManagerInterface
      * @return int|null
      */
     public static function getProductIdBySlug(string $slug, string $settingManager): ?int;
+
+    /**
+     * values correspond to charity coin product slug
+     *
+     * @return array|string[]
+     */
+    public static function getAllCampaignTypes(): array;
+
+    /**
+     * @return CharityCampaign[]
+     */
+    public static function getAllCampaigns(): array;
+
+    /**
+     * @param string $campaignSlug
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @return ReportResultModel
+     */
+    public static function getRevenueOfCampaignInTimeRange(string $campaignSlug, DateTime $startDate, DateTime $endDate): ReportResultModel;
 }

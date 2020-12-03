@@ -79,11 +79,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif ?>
             </td>
         </tr>
-        <?php $sum = 0;
-        $totalOrderCounter = 0; ?>
-        <?php foreach (\donations\CampaignManager::getAllCampaigns() as $charityCampaign): ?>
+        <?php
+        $sum = 0;
+        $totalOrderCounter = 0;
+        ?>
+        <?php foreach (\donations\CharityProductManager::getAllCampaigns() as $charityCampaign): ?>
             <?php
-            $report = \donations\CampaignManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
+            $report = \donations\CharityProductManager::getRevenueOfCampaignInTimeRange($charityCampaign->getSlug(), $startDate, $today);
             $revenue = $report->getAmount();
             $totalOrderCounter = $report->getOrderCountTotal();
             $sum += $revenue;

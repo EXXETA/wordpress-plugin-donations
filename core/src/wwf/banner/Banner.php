@@ -49,7 +49,7 @@ class Banner
         $this->donationPlugin = $donationPlugin;
 
         $isValid = false;
-        $allCampaigns = call_user_func($donationPlugin->getCampaignManager() . '::' . 'getAllCampaignTypes');
+        $allCampaigns = call_user_func($donationPlugin->getCharityProductManager() . '::' . 'getAllCampaignTypes');
         foreach ($allCampaigns as $singleCampaign) {
             if ($singleCampaign === $bannerType) {
                 $isValid = true;
@@ -69,7 +69,7 @@ class Banner
      */
     public function render(): string
     {
-        $campaign = call_user_func($this->getDonationPlugin()->getCampaignManager() . '::getCampaignBySlug', $this->campaign);
+        $campaign = call_user_func($this->getDonationPlugin()->getCharityProductManager() . '::getCampaignBySlug', $this->campaign);
         if (!$campaign) {
             error_log(sprintf("Invalid campaign for slug '%s'", $this->campaign));
             return '';

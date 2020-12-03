@@ -5,6 +5,7 @@ namespace exxeta\wwf\banner;
 
 /**
  * Interface DonationPluginInterface
+ *
  * @package exxeta\wwf\banner
  */
 interface DonationPluginInterface
@@ -15,13 +16,6 @@ interface DonationPluginInterface
      * @return string
      */
     public function getCharityProductManager(): string;
-
-    /**
-     * returns the string of the Fully-Qualified-Class-Name (FQCN) of the plugin's CampaignManagerInterface
-     *
-     * @return string
-     */
-    public function getCampaignManager(): string;
 
     /**
      * returns the string of the Fully-Qualified-Class-Name (FQCN) of the plugin's SettingsManagerInterface

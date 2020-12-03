@@ -40,7 +40,7 @@
     <?php foreach ($args['revenues'] as $slug => $revenue) : ?>
         <tr>
             <td style="border: 1px solid #eee;padding-left: 12px;" width="70%">
-                <strong><?php echo call_user_func($args['pluginInstance']->getCampaignManager() . '::getCampaignBySlug', $slug)->getName() ?></strong>
+                <strong><?php echo call_user_func($args['pluginInstance']->getCharityProductManager() . '::getCampaignBySlug', $slug)->getName() ?></strong>
             </td>
             <td style="border: 1px solid #eee;padding-left: 12px;" width="30%">
                 <?php echo number_format($revenue, 2) ?> &euro;

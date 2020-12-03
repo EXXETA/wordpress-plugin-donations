@@ -339,7 +339,7 @@ class Plugin
     static function render_cart_block($attributes = [], $content = ''): string
     {
         if (!isset($attributes['donationMode'])) {
-            $campaign = CampaignManager::getAllCampaignTypes()[0];
+            $campaign = CharityProductManager::getAllCampaignTypes()[0];
         } else {
             $campaign = $attributes['donationMode'];
         }
@@ -363,7 +363,7 @@ class Plugin
     static function setup_banner_shortcode($atts): string
     {
         $shortCodeAtts = shortcode_atts([
-            'campaign' => CampaignManager::getAllCampaignTypes()[0],
+            'campaign' => CharityProductManager::getAllCampaignTypes()[0],
         ], $atts, self::$bannerShortCode);
         return (new Banner(new WooBannerHandler(plugin_dir_url(self::getPluginFile())), static::getDonationPlugin(), $shortCodeAtts['campaign']))->render();
     }
