@@ -82,6 +82,9 @@ You may also want to look at the SCSS of the WordPress plugin [here](https://git
 No, not in a written form. See the previously linked SCSS file for the WordPress plugin and you are strongly encouraged to use SCSS and a style-preprocessor.
 Also note, that your styling rules should never depend on specific Themes/CSS Frameworks, as long as you have no good reason to do this. 
 
+#### Are there any default campaign texts?
+Yes! They are part of this package and in addition you can use the `TextProvider`-class to get texts which can be shared across the plugins.
+
 ## Testing
 Execute this command to run the unit tests of this package.
  
@@ -89,9 +92,6 @@ Execute this command to run the unit tests of this package.
 
 ## TODO
 - How to handle assets (images + styles + scripts) in a "core"-way?
-- Extract information texts to core, too! + documentation
-- Add general plugin description (diagram?)
 - Customize build script and main project's README
 - Extract SCSS to core + documentation
-- Run code inspection + static code analysis tools
 - Rename methods! and check interfaces!

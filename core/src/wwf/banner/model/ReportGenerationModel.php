@@ -2,6 +2,8 @@
 
 namespace exxeta\wwf\banner\model;
 
+use DateTime;
+
 /**
  * Class ReportGenerationModel
  *
@@ -12,11 +14,11 @@ namespace exxeta\wwf\banner\model;
 class ReportGenerationModel
 {
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $startDate;
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $endDate;
     /**
@@ -26,22 +28,22 @@ class ReportGenerationModel
     /**
      * @var bool
      */
-    private $isRegular = false;
+    private $isRegular;
 
     /**
      * @var bool
      */
-    private $sendMail = true;
+    private $sendMail;
 
     /**
      * ReportGenerationModel constructor.
-     * @param \DateTime $startDate
-     * @param \DateTime $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @param string $intervalMode
      * @param bool $isRegular
      * @param bool $sendMail
      */
-    public function __construct(\DateTime $startDate, \DateTime $endDate, string $intervalMode,
+    public function __construct(DateTime $startDate, DateTime $endDate, string $intervalMode,
                                 bool $isRegular, bool $sendMail)
     {
         $this->startDate = $startDate;
@@ -52,17 +54,17 @@ class ReportGenerationModel
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getStartDate(): \DateTime
+    public function getStartDate(): DateTime
     {
         return $this->startDate;
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getEndDate(): \DateTime
+    public function getEndDate(): DateTime
     {
         return $this->endDate;
     }

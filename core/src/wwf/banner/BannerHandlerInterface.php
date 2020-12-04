@@ -83,8 +83,7 @@ interface BannerHandlerInterface
      * this hook method can be used to customize the inner form elements (e.g. to add hidden inputs or csrf tokens..)
      *
      * @param $output string is passed by reference!
-     * @param CharityProduct $charityProduct
-     * @return void
+     * @param $charityProduct CharityProduct
      */
     public function applyCartFormHook(&$output, CharityProduct $charityProduct): void;
 

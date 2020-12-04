@@ -2,6 +2,8 @@
 
 namespace exxeta\wwf\banner\model;
 
+use DateTime;
+
 /**
  * Class ReportResultModel
  *
@@ -22,21 +24,21 @@ class ReportResultModel
     private $amount;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $startDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     private $endDate;
 
     /**
      * ReportResultModel constructor.
-     * @param \DateTime $startDate
-     * @param \DateTime $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      */
-    public function __construct(\DateTime $startDate, \DateTime $endDate)
+    public function __construct(DateTime $startDate, DateTime $endDate)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
@@ -77,17 +79,17 @@ class ReportResultModel
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getStartDate(): \DateTime
+    public function getStartDate(): DateTime
     {
         return $this->startDate;
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getEndDate(): \DateTime
+    public function getEndDate(): DateTime
     {
         return $this->endDate;
     }

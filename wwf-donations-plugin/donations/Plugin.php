@@ -11,6 +11,7 @@ use exxeta\wwf\banner\MiniBanner;
 use exxeta\wwf\banner\model\CharityProduct;
 use exxeta\wwf\banner\model\ReportGenerationModel;
 use exxeta\wwf\banner\ReportGenerator;
+use exxeta\wwf\banner\TextProvider;
 use WC_Product_Simple;
 use WP_Term;
 
@@ -537,17 +538,7 @@ class Plugin
         }
 
         // FIXME extract this!
-        $output = '<div class="notice notice-info"><p>';
-        $output .= 'Dieses Plugin erweitert den Shop mit mehreren Produkten, um Gelder für 
-                    Wohltätigkeitsorganisationen zu sammeln.<br/>';
-        $output .= sprintf('Produkt-IDs: <strong>%s</strong>', join(', ', $allProductIds)) . '<br/>';
-        $output .= 'Bitte überweisen Sie in regelmäßigen Abständen die Beträge der eingenommenen Spenden 
-                    unter Angabe des jeweilig gewünschten Spendenzwecks zusätzlich zum angegebenen Verwendungszweck
-                    auf folgendes Konto:<br/><br/>';
-        $output .= '<strong>IBAN:</strong> DE06 5502 0500 0222 2222 22<br/>';
-        $output .= '<strong>BIC:</strong> BFSWDE33MNZ &ndash; Bank für Sozialwirtschaft<br/>';
-        $output .= '<strong>Verwendungszweck:</strong> 20ISAZ2002';
-        $output .= '</p></div>';
+        $output = sprintf('<div class="notice notice-info">%s</div>', TextProvider::getGeneralInfoText());
 
         $settingsManager = static::getDonationPlugin()->getSettingsManagerInstance();
 

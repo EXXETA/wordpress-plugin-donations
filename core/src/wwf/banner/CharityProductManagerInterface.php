@@ -33,7 +33,7 @@ interface CharityProductManagerInterface
     public function getCategoryId(): string;
 
     /**
-     * @return array|false|\WP_Term
+     * @return array|false|object
      */
     public function getCharityProductCategory();
 
