@@ -5,6 +5,9 @@ This package contains common PHP code used by all WWF-Banner plugins.
 *Note:* This code was extracted as there was only one other plugin using this core. Therefore you might find issues, problems
 or missing features. That means: **If there is something wrong or missing, feel free to add or request it!**
 
+This is the general idea of this core package:
+![](./docs/shop_plugin_overview.png)
+
 ## How-To use this package/How-To start a new shop plugin
 
 Goal: You should use this package if you want to implement a WWF Germany shop-specific banner plugin.
@@ -91,3 +94,4 @@ Execute this command to run the unit tests of this package.
 - Customize build script and main project's README
 - Extract SCSS to core + documentation
 - Run code inspection + static code analysis tools
+- Rename methods! and check interfaces!
