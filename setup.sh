@@ -45,7 +45,6 @@ php wp-cli.phar --info
 mkdir -p wp
 cd wp
 php ../wp-cli.phar core download || true
-cd -
 
 # setup development environment
 cd ./wwf-donations-plugin

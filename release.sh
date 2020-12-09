@@ -62,7 +62,7 @@ rm -rf src
 
 # copy license and readme
 cp ../../LICENSE .
-cp ../../README.md README_dev.md
+cp ../../wp/README.md README_dev.md
 
 # build archives
 cd ..
