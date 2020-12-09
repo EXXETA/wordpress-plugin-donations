@@ -1,9 +1,16 @@
 .idea
+
 composer.phar
 wp-cli.phar
+
 wwf-donations-plugin/vendor
 wwf-donations-plugin/wp-content
+wwf-donations-plugin/images
+wwf-donations-plugin/banner.css
 wwf-donations-plugin/build/*.map
+
 node_modules
 wp
 release
+
+assets/dist

@@ -23,16 +23,17 @@ which gzip &>/dev/null
 set -eu
 
 # execute unit tests of core lib
-#cd core
-#./vendor/phpunit/phpunit/phpunit test
-#cd ..
+cd core
+./vendor/phpunit/phpunit/phpunit test
+cd -
 
-# build js artifacts
 cd wwf-donations-plugin
 
+# build js artifacts
 npm i
-npm run build
 npm run build-js
+# this will copy over the core assets, too
+npm run build:clean
 cd ..
 
 # create empty release dir
@@ -69,4 +70,4 @@ cd ..
 #tar -cvf wp-wwf-donations-plugin.tar wwf-donations-plugin
 #gzip wp-wwf-donations-plugin.tar
 
-echo "OK"
+echo "OK."

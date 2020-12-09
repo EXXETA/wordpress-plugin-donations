@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# script to set up a development environment for all shop plugins contained in this project
+
 # check for required available commands of this script
 which npm &>/dev/null
 [ $? -eq 0 ] || echo "npm command not found."
@@ -20,6 +22,19 @@ if [ ! -f composer.phar ]; then
   php -r "unlink('composer-setup.php');"
 fi
 
+# build banner core package for php composer
+cd core
+php ../composer.phar install
+cd -
+
+# assemble core assets
+cd assets
+npm i
+npm run assemble
+cd -
+
+# shop-specific setup instructions follow here:
+
 # download wp-cli
 if [ ! -f wp-cli.phar ]; then
   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -30,12 +45,12 @@ php wp-cli.phar --info
 mkdir -p wp
 cd wp
 php ../wp-cli.phar core download || true
-cd ..
+cd -
 
 # setup development environment
 cd ./wwf-donations-plugin
 php ../composer.phar install || php ../composer.phar dump-autoload || true
 
 npm i
-npm run build
 npm run build-js
+npm run build:clean

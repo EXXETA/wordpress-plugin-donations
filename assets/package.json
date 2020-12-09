@@ -1,0 +1,19 @@
+{
+  "name": "wwf-banner-core-assets",
+  "version": "1.0.0",
+  "description": "Central asset package for wwf-banner-core",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist",
+    "assemble": "mkdir -p dist && mkdir -p dist/images && npm run styles && npm run copy:assets",
+    "styles": "node-sass --output-style compressed styles/banner.scss > dist/banner.css",
+    "stylewatch": "node-sass -w --output-style compressed styles/banner.scss > dist/banner.css",
+    "copy:assets": "cp -fr images/* dist/images"
+  },
+  "author": "EXXETA AG",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "node-sass": "^5.0.0",
+    "rimraf": "^3.0.2"
+  }
+}
