@@ -415,7 +415,7 @@ class Plugin
             }
         }
         if ($isStyleAndScriptIncluded) {
-            wp_enqueue_style('wwf-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'styles/banner.css');
+            wp_enqueue_style('wwf-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'banner.css');
             wp_enqueue_script('wwf-donations-mini-banner', plugin_dir_url(self::getPluginFile()) . 'scripts/mini-banner.js', ['jquery'], false, true);
         }
     }

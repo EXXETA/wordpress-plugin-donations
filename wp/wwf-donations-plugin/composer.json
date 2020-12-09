@@ -9,7 +9,7 @@
     "woocommerce/woocommerce": "4.6.0"
   },
   "require": {
-    "exxeta/wwf-donations-shop-banner-core": "0.9.*"
+    "exxeta/wwf-donations-shop-banner-core": "1.0.*"
   },
   "repositories": [
     {
