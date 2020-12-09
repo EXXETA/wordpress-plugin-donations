@@ -1,16 +1,18 @@
 .idea
 
 composer.phar
-wp-cli.phar
 
-wwf-donations-plugin/vendor
-wwf-donations-plugin/wp-content
-wwf-donations-plugin/images
-wwf-donations-plugin/banner.css
-wwf-donations-plugin/build/*.map
+wp/wp-cli.phar
+wp/wwf-donations-plugin/wp-content
+wp/wwf-donations-plugin/images
+wp/wwf-donations-plugin/banner.css
+wp/wwf-donations-plugin/build/*.map
 
+vendor
 node_modules
-wp
+
+wp/wp
+
 release
 
 assets/dist

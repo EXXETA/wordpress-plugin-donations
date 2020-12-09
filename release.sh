@@ -27,14 +27,13 @@ cd core
 ./vendor/phpunit/phpunit/phpunit test
 cd -
 
-cd wwf-donations-plugin
-
+cd wp/wwf-donations-plugin
 # build js artifacts
 npm i
 npm run build-js
 # this will copy over the core assets, too
 npm run build:clean
-cd ..
+cd -
 
 # create empty release dir
 if [ ! -d release ]; then
@@ -46,12 +45,13 @@ else
 fi
 
 # copy project files
-find wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
+find wp/wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
 
 cd release/wwf-donations-plugin
 
 # adjust composer path to the core lib as it is one additional level distant
-sed -i 's/..\/core/..\/..\/core/g' composer.json
+#sed -i 's/..\/core/..\/..\/core/g' composer.json
+
 php ../../composer.phar update --no-dev
 rm package.json
 rm package-lock.json

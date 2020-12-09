@@ -34,7 +34,7 @@ npm run assemble
 cd -
 
 # shop-specific setup instructions follow here:
-
+cd wp
 # download wp-cli
 if [ ! -f wp-cli.phar ]; then
   curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -49,7 +49,7 @@ cd -
 
 # setup development environment
 cd ./wwf-donations-plugin
-php ../composer.phar install || php ../composer.phar dump-autoload || true
+php ../../composer.phar install || php ../../composer.phar dump-autoload || true
 
 npm i
 npm run build-js
