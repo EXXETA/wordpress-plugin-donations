@@ -35,7 +35,7 @@ interface CharityProductManagerInterface
     /**
      * @return mixed array|false|object
      */
-    public function getCharityProductCategory(): mixed;
+    public function getCharityProductCategory();
 
     /**
      * method load product initially

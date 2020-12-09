@@ -13,7 +13,7 @@ services:
       MYSQL_PASSWORD: wordpress
 
   wordpress:
-    build: ..
+    build: .
     depends_on:
       - db
     ports:

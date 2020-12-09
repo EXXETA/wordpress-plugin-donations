@@ -95,7 +95,7 @@ class SettingsManager extends AbstractSettingsManager
         update_option($settingKey, $value);
     }
 
-    public static function getPluginName()
+    public static function getPluginName(): string
     {
         return Plugin::getPluginFile();
     }

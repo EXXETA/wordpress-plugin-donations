@@ -537,8 +537,7 @@ class Plugin
             $allProductIds[] = get_option($charityProduct->getProductIdSettingKey());
         }
 
-        // FIXME extract this!
-        $output = sprintf('<div class="notice notice-info">%s</div>', TextProvider::getGeneralInfoText());
+        $output = sprintf('<div class="notice notice-info">%s</div>', TextProvider::getGeneralInfoText($allProductIds));
 
         $settingsManager = static::getDonationPlugin()->getSettingsManagerInstance();
 

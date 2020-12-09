@@ -20,7 +20,7 @@ class CharityProductManager extends AbstractCharityProductManager
     private static $WC_PRODUCT_CATEGORY_TAXONOMY = "product_cat";
 
     /**
-     * @return array|false|\WP_Term
+     * @return array|false|mixed|\WP_Error|\WP_Term|null
      */
     public function getCharityProductCategory()
     {

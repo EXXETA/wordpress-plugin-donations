@@ -23,9 +23,13 @@ which gzip &>/dev/null
 set -eu
 
 # execute unit tests of core lib
+echo "Run unit tests"
+
 cd core
 ./vendor/phpunit/phpunit/phpunit test
 cd -
+
+echo -e "\nbuild js and assemble assets into the plugin directory"
 
 cd wp/wwf-donations-plugin
 # build js artifacts
@@ -44,15 +48,18 @@ else
   mkdir release
 fi
 
+echo "Copy over plugin files..."
 # copy project files
 find wp/wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
 
-cd release/wwf-donations-plugin
+cd release/wp/wwf-donations-plugin
+
+echo "Preparing release directory..."
 
 # adjust composer path to the core lib as it is one additional level distant
-#sed -i 's/..\/core/..\/..\/core/g' composer.json
+sed -i 's/..\/..\/core/..\/..\/..\/core/g' composer.json
 
-php ../../composer.phar update --no-dev
+php ../../../composer.phar update --no-dev
 rm package.json
 rm package-lock.json
 rm composer.lock
@@ -61,8 +68,8 @@ rm composer.lock
 rm -rf src
 
 # copy license and readme
-cp ../../LICENSE .
-cp ../../wp/README.md README_dev.md
+cp ../../../LICENSE .
+cp ../../../wp/README.md README_dev.md
 
 # build archives
 cd ..
@@ -73,4 +80,4 @@ cd ..
 #tar -cvf wp-wwf-donations-plugin.tar wwf-donations-plugin
 #gzip wp-wwf-donations-plugin.tar
 
-echo "OK."
+echo "Release OK."
