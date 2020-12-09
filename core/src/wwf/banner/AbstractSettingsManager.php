@@ -169,7 +169,7 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * @return string campaign slug or possible "null"
+     * @return string|null campaign slug or possible "null"
      */
     public function getMiniBannerCampaign(): ?string
     {

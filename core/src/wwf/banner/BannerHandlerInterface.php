@@ -42,8 +42,6 @@ interface BannerHandlerInterface
     /**
      * Method to get the base url (of this plugin)
      *
-     * TODO replace/remove this method?
-     *
      * @return string
      */
     public function getBaseUrl(): string;

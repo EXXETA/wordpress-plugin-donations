@@ -7,7 +7,6 @@ use DateTime;
 
 /**
  * Interface SettingsManagerInterface
- * TODO add docs from abstract settings manager class!
  *
  * this interface provides methods to manage settings of this plugin in a concrete instantiation.
  *
@@ -48,9 +47,9 @@ interface SettingsManagerInterface
     /**
      * method to provide a (shop-specific) plugin name
      *
-     * @return mixed
+     * @return string
      */
-    public static function getPluginName();
+    public static function getPluginName(): string;
 
     /**
      * shop-specific implementation to get a setting/option of this plugin
@@ -70,27 +69,85 @@ interface SettingsManagerInterface
      */
     public function updateSetting(string $settingKey, $value): void;
 
+    /**
+     * indicator to show mini banner in mini cart
+     *
+     * @return bool
+     */
     public function getMiniBannerIsShownInMiniCart(): bool;
 
+    /**
+     * @return string|null campaign slug or possible "null"
+     */
     public function getMiniBannerCampaign(): ?string;
 
+    /**
+     * usage of this option is shop-specific, but this setting could store a page id (e.g. in a woocommerce shop)
+     *
+     * @return int|null
+     */
     public function getMiniBannerCampaignTargetPageId(): ?int;
 
+    /**
+     * Get all reporting intervals known to this plugin
+     *
+     * @return array str => str, value => label
+     */
     public function getReportingIntervals(): array;
 
+    /**
+     * Report counter number already incremented and updated in settings.
+     * Ready to use during report generation.
+     *
+     * @return int
+     */
     public function getReportCounterIncremented(): int;
 
+    /**
+     * update date time of last check if a report should be generated to now.
+     */
     public function setReportLastCheck(): void;
 
+    /**
+     * Method to get the datetime of the last check the plugin did to check if reports should be generated.
+     * Returns null if there is no previous check, e.g. after a clean install.
+     *
+     * @return DateTime|null
+     */
     public function getReportLastCheck(): ?DateTime;
 
+    /**
+     * Method to explicitly set the date and time of the last report generation.
+     *
+     * @param DateTime|null $dateTime
+     */
     public function setReportLastGeneration(?DateTime $dateTime): void;
 
+    /**
+     * Method to get a date and time of the last date when a report was generated.
+     *
+     * @return DateTime|null
+     */
     public function getReportLastGenerationDate(): ?DateTime;
 
+    /**
+     * Method to get the recipient mail address for generated reports.
+     *
+     * @return string
+     */
     public function getReportRecipientMail(): string;
 
+    /**
+     * Method to get the number of days in past for the "live" report view.
+     *
+     * @return int
+     */
     public function getLiveReportDaysInPast(): int;
 
+    /**
+     * Method to get the currently configured reporting interval
+     *
+     * @return string
+     */
     public function getCurrentReportingInterval(): string;
 }

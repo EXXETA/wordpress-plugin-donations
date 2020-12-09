@@ -33,9 +33,9 @@ interface CharityProductManagerInterface
     public function getCategoryId(): string;
 
     /**
-     * @return array|false|object
+     * @return mixed array|false|object
      */
-    public function getCharityProductCategory();
+    public function getCharityProductCategory(): mixed;
 
     /**
      * method load product initially
