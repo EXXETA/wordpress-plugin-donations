@@ -49,7 +49,10 @@ fi
 find wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
 
 cd release/wwf-donations-plugin
-php ../../composer.phar install --no-dev
+
+# adjust composer path to the core lib as it is one additional level distant
+sed -i 's/..\/core/..\/..\/core/g' composer.json
+php ../../composer.phar update --no-dev
 rm package.json
 rm package-lock.json
 rm composer.lock

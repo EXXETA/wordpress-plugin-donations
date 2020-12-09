@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "assemble": "mkdir -p dist && mkdir -p dist/images && npm run styles && npm run copy:assets",
+    "assemble:clean": "npm run clean && npm run assemble",
     "styles": "node-sass --output-style compressed styles/banner.scss > dist/banner.css",
     "stylewatch": "node-sass -w --output-style compressed styles/banner.scss > dist/banner.css",
     "copy:assets": "cp -fr images/* dist/images"
