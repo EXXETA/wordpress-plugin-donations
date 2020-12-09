@@ -7,7 +7,7 @@
     "start": "wp-scripts start",
     "build:clean": "cd ../../assets && npm run clean && cd - && npm run build",
     "build": "cd ../../assets && npm run assemble && cd - && mkdir -p images && cp -fr ../../assets/dist/banner.css . && cp -fr ../../assets/dist/images/* images/",
-    "build-js": "wp-scripts build",
+    "build-js": "node node_modules/@wordpress/scripts/bin/wp-scripts.js build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "EXXETA AG",
