@@ -5,10 +5,10 @@ organization [WWF](https://www.wwf.de/). Automatically sending mail reports.**
 
 **NOTE:** Currently this plugin is in German language available only.
 
-Do you have questions, want to request a feature or do you found a
+Do you have questions, want to request a feature or did you find a
 bug? [-> Create issues!](https://github.com/EXXETA/wordpress-plugin-donations/issues)
 
-For a full feature list visit the main project's README.
+For a full list of features visit the [main project's README](https://github.com/EXXETA/wordpress-plugin-donations).
 
 ## Server and WordPress requirements
 
@@ -25,16 +25,16 @@ For a full feature list visit the main project's README.
 # Setup - Installation procedure
 
 1. Be sure to meet the listed requirements for the web server and the WordPress installation, *before* you proceed.
-2. Extract provided archive of this plugin to `wp-content/plugins` directory.
+2. Extract the release archive of this plugin to `wp-content/plugins` directory.
 3. Install and activate this plugin in WordPress plugin management section.
 4. Configure plugin settings in `Einstellungen > Spenden`.
 5. Add the banner to your *WooCommerce* cart page by using a block (in "Gutenberg" editor)
    or as an alternative you can use a WordPress shortcode (documented below). Technically both ways lead to the same
    markup/result.
 6. Read this documentation carefully to understand how this plugin is supposed to work.
-7. You'll get regular donation reports and you *must* transfer the donated money to
+7. You'll receive regular donation reports. You *must* transfer the donated money to
    the [WWF Germany](https://www.wwf.de/). More information (including bank account) is given in the plugin's dashboard.
-
+   
 **NOTE:** After the first plugin installation there will be generated a first (probably empty) report.
 
 # Plugin's functionality
@@ -50,7 +50,7 @@ products (à 1 €) for different campaigns:
 - Protecting **climate**
 - Protecting **diversity**
 
-*Note:* You can view the WooCommerce product IDs in plugin's report dashboard page.
+*Note:* You can view the WooCommerce product IDs in the plugin's report dashboard page.
 
 *Note:* Products are not removed during the uninstallation process. You have to remove them yourself for a complete
 cleanup.
@@ -90,13 +90,13 @@ Example of shortcode usage: `[wwf_donations_banner campaign='protect_climate_coi
 This shortcode works in the same way as `wwf_donations_banner` does, except the *default* campaign is set
 to `protect_diversity_coin`. You can use the `campaign` argument, too.
 
-If no campaign is specified explicitly, the default one or the one defined in plugin's settings page will be used.
+If no campaign is specified explicitly, the default one or the one defined in the plugin's settings page will be used.
 
 ### Reports
 
 You can configure three different report interval modes: `weekly`, `monthly`, `quarterly`.
 
-Each report will be send by mail to an address you can view, but not change in plugin's backend section.
+Each report will be sent by mail to an address you can view, but not change in the plugin's backend section.
 
 Technically the report generation is a summation of plugin's donation products in completed or processed orders grouped
 by a donation campaign in a certain time range.
@@ -104,7 +104,7 @@ by a donation campaign in a certain time range.
 All reports are persisted as a private custom post type integrated into the WordPress system.
 
 One time per day, a routine will check if the time to generate a new report has been reached. You can view the date and
-time of the last check in plugin's report dashboard.
+time of the last check in the plugin's report dashboard.
 
 ### Plugin's settings
 
@@ -113,7 +113,7 @@ This plugin enables you to modify certain aspects of the donations campaign inte
 ![](../screenshots/plugin_settings.png)
 
 - **Reporting interval:** {weekly, monthly, quarterly}
-- **Report preview default days in past:** This can be overwritten in the preview section.
+- **Report preview default days in the past:** This can be overwritten in the preview section.
 - (readonly) **Recipient's mail address:** You can't change this value and you must not.
 - **Show Mini-Banner in Mini-Cart:**\* yes/no flag.
 - **Campaign of mini-banner:**\* Default is "protect diversity"
@@ -129,9 +129,9 @@ storage one time. E.g. by doing the following:
 This plugin is shipped with self-contained responsive CSS styles without dependencies to a specific theme or framework.
 Although the styles should work in most setups there are situations when you want to modify the styles, e.g. if you use
 special fonts or a special theme. Feel free to overwrite the styles as you want as long as there are no major
-differences in regard to contents and copyright.
+differences in regard to content and copyright.
 
-Officialy this plugin is developed and tested with the Theme `Shophistic Lite`.
+Officially this plugin is developed and tested with the Theme `Shophistic Lite`.
 
 *NOTE*: Styles are included by WordPress only if the banner was placed into a page/post or if the mini-banner
 integration is enabled.
@@ -149,7 +149,7 @@ integration is enabled.
 
 ![](../screenshots/gutenberg_editor_view.png)
 
-![](../screenshots/live_report_view.png)
+![](../screenshots/live_report_view.PNG)
 
 # Development
 
@@ -157,7 +157,7 @@ integration is enabled.
 
 - PHP Language Level 7.3+
 - MySQL/MariaDB 5.7+/10.3+
-- `docker` and `docker-compose`
+- `docker` + `docker-compose`
 - Composer for PHP
 - WordPress crons (= scheduled events) are activated (simply by calling [wp-cron.php](http://127.0.0.1/wp-cron.php))
 - `npm`
@@ -187,7 +187,7 @@ afterwards.
 
 ### Run shop on your local machine
 
-* This project uses a custom docker WordPress image with predefined plugins, themes etc.
+* This project uses a custom docker WordPress container image with predefined plugins, themes etc.
 * Build the development container with `docker-compose build`
 * Open the directory of this README in cmd and run command `docker-compose up -d --remove-orphans`. Consider
   using `--force-recreate`
@@ -252,4 +252,4 @@ afterwards.
 
 All images in `wwf-donations-plugin/images/` are explicitly excluded of the licensing policy mentioned below.
 
-This plugin is licensed under [GPL v3.0](./LICENSE).
+This plugin is licensed under [GPL v3.0](../LICENSE).
