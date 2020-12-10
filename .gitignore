@@ -16,3 +16,8 @@ wp/wp
 release
 
 assets/dist
+
+# sw specific stuff
+# remove all except the plugin
+shopware/src/*
+!shopware/src/custom/

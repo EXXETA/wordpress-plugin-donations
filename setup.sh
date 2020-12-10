@@ -55,5 +55,6 @@ php ../../composer.phar install || php ../../composer.phar dump-autoload || true
 npm i
 npm run build-js
 npm run build:clean
+cd -
 
 echo "Setup OK."
