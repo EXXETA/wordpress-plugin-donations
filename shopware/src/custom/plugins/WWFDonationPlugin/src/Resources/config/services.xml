@@ -5,10 +5,18 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-
-        <service id="WWFDonationPlugin\Subscriber\Storefront\Subscriber" class="WWFDonationPlugin\Subscriber\Storefront\Subscriber">
+        <service id="WWFDonationPlugin\Subscriber\Storefront\Subscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
-        
+
+        <service id="WWFDonationPlugin\Service\CharityCampaignManager" public="true">
+        </service>
+
+        <service id="WWFDonationPlugin\Service\ProductService" lazy="false" public="true">
+            <argument type="service" id="WWFDonationPlugin\Service\CharityCampaignManager" />
+            <argument id="tax.repository" />
+            <argument id="product.repository" />
+            <argument id="product_category.repository" />
+        </service>
     </services>
 </container>

@@ -1,53 +1,61 @@
 {
-    "name": "wwf-germany/donation-plugin",
-    "description": "WWF Donation Plugin Germany Shopware",
-    "type": "shopware-platform-plugin",
-    "version": "0.1.0",
-    "license": "GPLv3",
-    "authors": [
-        {
-            "name": "Exxeta AG",
-            "role": "Manufacturer"
-        },
-        {
-            "name": "Marius Schuppert",
-            "role": "Manufacturer"
-        }
-    ],
-    "extra": {
-        "shopware-plugin-class": "WWFDonationPlugin\\WWFDonationPlugin",
-        "plugin-icon": "Resources/config/plugin.png",
-        "author": "EXXETA AG, Marius Schuppert",
-        "label": {
-            "de-DE": "WWF Donation Plugin",
-            "en-GB": "WWF Donation Plugin"
-        },
-        "description": {
-            "de-DE": "Deutsche Beschreibung des Plugins",
-            "en-GB": "English Description of Plugin"
-        },
-        "manufacturerLink": {
-            "de-DE": "https://github.com/EXXETA/wordpress-plugin-donations",
-            "en-GB": "https://github.com/EXXETA/wordpress-plugin-donations"
-        }
+  "name": "exxeta/shopware-wwf-germany-donation-plugin",
+  "description": "WWF Donation Plugin Germany Shopware",
+  "type": "shopware-platform-plugin",
+  "version": "v0.1.0",
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "Exxeta AG",
+      "role": "Manufacturer"
     },
-    "require": {
-        "php": ">= 7.2"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~8.3.4",
-        "phpstan/phpstan": "^0.12.18",
-        "shopware/core": "*",
-        "shopware/storefront": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "WWFDonationPlugin\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "WWFDonationPlugin\\Tests\\": "tests/"
-        }
+    {
+      "name": "Marius Schuppert",
+      "role": "Manufacturer"
     }
+  ],
+  "extra": {
+    "shopware-plugin-class": "WWFDonationPlugin\\WWFDonationPlugin",
+    "plugin-icon": "Resources/config/plugin.png",
+    "author": "EXXETA AG, Marius Schuppert",
+    "label": {
+      "de-DE": "WWF Donation Plugin",
+      "en-GB": "WWF Donation Plugin"
+    },
+    "description": {
+      "de-DE": "Deutsche Beschreibung des Plugins",
+      "en-GB": "English Description of Plugin"
+    },
+    "manufacturerLink": {
+      "de-DE": "https://github.com/EXXETA/wordpress-plugin-donations",
+      "en-GB": "https://github.com/EXXETA/wordpress-plugin-donations"
+    }
+  },
+  "require": {
+    "php": ">= 7.2",
+    "exxeta/wwf-donations-shop-banner-core": "1.0.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~8.3.4",
+    "phpstan/phpstan": "^0.12.18"
+  },
+  "autoload": {
+    "psr-4": {
+      "WWFDonationPlugin\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WWFDonationPlugin\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../../../../core",
+      "options": {
+        "symlink": false
+      }
+    }
+  ]
 }
