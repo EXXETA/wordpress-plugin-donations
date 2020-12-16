@@ -1,0 +1,19 @@
+{
+  "name": "wwf-donations-plugin",
+  "version": "1.1.0",
+  "description": "JS project setup for wordpress plugin",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build:clean": "cd \"../../assets\" && npm run clean && cd \"../wp/wwf-donations-plugin\" && npm run build",
+    "build": "cd \"../../assets\" && npm run assemble && cd \"../wp/wwf-donations-plugin\" && shx mkdir -p images && shx cp -fr \"../../assets/dist/banner.css\" . && shx cp -fr \"../../assets/dist/images/*\" \"images/\"",
+    "build-js": "node node_modules/@wordpress/scripts/bin/wp-scripts.js build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "EXXETA AG",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "@wordpress/scripts": "^12.5.0",
+    "shx": "^0.3.3"
+  }
+}

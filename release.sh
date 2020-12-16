@@ -22,41 +22,54 @@ which gzip &>/dev/null
 
 set -eu
 
+# execute unit tests of core lib
+echo "Run unit tests"
+
+cd core
+./vendor/phpunit/phpunit/phpunit test
+cd -
+
+echo -e "\nbuild js and assemble assets into the plugin directory"
+
+cd wp/wwf-donations-plugin
 # build js artifacts
-cd wwf-donations-plugin
-
-#./vendor/phpunit/phpunit/phpunit test
-
 npm i
-npm run build
 npm run build-js
-cd ..
+# this will copy over the core assets, too
+npm run build:clean
+cd -
 
 # create empty release dir
 if [ ! -d release ]; then
   mkdir release
 else
+  echo "removing release directory due to rebuild"
   rm -rf release
   mkdir release
 fi
 
+echo "Copy over plugin files..."
 # copy project files
-find wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
+find wp/wwf-donations-plugin -type f -not -path '*/node_modules/*' -not -path '*/vendor/*' -not -path '*/wp-content/*' -exec cp -v --parents '{}' 'release/' \;
 
-cd release/wwf-donations-plugin
-php ../../composer.phar install --no-dev
+cd release/wp/wwf-donations-plugin
+
+echo "Preparing release directory..."
+
+# adjust composer path to the core lib as it is one additional level distant
+sed -i 's/..\/..\/core/..\/..\/..\/core/g' composer.json
+
+php ../../../composer.phar update --no-dev
 rm package.json
 rm package-lock.json
 rm composer.lock
 
-# remove js sources
+# remove js sources from release output
 rm -rf src
-# remove php unit tests
-rm -rf test
 
 # copy license and readme
-cp ../../LICENSE .
-cp ../../README.md README_dev.md
+cp ../../../LICENSE .
+cp ../../../wp/README.md README_dev.md
 
 # build archives
 cd ..
@@ -67,4 +80,4 @@ cd ..
 #tar -cvf wp-wwf-donations-plugin.tar wwf-donations-plugin
 #gzip wp-wwf-donations-plugin.tar
 
-echo "OK"
+echo "Release OK."

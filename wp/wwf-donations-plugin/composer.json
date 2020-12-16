@@ -1,0 +1,33 @@
+{
+  "name": "exxeta/wwf-donations-plugin-wordpress",
+  "version": "1.1.0",
+  "type": "project",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require-dev": {
+    "wp-coding-standards/wpcs": "*",
+    "woocommerce/woocommerce": "4.6.0"
+  },
+  "require": {
+    "exxeta/wwf-donations-shop-banner-core": "1.0.*"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../core",
+      "options": {
+        "symlink": false
+      }
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "donations\\": "donations"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.3"
+    }
+  }
+}
