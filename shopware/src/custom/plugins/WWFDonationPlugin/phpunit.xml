@@ -4,9 +4,9 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.1/phpunit.xsd"
          bootstrap="../../../src/TestBootstrap.php"
          cacheResult="false">
-    
+
     <testsuites>
-        <testsuite name="Dockware Sample Plugin Tests">
+        <testsuite name="WWFDonationPlugin Test Suite">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
@@ -16,5 +16,5 @@
             <directory suffix=".php">./</directory>
         </whitelist>
     </filter>
-    
+
 </phpunit>

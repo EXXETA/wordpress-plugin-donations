@@ -5,6 +5,8 @@ namespace WWFDonationPlugin;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\Service\CharityCampaignManager;
 use WWFDonationPlugin\Service\ProductService;
 
@@ -14,6 +16,12 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 
 class WWFDonationPlugin extends Plugin
 {
+    public function build(ContainerBuilder $container): void
+    {
+        VarDumper::dump('testtttt');
+        parent::build($container);
+    }
+
 
     public function postInstall(InstallContext $context): void
     {

@@ -21,3 +21,5 @@ assets/dist
 # remove all except the plugin
 shopware/src/*
 !shopware/src/custom/
+
+.phpunit.result.cache
