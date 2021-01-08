@@ -6,7 +6,6 @@ use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\Service\CharityCampaignManager;
 use WWFDonationPlugin\Service\ProductService;
 
@@ -18,10 +17,8 @@ class WWFDonationPlugin extends Plugin
 {
     public function build(ContainerBuilder $container): void
     {
-        VarDumper::dump('testtttt');
         parent::build($container);
     }
-
 
     public function postInstall(InstallContext $context): void
     {
@@ -30,8 +27,10 @@ class WWFDonationPlugin extends Plugin
         $productRepository = $this->container->get('product.repository');
         $productCategoryRepository = $this->container->get('product_category.repository');
         $manufacturerRepository = $this->container->get('product_manufacturer.repository');
+        $salesChannelRepository = $this->container->get('sales_channel.repository');
+
         $productService = new ProductService($charityCampaignManager, $taxRepository,
-            $productRepository, $productCategoryRepository, $manufacturerRepository);
+            $productRepository, $productCategoryRepository, $manufacturerRepository, $salesChannelRepository);
 
         $productService->createProducts($context->getContext());
     }
@@ -42,7 +41,15 @@ class WWFDonationPlugin extends Plugin
 
         if ($uninstallContext->keepUserData()) {
             // TODO do something different when the user want to keep the plugin's data
+
+            // TODO delete wwf manufacturer ID
+            // TODO delete zero rate tax? iff no entities associated?
+            // TODO delete wwf products
+
             return;
         }
     }
+
+    // TODO activation event: activate products!
+    // TODO deactivation event: deactivate products!
 }

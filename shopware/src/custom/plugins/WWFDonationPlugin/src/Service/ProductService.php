@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace WWFDonationPlugin\Service;
 
 use exxeta\wwf\banner\model\CharityCampaign;
+use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
+use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -21,6 +23,7 @@ class ProductService
 {
     const MANUFACTURER_NAME_WWF_GERMANY = 'WWF Deutschland';
     const WWF_PRODUCT_NUMBER_PREFIX = 'WWF-DE-';
+    const WWF_PRODUCT_DEFAULT_STOCK = 5000;
 
     /**
      * @var CharityCampaignManager
@@ -48,6 +51,11 @@ class ProductService
     protected $manufacturerRepository;
 
     /**
+     * @var EntityRepository
+     */
+    protected $salesChannelRepository;
+
+    /**
      * ProductService constructor.
      *
      * @param CharityCampaignManager $campaignManager
@@ -55,18 +63,21 @@ class ProductService
      * @param EntityRepository $productRepository
      * @param EntityRepository $productCategoryRepository
      * @param EntityRepository $manufacturerRepository
+     * @param EntityRepository $salesChannelRepository
      */
     public function __construct(CharityCampaignManager $campaignManager,
                                 EntityRepository $taxRepository,
                                 EntityRepository $productRepository,
                                 EntityRepository $productCategoryRepository,
-                                EntityRepository $manufacturerRepository)
+                                EntityRepository $manufacturerRepository,
+                                EntityRepository $salesChannelRepository)
     {
         $this->campaignManager = $campaignManager;
         $this->taxRepository = $taxRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryRepository = $productCategoryRepository;
         $this->manufacturerRepository = $manufacturerRepository;
+        $this->salesChannelRepository = $salesChannelRepository;
     }
 
     public function createProducts(Context $context): void
@@ -74,6 +85,13 @@ class ProductService
         $charityCampaigns = $this->campaignManager->getAllCampaigns();
         $productManufacturerId = $this->getOrCreateProductManufacturerId($context);
         $taxId = $this->getOrCreateZeroTaxRateEntityId($context);
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('active', true));
+        $criteria->addFilter(new EqualsFilter('maintenance', false));
+
+        $productVisibilities = [['salesChannelId' => Defaults::SALES_CHANNEL, 'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL]];
+
         // TODO add category
         // TODO add product images
         // TODO add parent + children products?
@@ -86,20 +104,19 @@ class ProductService
 
             $productCriteria = (new Criteria())->addFilter(new EqualsFilter('productNumber', $productNumber));
             $potentiallyExistingProduct = $this->productRepository->searchIds($productCriteria, $context);
-            $isUpdate = !empty($potentiallyExistingProduct->firstId());
+            $isUpdate = $potentiallyExistingProduct->getTotal() > 0;
 
             if ($isUpdate) {
                 // update
                 $data = [
                     'id' => $potentiallyExistingProduct->firstId(),
                     'description' => $charityCampaign->getDescription(),
-                    'stock' => 1,
+                    'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
                     'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
                     'active' => true,
-                    'shipping_free' => true,
-                    'min_purchase' => 1,
-                    'max_purchase' => 1000,
+                    'shippingFree' => true,
+                    'restockTime' => 1,
                 ];
                 $this->productRepository->update([$data], $context);
             } else {
@@ -108,15 +125,17 @@ class ProductService
                     'id' => $productId,
                     'productNumber' => $productNumber,
                     'description' => $charityCampaign->getDescription(),
-                    'stock' => 1,
+                    'visibilities' => $productVisibilities,
+                    'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
                     'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
                     'manufacturerId' => $productManufacturerId,
                     'taxId' => $taxId,
                     'active' => true,
                     'shippingFree' => true,
+                    'restockTime' => 1,
                     'minPurchase' => 1,
-                    'maxPurchase' => 5000,
+                    'maxPurchase' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'weight' => 0,
                     'height' => 0,
                     'length' => 0,
@@ -168,5 +187,22 @@ class ProductService
             $taxEntity = $getTaxRecords();
         }
         return $taxEntity;
+    }
+
+    /**
+     * Method to check if a given product entity is a WWF charity product
+     *
+     * @param ProductEntity|null $productEntity
+     * @return bool
+     */
+    static function isWWFProduct(?ProductEntity $productEntity): bool
+    {
+        if (!$productEntity || !$productEntity instanceof ProductEntity) {
+            return false;
+        }
+        if (0 === mb_stripos($productEntity->getProductNumber(), self::WWF_PRODUCT_NUMBER_PREFIX)) {
+            return true;
+        }
+        return false;
     }
 }
