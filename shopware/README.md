@@ -14,3 +14,6 @@ For development run `docker-compose up` and sync changes of plugin's code via SF
 ## TODO
 
 - Never change product number (prefix)!
+
+
+- Installtion process order: Media import -> Product import -> CMS block

@@ -9,12 +9,19 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="WWFDonationPlugin\Service\Logger" class="Monolog\Logger">
+            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
+            <argument type="string">wwf_logs</argument>
+        </service>
+
         <service id="Shopware\Core\Content\Product\DataAbstractionLayer\StockUpdater"
-                 class="WWFDonationPlugin\Subscriber\WWFProductStockUpdater">
+                 class="WWFDonationPlugin\Subscriber\WWFProductStockUpdater" public="true">
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Core\Content\Product\ProductDefinition"/>
             <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"/>
+            <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
+            <argument type="service" id="product.repository"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -22,12 +29,25 @@
                  id="WWFDonationPlugin\Service\CharityCampaignManager" public="true">
         </service>
 
+        <service id="WWFDonationPlugin\Service\DonationPluginInstance" public="true">
+        </service>
+
+        <service id="WWFDonationPlugin\Service\MediaService" lazy="false" public="true">
+            <argument id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument id="media.repository"/>
+            <argument id="media_folder.repository"/>
+            <argument id="product_media.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+        </service>
+
         <service id="WWFDonationPlugin\Service\ProductService" lazy="false" public="true">
             <argument type="service" id="WWFDonationPlugin\Service\CharityCampaignManager"/>
             <argument id="tax.repository"/>
             <argument id="product.repository"/>
             <argument id="product_category.repository"/>
-            <argument type="service" id="product_manufacturer.repository"/>
+            <argument id="product_manufacturer.repository"/>
+            <argument id="sales_channel.repository"/>
+            <argument id="WWFDonationPlugin\Service\MediaService"/>
         </service>
     </services>
 </container>

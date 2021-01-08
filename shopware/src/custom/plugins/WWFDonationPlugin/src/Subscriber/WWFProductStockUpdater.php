@@ -49,6 +49,7 @@ class WWFProductStockUpdater extends StockUpdater
 
     /**
      * WWFProductStockUpdater constructor.
+     *
      * @param Connection $connection
      * @param ProductDefinition $definition
      * @param CacheClearer $cache

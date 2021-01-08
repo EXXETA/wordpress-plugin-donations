@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace WWFDonationPlugin\Service;
 
+use exxeta\wwf\banner\CharityProductManagerInterface;
 use exxeta\wwf\banner\model\CharityCampaign;
 use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Shopware\Core\Content\Product\ProductEntity;
@@ -26,7 +27,7 @@ class ProductService
     const WWF_PRODUCT_DEFAULT_STOCK = 5000;
 
     /**
-     * @var CharityCampaignManager
+     * @var CharityProductManagerInterface
      */
     protected $campaignManager;
 
@@ -56,21 +57,28 @@ class ProductService
     protected $salesChannelRepository;
 
     /**
+     * @var MediaService
+     */
+    protected $mediaService;
+
+    /**
      * ProductService constructor.
      *
-     * @param CharityCampaignManager $campaignManager
+     * @param CharityProductManagerInterface $campaignManager
      * @param EntityRepository $taxRepository
      * @param EntityRepository $productRepository
      * @param EntityRepository $productCategoryRepository
      * @param EntityRepository $manufacturerRepository
      * @param EntityRepository $salesChannelRepository
+     * @param MediaService $mediaService
      */
-    public function __construct(CharityCampaignManager $campaignManager,
+    public function __construct(CharityProductManagerInterface $campaignManager,
                                 EntityRepository $taxRepository,
                                 EntityRepository $productRepository,
                                 EntityRepository $productCategoryRepository,
                                 EntityRepository $manufacturerRepository,
-                                EntityRepository $salesChannelRepository)
+                                EntityRepository $salesChannelRepository,
+                                MediaService $mediaService)
     {
         $this->campaignManager = $campaignManager;
         $this->taxRepository = $taxRepository;
@@ -78,6 +86,7 @@ class ProductService
         $this->productCategoryRepository = $productCategoryRepository;
         $this->manufacturerRepository = $manufacturerRepository;
         $this->salesChannelRepository = $salesChannelRepository;
+        $this->mediaService = $mediaService;
     }
 
     public function createProducts(Context $context): void
@@ -90,6 +99,7 @@ class ProductService
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addFilter(new EqualsFilter('maintenance', false));
 
+        // TODO enable all sales channels by default!
         $productVisibilities = [['salesChannelId' => Defaults::SALES_CHANNEL, 'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL]];
 
         // TODO add category
@@ -99,17 +109,42 @@ class ProductService
         $productNumberCounter = 0;
         foreach ($charityCampaigns as $charityCampaign) {
             /* @var CharityCampaign $charityCampaign */
-            $productId = Uuid::randomHex();
+
             $productNumber = self::WWF_PRODUCT_NUMBER_PREFIX . ++$productNumberCounter;
 
             $productCriteria = (new Criteria())->addFilter(new EqualsFilter('productNumber', $productNumber));
-            $potentiallyExistingProduct = $this->productRepository->searchIds($productCriteria, $context);
+            $productCriteria->addAssociation('media');
+
+            $potentiallyExistingProduct = $this->productRepository->search($productCriteria, $context);
             $isUpdate = $potentiallyExistingProduct->getTotal() > 0;
+            if ($isUpdate) {
+                $first = $potentiallyExistingProduct->first();
+                /* @var ProductEntity $first */
+                $productId = $first->getId();
+                // FIXME safe access - consider null values!
+                $mediaRecord = $first->getMedia()->getMedia()->first();
+                $mediaId = $mediaRecord->getId();
+                $productMediaEntity = $this->mediaService->getProductMediaRecord($mediaId, $productId);
+                if (!$productMediaEntity) {
+                    // FIXME error log
+                    continue;
+                }
+            } else {
+                // insert
+                $productId = Uuid::randomHex();
+                $mediaId = Uuid::randomHex();
+                $mediaRecord = $this->mediaService->getMediaRecordForProductBySlug($charityCampaign->getSlug());
+                if (!$mediaRecord) {
+                    // FIXME handle this case!
+                }
+            }
+
+            $mediaInfo = [['id' => $mediaId, 'mediaId' => $mediaRecord->getId(), 'productId' => $productId]];
 
             if ($isUpdate) {
                 // update
                 $data = [
-                    'id' => $potentiallyExistingProduct->firstId(),
+                    'id' => $productId,
                     'description' => $charityCampaign->getDescription(),
                     'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
@@ -117,6 +152,8 @@ class ProductService
                     'active' => true,
                     'shippingFree' => true,
                     'restockTime' => 1,
+                    'media' => $mediaInfo,
+                    'cover' => $mediaInfo[0],
                 ];
                 $this->productRepository->update([$data], $context);
             } else {
@@ -139,6 +176,8 @@ class ProductService
                     'weight' => 0,
                     'height' => 0,
                     'length' => 0,
+                    'media' => $mediaInfo,
+                    'cover' => $mediaInfo[0],
                 ];
                 $this->productRepository->upsert([$data], $context);
             }
