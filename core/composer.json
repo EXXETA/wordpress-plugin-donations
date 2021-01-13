@@ -2,7 +2,7 @@
   "name": "exxeta/wwf-donations-shop-banner-core",
   "description": "Core files of banner generation independent of a shop system",
   "type": "library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "prefer-stable": true,
   "license": "GPLv3",
   "authors": [

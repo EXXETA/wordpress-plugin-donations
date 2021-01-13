@@ -124,6 +124,36 @@ abstract class AbstractCharityProductManager implements CharityProductManagerInt
     }
 
     /**
+     * all campaign banner asset file names
+     *
+     * @return string[]
+     */
+    public function getAllCampaignBannerFileNames(): array
+    {
+        return [
+            'banner_protect_climate.jpg',
+            'banner_protect_diversity.jpg',
+            'banner_protect_forests.jpg',
+            'banner_protect_oceans.jpg',
+            'banner_protect_species.jpg',
+        ];
+    }
+
+    /**
+     * all icon asset file names used by the plugin
+     *
+     * @return string[]
+     */
+    public function getIconAssetFileNames(): array
+    {
+        return [
+            'icon_cart.svg',
+            'icon_fold.svg',
+            'icon_times.svg',
+        ];
+    }
+
+    /**
      * @return CharityProduct[]
      */
     public function getAllProducts(): array
