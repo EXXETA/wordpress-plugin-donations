@@ -35,3 +35,6 @@ shopware/sw6/src/var
 #shopware/sw6/src/custom/plugins/WWFDonationPlugin/images
 
 .phpunit.result.cache
+
+# jtl ignores
+jtl/shop-*.zip

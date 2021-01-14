@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  jtl:
+    build: .
+    container_name: jtl-shop-dev
+    ports:
+      - "8080:8080"
+      - "8025:8025"
+      - "3306:3306"
+    restart: always
+    volumes:
+      - ./plugins/:/var/www/html/plugins/:rw
+      - db_data:/var/lib/mysql
+volumes:
+  db_data: { }
+
+networks:
+  web:
+    external: false
