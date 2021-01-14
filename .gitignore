@@ -9,6 +9,8 @@ wp/wwf-donations-plugin/images
 wp/wwf-donations-plugin/banner.css
 wp/wwf-donations-plugin/build/*.map
 
+.phpunit.result.cache
+
 vendor
 node_modules
 
@@ -37,4 +39,4 @@ shopware/sw6/src/var
 .phpunit.result.cache
 
 # jtl ignores
-jtl/shop-*.zip
+jtl/shop*.zip
