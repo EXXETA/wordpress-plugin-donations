@@ -12,6 +12,7 @@ services:
     volumes:
       - ./plugins/:/var/www/html/plugins/:rw
       - db_data:/var/lib/mysql
+
 volumes:
   db_data: { }
 

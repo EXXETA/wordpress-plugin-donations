@@ -4,7 +4,7 @@ NOTE: The following container image configuration is suited for development purp
 
 ### Build
 
-- Download JTL Shop and Systemcheck into this directory. Ensure their names are:
+- Download JTL Shop and Systemcheck into this directory. Ensure their file names are:
     - shop-v5-0-0.zip
     - shop5-systemcheck-v5-0-0.zip
 
@@ -14,9 +14,12 @@ NOTE: The following container image configuration is suited for development purp
 ### Run
 
 - Run: `docker-compose up`
+    - A web server listens then on your host at port 8080 TCP. To adjust ports you have to modify the docker-compose.yml
+      file.
+    - Two volumes are used: One for MariaDB data (`/var/lib/mysql`) and one bind-mount for repository
+      directory `./plugins`
 - Stop: `docker-compose down`
-
-A web server listens on your host at port 8080 TCP. To adjust ports you have to modify the docker-compose.yml file.
+- Remove local containers + volumes: `docker-compose down --volume --remove-orphans`
 
 ### Get a shell in the container
 

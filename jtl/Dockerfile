@@ -1,5 +1,7 @@
 FROM debian:buster
 
+# this image is for development purposes only!
+
 # install system dependencies
 RUN apt-get update \
     && apt-get upgrade -y --quiet --no-install-recommends \
@@ -19,7 +21,6 @@ RUN mysql_install_db --user=mysql && service mysql start; \
     && printf "root\n n\n y\n n\n y\n y\n" sudo mysql_secure_installation; \
     service mysql restart;
 
-# FIXME delete apt cache
 COPY shop5-systemcheck-v5-0-0.zip /var/www/html
 COPY shop-v5-0-0.zip /var/www/html
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -27,6 +28,7 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # change default web ports to non-root ports 8080 and 8443
 RUN sed -i "/Listen 80/c\Listen 8080" /etc/apache2/ports.conf \
     && sed -i "/Listen 443/c\Listen 8443" /etc/apache2/ports.conf \
+    # FIXME this fixed line number can and will cause problems if the official apache config file changes!
     && sed -i "172s/AllowOverride None/AllowOverride All/" /etc/apache2/apache2.conf \
     && sed -i "/upload_max_filesize/c\upload_max_filesize = 12M" /etc/php/7.3/apache2/php.ini \
     && sed -i "/max_execution_time/c\max_execution_time = 150" /etc/php/7.3/apache2/php.ini \
@@ -43,7 +45,8 @@ RUN rm /var/www/html/index.html; cd /var/www/html; unzip -q shop5-systemcheck-v5
     # install adminer + set file and dir permissions
     mkdir -p /var/www/html/adminer \
     && curl -L -o /var/www/html/adminer/index.php https://github.com/vrana/adminer/releases/download/v4.7.8/adminer-4.7.8.php \
-    && chown -R www-data:www-data /var/www/html && chown -R www-data:www-data /var/log;
+    && touch /var/log/apache2/php_errors.log \
+    && chown -R www-data:www-data /var/www/html && chown -R www-data:www-data /var/log
 
 # webserver http port
 EXPOSE 8080
@@ -52,8 +55,10 @@ EXPOSE 3306
 #mailhog
 EXPOSE 8025
 
-VOLUME /var/www/html/plugins
-VOLUME /var/lib/mysql
+# ensure plugin (development) directory is owned by www-data
+USER www-data
+RUN rm -rf /var/www/html/plugins; mkdir -p /var/www/html/plugins; chown -R www-data:www-data /var/www/html/plugins
+USER root
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
