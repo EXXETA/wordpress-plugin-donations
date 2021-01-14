@@ -23,6 +23,7 @@ use Shopware\Core\Framework\Uuid\Uuid;
 class MediaService
 {
     const WWF_MEDIA_FOLDER_NAME = 'WWF Media';
+    const ASSET_PATH_PREFIX = __DIR__ . '/../../images/';
 
     /**
      * @var DonationPluginInterface
@@ -77,7 +78,7 @@ class MediaService
         $this->importProductImages();
     }
 
-    public function getMediaRecordForProductBySlug(string $slug): ?MediaEntity
+    public function getMediaRecordBySlug(string $slug): ?MediaEntity
     {
         $charityProduct = $this->donationPlugin->getCharityProductManagerInstance()->getProductBySlug($slug);
         if ($charityProduct instanceof CharityProduct) {
@@ -127,45 +128,25 @@ class MediaService
 
     protected function importProductImages(): void
     {
-        $assetPathPrefix = __DIR__ . '/../../images/';
         $mediaFolderId = $this->getMediaFolder()->getId();
         if (!$mediaFolderId) {
             // FIXME error log!
             return;
         }
-
+        // FIXME check if entry exist!
         $charityProducts = $this->donationPlugin->getCharityProductManagerInstance()->getAllProducts();
         foreach ($charityProducts as $charityProduct) {
-            // check if file exists
-            $productMediaRecord = $this->getMediaRecordForProductBySlug($charityProduct->getSlug());
+            $productMediaRecord = $this->getMediaRecordBySlug($charityProduct->getSlug());
             if ($productMediaRecord != null) {
                 continue;
             }
-            $productImagePath = sprintf('%s%s', $assetPathPrefix, $charityProduct->getImagePath());
-            $tempFile = tempnam(sys_get_temp_dir(), '');
-            copy($productImagePath, $tempFile);
+            $this->importProductImage($charityProduct->getImagePath(), $mediaFolderId, 'png');
+        }
 
-            $fileSize = filesize($tempFile);
-            $mediaFile = new MediaFile($tempFile, 'image/png', 'png', $fileSize);
-
-            $mediaId = Uuid::randomHex();
-            $context = Context::createDefaultContext();
-
-            $this->mediaRepository->create([[
-                'id' => $mediaId,
-                'mediaFolderId' => $mediaFolderId
-            ]], $context);
-
-            try {
-                $fileName = basename($productImagePath, '.png');
-                $this->fileSaver->persistFileToMedia($mediaFile, $fileName, $mediaId, $context);
-            } catch (DuplicatedMediaFileNameException $ex) {
-                // this is okay.
-            } finally {
-                if (file_exists($tempFile)) {
-                    unlink($tempFile);
-                }
-            }
+        foreach ($this->donationPlugin->getCharityProductManagerInstance()->getAllCampaignBannerFileNames() as $bannerImageFileName) {
+            $fileType = 'jpeg';
+            $fileNameWithoutExt = str_replace(sprintf('.%s', $fileType), '', $bannerImageFileName);
+            $this->importProductImage($fileNameWithoutExt, $mediaFolderId, $fileType);
         }
     }
 
@@ -183,4 +164,37 @@ class MediaService
         return null;
     }
 
+    /**
+     * @param string $fileName
+     * @param string $mediaFolderId
+     * @param string $fileType e.g. 'png' - without leading dot
+     */
+    protected function importProductImage(string $fileName, string $mediaFolderId, string $fileType): void
+    {
+        $productImagePath = sprintf('%s%s', self::ASSET_PATH_PREFIX, $fileName);
+        $tempFile = tempnam(sys_get_temp_dir(), '');
+        copy($productImagePath, $tempFile);
+
+        $fileSize = filesize($tempFile);
+        $mediaFile = new MediaFile($tempFile, sprintf('image/%s', $fileType), $fileType, $fileSize);
+
+        $mediaId = Uuid::randomHex();
+        $context = Context::createDefaultContext();
+
+        $this->mediaRepository->create([[
+            'id' => $mediaId,
+            'mediaFolderId' => $mediaFolderId
+        ]], $context);
+
+        try {
+            $fileName = basename($productImagePath, sprintf('.%s', $fileType));
+            $this->fileSaver->persistFileToMedia($mediaFile, $fileName, $mediaId, $context);
+        } catch (DuplicatedMediaFileNameException $ex) {
+            // this is okay.
+        } finally {
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
+        }
+    }
 }

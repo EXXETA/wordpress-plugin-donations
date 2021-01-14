@@ -133,7 +133,7 @@ class ProductService
                 // insert
                 $productId = Uuid::randomHex();
                 $mediaId = Uuid::randomHex();
-                $mediaRecord = $this->mediaService->getMediaRecordForProductBySlug($charityCampaign->getSlug());
+                $mediaRecord = $this->mediaService->getMediaRecordBySlug($charityCampaign->getSlug());
                 if (!$mediaRecord) {
                     // FIXME handle this case!
                 }
@@ -184,6 +184,12 @@ class ProductService
         }
     }
 
+    /**
+     * Method to get or create a WWF product manufacturer record and its id
+     *
+     * @param Context $context
+     * @return string
+     */
     public function getOrCreateProductManufacturerId(Context $context): string
     {
         $getProductManufacturer = function () use (&$context): ?string {
