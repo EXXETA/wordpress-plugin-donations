@@ -85,6 +85,16 @@ interface CharityProductManagerInterface
     public function getAllCampaigns(): array;
 
     /**
+     * @return array
+     */
+    public function getAllCampaignBannerFileNames(): array;
+
+    /**
+     * @return array
+     */
+    public function getIconAssetFileNames(): array;
+
+    /**
      * @param string $campaignSlug
      * @param DateTime $startDate
      * @param DateTime $endDate
