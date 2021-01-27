@@ -99,8 +99,16 @@ class ProductService
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addFilter(new EqualsFilter('maintenance', false));
 
-        // TODO enable all sales channels by default!
-        $productVisibilities = [['salesChannelId' => Defaults::SALES_CHANNEL, 'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL]];
+        // enable products for all sales channels
+        $salesChannelSearch = $this->salesChannelRepository->search(new Criteria(), $context);
+        $salesChannelIds = [Defaults::SALES_CHANNEL];
+        if ($salesChannelSearch->getTotal() > 0) {
+            $salesChannelIds = $salesChannelSearch->getIds();
+        }
+        $productVisibilities = [];
+        foreach ($salesChannelIds as $salesChannelId) {
+            $productVisibilities[] = ['salesChannelId' => $salesChannelId, 'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL];
+        }
 
         // TODO add category
         // TODO add product images

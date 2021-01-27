@@ -144,7 +144,7 @@ class MediaService
         }
 
         foreach ($this->donationPlugin->getCharityProductManagerInstance()->getAllCampaignBannerFileNames() as $bannerImageFileName) {
-            $fileType = 'jpeg';
+            $fileType = 'jpg';
             $fileNameWithoutExt = str_replace(sprintf('.%s', $fileType), '', $bannerImageFileName);
             $this->importProductImage($fileNameWithoutExt, $mediaFolderId, $fileType);
         }
@@ -171,7 +171,7 @@ class MediaService
      */
     protected function importProductImage(string $fileName, string $mediaFolderId, string $fileType): void
     {
-        $productImagePath = sprintf('%s%s', self::ASSET_PATH_PREFIX, $fileName);
+        $productImagePath = sprintf('%s%s.%s', self::ASSET_PATH_PREFIX, $fileName, $fileType);
         $tempFile = tempnam(sys_get_temp_dir(), '');
         copy($productImagePath, $tempFile);
 
