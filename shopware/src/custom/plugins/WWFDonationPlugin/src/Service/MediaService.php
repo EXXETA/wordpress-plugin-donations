@@ -140,7 +140,8 @@ class MediaService
             if ($productMediaRecord != null) {
                 continue;
             }
-            $this->importProductImage($charityProduct->getImagePath(), $mediaFolderId, 'png');
+            $fileNameWithoutExt = str_replace(sprintf('.%s', 'png'), '', $charityProduct->getImagePath());
+            $this->importProductImage($fileNameWithoutExt, $mediaFolderId, 'png');
         }
 
         foreach ($this->donationPlugin->getCharityProductManagerInstance()->getAllCampaignBannerFileNames() as $bannerImageFileName) {
