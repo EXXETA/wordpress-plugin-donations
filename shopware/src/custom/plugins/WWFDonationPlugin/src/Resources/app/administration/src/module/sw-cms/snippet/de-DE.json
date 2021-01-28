@@ -1,0 +1,9 @@
+{
+  "sw-cms": {
+    "blocks": {
+      "wwfBanner": {
+        "label": "WWF Banner"
+      }
+    }
+  }
+}
