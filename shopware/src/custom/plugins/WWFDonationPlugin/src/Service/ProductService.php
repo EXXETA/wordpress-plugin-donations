@@ -141,7 +141,7 @@ class ProductService
                 // insert
                 $productId = Uuid::randomHex();
                 $mediaId = Uuid::randomHex();
-                $mediaRecord = $this->mediaService->getMediaRecordBySlug($charityCampaign->getSlug());
+                $mediaRecord = $this->mediaService->getProductMediaRecordBySlug($charityCampaign->getSlug());
                 if (!$mediaRecord) {
                     // FIXME handle this case!
                 }

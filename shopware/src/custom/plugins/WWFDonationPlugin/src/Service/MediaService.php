@@ -51,6 +51,11 @@ class MediaService
     protected $fileSaver;
 
     /**
+     * @var MediaFolderEntity
+     */
+    private $mediaFolder;
+
+    /**
      * MediaService constructor.
      *
      * @param DonationPluginInterface $donationPluginInstance
@@ -78,7 +83,7 @@ class MediaService
         $this->importProductImages();
     }
 
-    public function getMediaRecordBySlug(string $slug): ?MediaEntity
+    public function getProductMediaRecordBySlug(string $slug): ?MediaEntity
     {
         $charityProduct = $this->donationPlugin->getCharityProductManagerInstance()->getProductBySlug($slug);
         if ($charityProduct instanceof CharityProduct) {
@@ -104,6 +109,27 @@ class MediaService
         $criteria->addFilter(new EqualsFilter('mediaId', $mediaId));
 
         $entitySearchResult = $this->productMediaRepository->search($criteria, Context::createDefaultContext());
+        if ($entitySearchResult->getTotal() > 0) {
+            return $entitySearchResult->first();
+        }
+        return null;
+    }
+
+    /**
+     * @param string $filename
+     * @return MediaEntity
+     */
+    public function getPluginMediaRecordByFilename(string $filename): ?MediaEntity
+    {
+        $mediaFolder = $this->getMediaFolder();
+        if (!$mediaFolder) {
+            // TODO log this event, it should not happen
+            return null;
+        }
+        $fileCriteria = new Criteria();
+        $fileCriteria->addFilter(new EqualsFilter('fileName', $filename));
+        $fileCriteria->addFilter(new EqualsFilter('mediaFolderId', $mediaFolder->getId()));
+        $entitySearchResult = $this->mediaRepository->search($fileCriteria, Context::createDefaultContext());
         if ($entitySearchResult->getTotal() > 0) {
             return $entitySearchResult->first();
         }
@@ -136,7 +162,7 @@ class MediaService
         // FIXME check if entry exist!
         $charityProducts = $this->donationPlugin->getCharityProductManagerInstance()->getAllProducts();
         foreach ($charityProducts as $charityProduct) {
-            $productMediaRecord = $this->getMediaRecordBySlug($charityProduct->getSlug());
+            $productMediaRecord = $this->getProductMediaRecordBySlug($charityProduct->getSlug());
             if ($productMediaRecord != null) {
                 continue;
             }
@@ -153,6 +179,11 @@ class MediaService
 
     private function getMediaFolder(): ?MediaFolderEntity
     {
+        // "cache" retrieved value as there is only one media folder used by this plugin
+        if ($this->mediaFolder instanceof MediaFolderEntity) {
+            return $this->mediaFolder;
+        }
+
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('name', self::WWF_MEDIA_FOLDER_NAME));
 
@@ -160,7 +191,11 @@ class MediaService
         $entitySearchResult = $this->mediaFolderRepository->search($criteria, $context);
         if ($entitySearchResult->getTotal() > 0) {
             // a directory with this name does already exist
-            return $entitySearchResult->first();
+            $first = $entitySearchResult->first();
+            if ($first instanceof MediaFolderEntity) {
+                $this->mediaFolder = $first;
+            }
+            return $first;
         }
         return null;
     }

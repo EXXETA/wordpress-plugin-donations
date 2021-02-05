@@ -32,22 +32,38 @@
         <service id="WWFDonationPlugin\Service\DonationPluginInstance" public="true">
         </service>
 
-        <service id="WWFDonationPlugin\Service\MediaService" lazy="false" public="true">
-            <argument id="WWFDonationPlugin\Service\DonationPluginInstance"/>
-            <argument id="media.repository"/>
-            <argument id="media_folder.repository"/>
-            <argument id="product_media.repository"/>
+        <service id="WWFDonationPlugin\Service\MediaService" public="false" shared="true" lazy="false">
+            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="media_folder.repository"/>
+            <argument type="service" id="product_media.repository"/>
             <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
         </service>
 
-        <service id="WWFDonationPlugin\Service\ProductService" lazy="false" public="true">
+        <service id="WWFDonationPlugin\Service\ProductService" public="true">
             <argument type="service" id="WWFDonationPlugin\Service\CharityCampaignManager"/>
-            <argument id="tax.repository"/>
-            <argument id="product.repository"/>
-            <argument id="product_category.repository"/>
-            <argument id="product_manufacturer.repository"/>
-            <argument id="sales_channel.repository"/>
-            <argument id="WWFDonationPlugin\Service\MediaService"/>
+            <argument type="service" id="tax.repository"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="product_category.repository"/>
+            <argument type="service" id="product_manufacturer.repository"/>
+            <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
         </service>
+
+        <service id="WWFDonationPlugin\Twig\BannerExtension" public="true">
+            <call method="setMediaService">
+                <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
+            </call>
+            <call method="setCsrfTokenManager">
+                <argument type="service" id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface"/>
+            </call>
+            <tag name="twig.extension"/>
+        </service>
+
+        <!-- controller -->
+        <service id="WWFDonationPlugin\Controller\WWFCartController" public="true">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+        </service>
+
     </services>
 </container>
