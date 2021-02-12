@@ -17,6 +17,8 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 
 class WWFDonationPlugin extends Plugin
 {
+    public const CSRF_TOKEN_ID = 'wwf-banner';
+
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);

@@ -7,6 +7,7 @@ namespace WWFDonationPlugin\Service;
 use exxeta\wwf\banner\BannerHandlerInterface;
 use exxeta\wwf\banner\model\CharityProduct;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use WWFDonationPlugin\WWFDonationPlugin;
 
 class ShopwareBannerHandler implements BannerHandlerInterface
 {
@@ -83,9 +84,8 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function applyCartFormHook(&$output, CharityProduct $charityProduct): void
     {
-        $output .= '<input name="productNumber" type="hidden" value="e391a3d564224973956fbbf773c89d68"/>';
-        $output .= sprintf('<input name="banner_csrf_token" type="hidden" value="%s"/>', $this->csrfTokenManager->getToken('wwf-banner'));
-        // TODO: Implement applyCartFormHook() method.
+        $output .= sprintf('<input name="donation" type="hidden" value="%s"/>', $charityProduct->getSlug());
+        $output .= sprintf('<input name="banner_csrf_token" type="hidden" value="%s"/>', $this->csrfTokenManager->getToken(WWFDonationPlugin::CSRF_TOKEN_ID));
     }
 
     public function getFormQuantityInputName(): string

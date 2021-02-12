@@ -162,6 +162,9 @@ class ProductService
                     'restockTime' => 1,
                     'media' => $mediaInfo,
                     'cover' => $mediaInfo[0],
+                    'customFields' => [
+                        'wwf_campaign_slug' => $charityCampaign->getSlug()
+                    ]
                 ];
                 $this->productRepository->update([$data], $context);
             } else {
@@ -186,6 +189,9 @@ class ProductService
                     'length' => 0,
                     'media' => $mediaInfo,
                     'cover' => $mediaInfo[0],
+                    'customFields' => [
+                        'wwf_campaign_slug' => $charityCampaign->getSlug()
+                    ]
                 ];
                 $this->productRepository->upsert([$data], $context);
             }
@@ -240,6 +246,22 @@ class ProductService
             $taxEntity = $getTaxRecords();
         }
         return $taxEntity;
+    }
+
+    /**
+     * @param \exxeta\wwf\banner\model\CharityProduct $charityProduct
+     * @param Context $context
+     * @return ProductEntity|null
+     */
+    public function getProductBySlug(string $charityProductSlug, Context $context): ?ProductEntity
+    {
+        $productCriteria = new Criteria();
+        $productCriteria->addFilter(new EqualsFilter('customFields.wwf_campaign_slug', $charityProductSlug));
+        $entitySearchResult = $this->productRepository->search($productCriteria, $context);
+        if ($entitySearchResult->getTotal() > 0) {
+            return $entitySearchResult->first();
+        }
+        return null;
     }
 
     /**
