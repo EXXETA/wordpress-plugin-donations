@@ -63,6 +63,9 @@
         <!-- controller -->
         <service id="WWFDonationPlugin\Controller\WWFCartController" public="true">
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ProductService"/>
+            <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
         </service>
 
     </services>

@@ -9,9 +9,11 @@ use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityD
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
@@ -89,7 +91,7 @@ class ProductService
         $this->mediaService = $mediaService;
     }
 
-    public function createProducts(Context $context): void
+    public function install(Context $context): void
     {
         $charityCampaigns = $this->campaignManager->getAllCampaigns();
         $productManufacturerId = $this->getOrCreateProductManufacturerId($context);
@@ -157,7 +159,7 @@ class ProductService
                     'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
                     'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
-                    'active' => true,
+                    'active' => false,
                     'shippingFree' => true,
                     'restockTime' => 1,
                     'media' => $mediaInfo,
@@ -179,7 +181,7 @@ class ProductService
                     'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
                     'manufacturerId' => $productManufacturerId,
                     'taxId' => $taxId,
-                    'active' => true,
+                    'active' => false,
                     'shippingFree' => true,
                     'restockTime' => 1,
                     'minPurchase' => 1,
@@ -279,5 +281,61 @@ class ProductService
             return true;
         }
         return false;
+    }
+
+    public function getCharityProductEntities(): ?EntityCollection
+    {
+        $criteria = new Criteria();
+        $productSlugs = $this->campaignManager->getAllCharityProductSlugs();
+        $criteria->addFilter(new EqualsAnyFilter('customFields.wwf_campaign_slug', $productSlugs));
+
+        $entitySearchResult = $this->productRepository->search($criteria, Context::createDefaultContext());
+        if ($entitySearchResult->getTotal() != count($productSlugs)) {
+            // TODO log this error!
+            return null;
+        }
+        return $entitySearchResult->getEntities();
+    }
+
+    /**
+     * Central method to set status of this plugin's products
+     *
+     * @param Context $deactivateContext
+     * @param bool $activeStatus
+     */
+    public function setProductsActiveStatus(Context $context, bool $activeStatus): void
+    {
+        $entityCollection = $this->getCharityProductEntities();
+        if (!$entityCollection) {
+            // TODO log this case!!
+            return;
+        }
+        // disable products
+        $updates = [];
+        foreach ($entityCollection->getIterator() as $entity) {
+            /* @var ProductEntity $entity */
+            $entity->setActive(false);
+            $updates[] = [
+                'id' => $entity->getId(),
+                'active' => $activeStatus
+            ];
+        }
+        $this->productRepository->update($updates, $context);
+    }
+
+
+    public function uninstall()
+    {
+        // TODO delete product media too!
+        $products = $this->getCharityProductEntities()->getIds();
+        if (!$products) {
+            // TODO log this case
+            return;
+        }
+        $ids = [];
+        foreach ($products as $singleProductId) {
+            $ids[] = ['id' => $singleProductId];
+        }
+        $this->productRepository->delete($ids, Context::createDefaultContext());
     }
 }
