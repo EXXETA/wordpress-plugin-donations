@@ -1,0 +1,9 @@
+{% block sw_cms_element_config_wwf_banner %}
+    <div class="sw-cms-el-config-wwf-banner">
+        <sw-single-select class="wwf-banner-field" size="medium" :options="allModes" v-model="campaignMode"
+                          :label="$tc('sw-cms.elements.wwfBanner.campaignMode.label')"
+                          :placeholder="$tc('sw-cms.elements.wwfBanner.campaignMode.placeHolder')"
+                          @element-update="onElementUpdate">
+        </sw-single-select>
+    </div>
+{% endblock %}

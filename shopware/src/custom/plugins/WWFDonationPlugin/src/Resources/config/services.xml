@@ -68,5 +68,8 @@
             <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
         </service>
 
+        <service id="WWFDonationPlugin\DataResolver\WWFBannerCmsElementResolver">
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
     </services>
 </container>

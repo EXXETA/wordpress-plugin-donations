@@ -3,26 +3,20 @@ import './preview';
 
 Shopware.Service('cmsService').registerCmsBlock({
     name: 'wwf-banner',
-    label: 'sw-cms.blocks.wwfBanner.label',
     category: 'commerce',
+    label: 'sw-cms.blocks.wwfBanner.label',
     hidden: false,
-    removable: false,
-    component: 'sw-cms-block-commerce-wwf-banner',
-    previewComponent: 'sw-cms-preview-block-commerce-wwf-banner',
+    removable: true,
+    component: 'sw-cms-block-wwf-banner',
+    previewComponent: 'sw-cms-preview-block-wwf-banner',
     defaultConfig: {
-        marginBottom: '0',
-        marginTop: '0',
+        marginBottom: '20px',
+        marginTop: '20px',
         marginLeft: '0',
         marginRight: '0',
-        sizingMode: 'boxed'
+        sizingMode: 'boxed',
     },
     slots: {
-        "content": {
-            type: "wwf-banner",
-            default: {
-                config: {},
-                data: {}
-            }
-        }
+        content: 'wwf-banner',
     }
 });

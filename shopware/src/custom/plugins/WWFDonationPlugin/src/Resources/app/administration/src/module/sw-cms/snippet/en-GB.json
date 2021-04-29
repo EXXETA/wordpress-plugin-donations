@@ -4,6 +4,14 @@
       "wwfBanner": {
         "label": "WWF Banner"
       }
+    },
+    "elements": {
+      "wwfBanner": {
+        "campaignMode": {
+          "label": "Banner Campaign Selection",
+          "placeHolder": "Select a campaign"
+        }
+      }
     }
   }
 }
