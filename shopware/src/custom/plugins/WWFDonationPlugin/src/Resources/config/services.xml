@@ -60,6 +60,14 @@
             <call method="setDonationPluginInstance">
                 <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
             </call>
+            <call method="setProductService">
+                <argument type="service" id="WWFDonationPlugin\Service\ProductService"/>
+            </call>
+            <tag name="twig.extension"/>
+        </service>
+        <service id="WWFDonationPlugin\Twig\SeoUrlNullableExtension">
+            <argument type="service" id="twig.extension.routing"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
             <tag name="twig.extension"/>
         </service>
 

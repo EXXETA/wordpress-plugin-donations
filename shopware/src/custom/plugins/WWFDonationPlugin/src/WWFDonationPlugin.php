@@ -94,8 +94,8 @@ class WWFDonationPlugin extends Plugin
         // TODO delete all added media + top level media folder
     }
 
-    // TODO activation event: activate products!
-    // TODO deactivation event: deactivate products!
+    // TODO activation event: activate products! already done?
+    // TODO deactivation event: deactivate products! already done?
     /**
      * @param DonationPluginInstance $donationPluginInstance
      * @param MediaService $mediaService

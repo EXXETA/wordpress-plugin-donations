@@ -15,7 +15,15 @@ Shopware.Service('cmsService').registerCmsElement({
         },
         isMiniBannerEnabled: {
             source: 'static',
-            value: false
+            value: false,
+        },
+        isOffCanvasDisplayed: {
+            source: 'static',
+            value: false,
+        },
+        miniBannerTargetCategory: {
+            source: 'static',
+            value: null,
         }
     }
 });

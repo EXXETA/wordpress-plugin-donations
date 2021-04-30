@@ -300,7 +300,12 @@ $urlPrefix: '/bundles/wwfdonationplugin/';
       flex-flow: row wrap;
       margin-top: 0.5rem;
 
-      > .quantity-field {
+      > form {
+        /* required for sw 6 only */
+        display: inherit;
+      }
+
+      .quantity-field {
         height: 2rem;
 
         .donation-campaign-mini-quantity-input {
@@ -317,12 +322,12 @@ $urlPrefix: '/bundles/wwfdonationplugin/';
         }
       }
 
-      > .button-field {
+      .button-field {
         height: 2rem;
         line-height: 2rem;
         vertical-align: middle;
 
-        a {
+        input[type='submit'], a {
           background-color: $submit-button-color;
           font-stretch: 25%;
           border: 0;
@@ -333,6 +338,7 @@ $urlPrefix: '/bundles/wwfdonationplugin/';
           margin-left: 0.25rem;
           height: 2rem;
 
+          /* the following rules are required for wordpress only */
           &.loading {
             padding-right: 4px !important; /* overwrite default for loading */
             cursor: progress;

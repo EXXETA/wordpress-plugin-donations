@@ -23,13 +23,28 @@ class ShopwareBannerHandler implements BannerHandlerInterface
     protected $csrfTokenManager;
 
     /**
+     * @var ProductService
+     */
+    protected $productService;
+
+    /**
+     * @var string|null
+     */
+    protected $targetPageId;
+
+    /**
      * ShopwareBannerHandler constructor.
      * @param MediaService $mediaService
+     * @param CsrfTokenManagerInterface $csrfTokenManager
+     * @param ProductService $productService
+     * @param string|null $targetPageId
      */
-    public function __construct(MediaService $mediaService, CsrfTokenManagerInterface $csrfTokenManager)
+    public function __construct(MediaService $mediaService, CsrfTokenManagerInterface $csrfTokenManager, ProductService $productService, ?string $targetPageId)
     {
         $this->mediaService = $mediaService;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->productService = $productService;
+        $this->targetPageId = $targetPageId;
     }
 
     public function getLogoImageUrl(CharityProduct $charityProduct): string
@@ -58,7 +73,6 @@ class ShopwareBannerHandler implements BannerHandlerInterface
     public function getBaseUrl(): string
     {
         return '/bundles/wwfdonationplugin/';
-        // TODO: Implement getBaseUrl() method.
     }
 
     public function getCartUrl(): string
@@ -68,8 +82,7 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getMiniBannerTargetPageUrl($pageId): string
     {
-        // FIXME: this should be more customisable
-        return '/wwfdonation/add-donation-line-item';
+        return $this->targetPageId;
     }
 
     public function getCartPageId(): int
@@ -80,7 +93,14 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function applyMiniBannerCartRowHook(string &$output, CharityProduct $charityProduct): void
     {
-        // TODO: Implement applyMiniBannerCartRowHook() method.
+        $output .= '<div class="donation-cart-row">';
+        $output .= sprintf('<form class="mini-banner-add-to-cart-form" method="GET" action="%s" data-form-csrf-handler="true"
+                              data-form-validation="true">', $this->getCartUrl() . '-ajax');
+        $this->applyCartFormHook($output, $charityProduct);
+
+        $output .= sprintf('<div class="quantity-field"><input class="donation-campaign-mini-quantity-input" type="number" value="1" min="1" name="%s" /></div>', $this->getFormQuantityInputName());
+        $output .= '<div class="button-field"><input type="submit" value="In den Warenkorb" class="add_to_cart_button" /></div>';
+        $output .= '</form></div>'; //.donation-cart-row
     }
 
     public function applyCartFormHook(&$output, CharityProduct $charityProduct): void

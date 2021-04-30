@@ -1,6 +1,8 @@
 {% block sw_cms_block_commerce_wwf_banner %}
-    <div class="col sw-cms-block-commerce-wwf-banner">
+    <div class="col sw-cms-block-commerce-wwf-banner"
+         data-open-offcanvas="{{ block.slots.getSlot('content').config.isOffCanvasDisplayed.value ? 'true' : 'false' }}">
         {{ wwfBanner(block.slots.getSlot('content').config.campaignMode.value,
-            block.slots.getSlot('content').config.isMiniBannerEnabled.value) | raw }}
+            block.slots.getSlot('content').config.isMiniBannerEnabled.value,
+            seoUrlNullable('frontend.navigation.page', { navigationId: block.slots.getSlot('content').config.miniBannerTargetCategory.value })) | raw }}
     </div>
 {% endblock %}

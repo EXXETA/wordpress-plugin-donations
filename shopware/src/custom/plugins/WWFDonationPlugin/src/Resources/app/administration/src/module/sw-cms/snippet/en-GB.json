@@ -15,6 +15,13 @@
           "label": "Show small banner version",
           "true": "Enabled",
           "false": "Disabled"
+        },
+        "isOffCanvasDisplayed": {
+          "label": "Open cart sidebar (offcanvas) after adding products to the cart"
+        },
+        "miniBannerTargetCategory": {
+          "label": "Category target of the 'more information' reference",
+          "placeholder": "Choose a category"
         }
       }
     }

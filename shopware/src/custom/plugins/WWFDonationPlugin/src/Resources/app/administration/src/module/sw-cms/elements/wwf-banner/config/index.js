@@ -1,5 +1,7 @@
 import template from './sw-cms-config-block-commerce-wwf-banner.html.twig';
 
+const {Criteria} = Shopware.Data;
+
 Shopware.Component.register('sw-cms-el-config-wwf-banner', {
     template,
 
@@ -46,8 +48,37 @@ Shopware.Component.register('sw-cms-el-config-wwf-banner', {
             },
             set(isEnabled) {
                 this.element.config.isMiniBannerEnabled.value = isEnabled;
+                if (!isEnabled) {
+                    this.element.config.miniBannerTargetCategory.value = null;
+                    this.element.config.isOffCanvasDisplayed.value = false;
+                    this.element.config.miniBannerTargetCategory.required = undefined;
+                } else {
+                    this.element.config.miniBannerTargetCategory.required = true;
+                }
             }
-        }
+        },
+        isOffCanvasDisplayed: {
+            get() {
+                return this.element.config.isOffCanvasDisplayed.value;
+            },
+            set(showOffCanvas) {
+                this.element.config.isOffCanvasDisplayed.value = showOffCanvas;
+            }
+        },
+        miniBannerTargetCategory: {
+            get() {
+                return this.element.config.miniBannerTargetCategory.value;
+            },
+            set(targetCategory) {
+                this.element.config.miniBannerTargetCategory.value = targetCategory;
+            }
+        },
+        pageCategoryCriteria() {
+            const criteria = new Criteria(1, 10);
+            criteria.addFilter(Criteria.equals('type', 'page'))
+            criteria.addFilter(Criteria.equals('active', true))
+            return criteria;
+        },
     },
 
     created() {
@@ -57,6 +88,11 @@ Shopware.Component.register('sw-cms-el-config-wwf-banner', {
     methods: {
         createdComponent() {
             this.initElementConfig('wwf-banner');
+            if (this.element.config.isMiniBannerEnabled.value) {
+                this.element.config.miniBannerTargetCategory.required = true;
+            } else {
+                this.element.config.miniBannerTargetCategory.required = undefined;
+            }
         },
 
         onElementUpdate(element) {

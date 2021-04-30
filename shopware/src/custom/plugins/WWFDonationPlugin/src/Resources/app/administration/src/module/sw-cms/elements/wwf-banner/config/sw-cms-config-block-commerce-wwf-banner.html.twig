@@ -10,5 +10,23 @@
         <sw-checkbox-field :label="$tc('sw-cms.elements.wwfBanner.isMiniBannerEnabled.label')"
                            v-model="isMiniBannerEnabled">
         </sw-checkbox-field>
+
+        <div v-if="isMiniBannerEnabled">
+            <sw-checkbox-field
+                    :label="$tc('sw-cms.elements.wwfBanner.isOffCanvasDisplayed.label')"
+                    v-model="isOffCanvasDisplayed">
+            </sw-checkbox-field>
+
+            <sw-entity-single-select entity="category"
+                                     size="medium"
+                                     :required="isMiniBannerEnabled"
+                                     v-model="miniBannerTargetCategory"
+                                     :criteria="pageCategoryCriteria"
+                                     :label="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.label')"
+                                     :placeholder="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.placeholder')">
+
+            </sw-entity-single-select>
+        </div>
+
     </div>
 {% endblock %}

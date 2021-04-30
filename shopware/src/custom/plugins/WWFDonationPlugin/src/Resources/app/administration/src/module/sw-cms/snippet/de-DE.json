@@ -15,6 +15,13 @@
           "label": "Verwende Mini-Banner",
           "true": "Aktiviert",
           "false": "Deaktiviert"
+        },
+        "isOffCanvasDisplayed": {
+          "label": "Öffne seitlichen Warenkorb nach dem Hinzufügen eines Produkts"
+        },
+        "miniBannerTargetCategory": {
+          "label": "Zielseite (Kategorie) des 'Weitere Informationen'-Links",
+          "placeholder": "Eine Kategorie auswählen"
         }
       }
     }

@@ -67,15 +67,46 @@ class WWFCartController extends StorefrontController
 
     /**
      * @RouteScope(scopes={"storefront"})
-     * @Route("/wwfdonation/add-donation-line-item", name="sales-channel-api.action.wwfdonationplugin.wwf-add-donation-line-item-action", methods={"GET"})
+     * @Route("/wwfdonation/add-donation-line-item-ajax", name="frontend.action.wwfdonationplugin.wwf-add-donation-line-item-ajax-action", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     * @param Request $request
+     * @param SalesChannelContext $salesChannelContext
+     */
+    public function wwfAddDonationLineItemAjax(Request $request, SalesChannelContext $salesChannelContext): Response
+    {
+        return $this->handleRequest(true, $request, $salesChannelContext);
+    }
+
+    /**
+     * @RouteScope(scopes={"storefront"})
+     * @Route("/wwfdonation/add-donation-line-item", name="frontend.action.wwfdonationplugin.wwf-add-donation-line-item-action", methods={"GET"})
      * @param Request $request
      * @param SalesChannelContext $salesChannelContext
      */
     public function wwfAddDonationLineItem(Request $request, SalesChannelContext $salesChannelContext): Response
     {
-        $redirectResponse = $this->redirectToRoute('frontend.checkout.cart.page');
+        return $this->handleRequest(false, $request, $salesChannelContext);
+    }
+
+    /**
+     * @param int|null $maxQuantity
+     * @param int $quantity
+     * @return bool
+     */
+    protected function isProductQuantityValid(?int $maxQuantity, int $quantity): bool
+    {
+        return $maxQuantity != null && $maxQuantity > 0 && $quantity > 0 && $quantity <= $maxQuantity;
+    }
+
+    protected function handleRequest(bool $isAjax, Request $request, SalesChannelContext $salesChannelContext)
+    {
+        if ($isAjax) {
+            $redirectResponse = $this->json(['ERROR']);
+        } else {
+            $redirectResponse = $this->redirectToRoute('frontend.checkout.cart.page');
+        }
 
         $csrf = $request->query->get('banner_csrf_token');
+
         $isRequestValid = $this->isCsrfTokenValid(WWFDonationPlugin::CSRF_TOKEN_ID, $csrf);
         if (!$isRequestValid) {
             $this->logger->warn('Invalid CSRF token for wwf cart controller endpoint. Cancelled/Skipped request.');
@@ -152,21 +183,15 @@ class WWFCartController extends StorefrontController
             $this->cartService->recalculate($cart, $salesChannelContext);
 
             $this->logger->debug('Added charity products to the cart successfully.');
+
+            if ($isAjax) {
+                $redirectResponse = $this->json(['OK']);
+            }
             // strip GET params by redirecting in this way
             return $redirectResponse;
         }
 
         $this->logger->info('Invalid quantity received for charity line item. Skipping request.');
         return $redirectResponse;
-    }
-
-    /**
-     * @param int|null $maxQuantity
-     * @param int $quantity
-     * @return bool
-     */
-    protected function isProductQuantityValid(?int $maxQuantity, int $quantity): bool
-    {
-        return $maxQuantity != null && $maxQuantity > 0 && $quantity > 0 && $quantity <= $maxQuantity;
     }
 }

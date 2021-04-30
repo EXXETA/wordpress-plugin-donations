@@ -8,6 +8,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Twig\TwigFunction;
 use WWFDonationPlugin\Service\DonationPluginInstance;
 use WWFDonationPlugin\Service\MediaService;
+use WWFDonationPlugin\Service\ProductService;
 use WWFDonationPlugin\Service\ShopwareBannerHandler;
 
 /**
@@ -32,6 +33,11 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      */
     private $donationPluginInstance;
 
+    /**
+     * @var ProductService
+     */
+    private $productService;
+
     public function getFunctions()
     {
         return [
@@ -44,11 +50,12 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      *
      * @param string $campaign
      * @param bool $isMiniBanner
+     * @param string|null $miniBannerTargetPage
      * @return string
      */
-    public function wwfBannerMarkup(string $campaign, bool $isMiniBanner)
+    public function wwfBannerMarkup(string $campaign, bool $isMiniBanner, ?string $miniBannerTargetPage)
     {
-        $bannerHandler = new ShopwareBannerHandler($this->mediaService, $this->csrfTokenManager);
+        $bannerHandler = new ShopwareBannerHandler($this->mediaService, $this->csrfTokenManager, $this->productService, $miniBannerTargetPage);
         if ($isMiniBanner) {
             $banner = new MiniBanner($bannerHandler, $this->donationPluginInstance, $campaign);
         } else {
@@ -95,5 +102,13 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
     public function setDonationPluginInstance(DonationPluginInstance $donationPluginInstance): void
     {
         $this->donationPluginInstance = $donationPluginInstance;
+    }
+
+    /**
+     * @param ProductService $productService
+     */
+    public function setProductService(ProductService $productService): void
+    {
+        $this->productService = $productService;
     }
 }

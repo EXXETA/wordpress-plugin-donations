@@ -9,8 +9,13 @@
             ]
         </p>
         <div class="sw-cms-el-wwf-banner__image">
-            <img :src="'/wwfdonationplugin/static/banner_sample_image_' + campaignMode.value + '-l.png' | asset"
+            <img v-if="!isMiniBannerEnabled || !isMiniBannerEnabled.value"
+                 :src="'/wwfdonationplugin/static/banner_sample_image_' + campaignMode.value + '-l.png' | asset"
                  alt="WWF Germany campaign banner preview"/>
+            <img v-else
+                 class="mini-banner-preview"
+                 :src="'/wwfdonationplugin/static/banner_sample_image_mini_' + campaignMode.value + '.png' | asset"
+                 alt="WWF Germany campaign mini banner preview"/>
         </div>
     </div>
 {% endblock %}

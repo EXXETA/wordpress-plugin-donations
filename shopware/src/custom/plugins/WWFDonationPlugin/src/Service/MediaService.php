@@ -159,7 +159,6 @@ class MediaService
             // FIXME error log!
             return;
         }
-        // FIXME check if entry exist!
         $charityProducts = $this->donationPlugin->getCharityProductManagerInstance()->getAllProducts();
         foreach ($charityProducts as $charityProduct) {
             $productMediaRecord = $this->getProductMediaRecordBySlug($charityProduct->getSlug());
