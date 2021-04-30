@@ -57,6 +57,9 @@
             <call method="setCsrfTokenManager">
                 <argument type="service" id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface"/>
             </call>
+            <call method="setDonationPluginInstance">
+                <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            </call>
             <tag name="twig.extension"/>
         </service>
 

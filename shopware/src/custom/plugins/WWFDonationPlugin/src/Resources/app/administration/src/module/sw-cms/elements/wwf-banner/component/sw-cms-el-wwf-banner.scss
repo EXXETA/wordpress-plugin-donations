@@ -1,6 +1,8 @@
 .sw-cms-el-wwf-banner {
   .sw-cms-el-wwf-banner__image {
-    height: auto;
-    width: auto;
+    img {
+      height: auto;
+      width: 100%;
+    }
   }
 }

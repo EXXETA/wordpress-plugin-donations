@@ -11,6 +11,9 @@ Shopware.Component.register('sw-cms-el-wwf-banner', {
     computed: {
         campaignMode() {
             return this.element.config.campaignMode;
+        },
+        isMiniBannerEnabled() {
+            return this.element.config.isMiniBannerEnabled;
         }
     },
 

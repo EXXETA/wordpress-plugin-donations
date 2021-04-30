@@ -11,7 +11,11 @@ Shopware.Service('cmsService').registerCmsElement({
     defaultConfig: {
         campaignMode: {
             source: 'static',
-            value: 'protect_species',
+            value: 'protect_species_coin',
         },
+        isMiniBannerEnabled: {
+            source: 'static',
+            value: false
+        }
     }
 });

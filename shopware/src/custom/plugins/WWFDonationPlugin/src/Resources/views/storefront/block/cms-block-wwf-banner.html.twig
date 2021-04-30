@@ -1,5 +1,6 @@
 {% block sw_cms_block_commerce_wwf_banner %}
     <div class="col sw-cms-block-commerce-wwf-banner">
-        {{ wwfBanner() | raw }}
+        {{ wwfBanner(block.slots.getSlot('content').config.campaignMode.value,
+            block.slots.getSlot('content').config.isMiniBannerEnabled.value) | raw }}
     </div>
 {% endblock %}

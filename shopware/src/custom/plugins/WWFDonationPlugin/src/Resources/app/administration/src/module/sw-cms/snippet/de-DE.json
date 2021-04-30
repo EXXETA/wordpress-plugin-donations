@@ -10,8 +10,20 @@
         "campaignMode": {
           "label": "Kampagnenauswahl",
           "placeHolder": "Bitte eine Kampagne auswählen"
+        },
+        "isMiniBannerEnabled": {
+          "label": "Verwende Mini-Banner",
+          "true": "Aktiviert",
+          "false": "Deaktiviert"
         }
       }
     }
+  },
+  "wwf-campaign-labels": {
+    "protect_species_coin": "Artenschutz",
+    "protect_ocean_coin": "Meeresschutz",
+    "protect_forest_coin": "Waldschutz",
+    "protect_climate_coin": "Klimaschutz",
+    "protect_diversity_coin": "Biodiversität"
   }
 }
