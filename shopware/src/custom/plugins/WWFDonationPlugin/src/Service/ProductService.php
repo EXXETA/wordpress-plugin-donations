@@ -113,7 +113,6 @@ class ProductService
         }
 
         // TODO add category
-        // TODO add product images
         // TODO add parent + children products?
 
         $productNumberCounter = 0;
@@ -322,7 +321,6 @@ class ProductService
         }
         $this->productRepository->update($updates, $context);
     }
-
 
     public function uninstall()
     {

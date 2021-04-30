@@ -5,17 +5,15 @@ namespace WWFDonationPlugin\Controller;
 use exxeta\wwf\banner\model\CharityProduct;
 use Monolog\Logger;
 use Shopware\Core\Checkout\Cart\Cart;
-use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Shopware\Core\Checkout\Cart\LineItemFactoryRegistry;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\Content\Product\ProductEntity;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use WWFDonationPlugin\Service\CharityCampaignManager;
 use WWFDonationPlugin\Service\ProductService;
@@ -31,7 +29,7 @@ use WWFDonationPlugin\WWFDonationPlugin;
  *
  * @package WWFDonationPlugin\Controller
  */
-class WWFCartController extends AbstractController
+class WWFCartController extends StorefrontController
 {
     /**
      * @var CartService
@@ -69,9 +67,11 @@ class WWFCartController extends AbstractController
 
     /**
      * @RouteScope(scopes={"storefront"})
-     * @Route("/wwfdonationplugin/add-donation-line-item", name="sales-channel-api.action.wwfdonationplugin.wwf-add-donation-line-item-action", methods={"GET"})
+     * @Route("/wwfdonation/add-donation-line-item", name="sales-channel-api.action.wwfdonationplugin.wwf-add-donation-line-item-action", methods={"GET"})
+     * @param Request $request
+     * @param SalesChannelContext $salesChannelContext
      */
-    public function wwfAddDonationLineItem(Request $request, Context $context): RedirectResponse
+    public function wwfAddDonationLineItem(Request $request, SalesChannelContext $salesChannelContext): Response
     {
         $redirectResponse = $this->redirectToRoute('frontend.checkout.cart.page');
 
@@ -96,40 +96,77 @@ class WWFCartController extends AbstractController
             // invalid charity product slug!
             return $redirectResponse;
         }
-        $productEntity = $this->productService->getProductBySlug($charityProduct->getSlug(), $context);
+        $productEntity = $this->productService->getProductBySlug($charityProduct->getSlug(), $salesChannelContext->getContext());
         if (!$productEntity instanceof ProductEntity) {
             $this->logger->err('Could not find sw product entity for charity campaign. Cancelled request.');
             // could not find product
             return $redirectResponse;
         }
         $maxQuantity = $productEntity->getMaxPurchase();
-        if ($maxQuantity != null && $quantity > 0 && $quantity <= $maxQuantity) {
+        if ($this->isProductQuantityValid($maxQuantity, $quantity)) {
             // ok, all data seems valid -> add product to cart
             $this->logger->debug('OK, all inputs to add charity products to the cart seem valid. Start of adding line items.');
-            $salesChannelContext = SalesChannelContext::createFrom($context);
-            try {
-                $token = $salesChannelContext->getToken();
-            } catch (\TypeError $typeError) {
-                $token = UUID::randomHex();
-                $this->cartService->createNew($token);
+            if (!$salesChannelContext) {
+                $salesChannelContext = SalesChannelContext::createFrom(\Shopware\Core\Framework\Context::createDefaultContext());
             }
-            $charityLineItem = $this->lineItemFactoryRegistry->create([
-                'type' => 'product',
-                'referencedId' => $productEntity->getId(),
-                'quantity' => $quantity
-            ], $salesChannelContext);
-            $cart = $this->cartService->getCart($token, $salesChannelContext);
+            try {
+                $cartToken = $salesChannelContext->getToken();
+            } catch (\TypeError $typeError) {
+                $cartToken = UUID::randomHex();
+            }
+            $cart = $this->cartService->getCart($cartToken, $salesChannelContext);
             if (!$cart instanceof Cart) {
                 // this should never happen
                 $this->logger->err('Could not retrieve cart object with a valid sw cart token.');
                 return $redirectResponse;
             }
-            $cart->addLineItems(new LineItemCollection([$charityLineItem]));
+            // get possible existing line item quantity
+            $existingQuantity = 0;
+            $existingLineItem = null;
+            foreach ($cart->getLineItems() as $singleLineItem) {
+                if ($singleLineItem->getReferencedId() == $productEntity->getId()) {
+                    $existingQuantity = $singleLineItem->getQuantity();
+                    $existingLineItem = $singleLineItem;
+                    break;
+                }
+            }
+            // new quantity check
+            $quantity += $existingQuantity;
+            $quantity = min($quantity, $maxQuantity);
+
+            // ok, everything still seems to be valid
+            if ($existingLineItem == null) {
+                // re-use existing line item
+                $charityLineItem = $this->lineItemFactoryRegistry->create([
+                    'type' => 'product',
+                    'referencedId' => $productEntity->getId(),
+                    'quantity' => $quantity
+                ], $salesChannelContext);
+                $cart->add($charityLineItem);
+            } else {
+                // line item already exists, so just increase its quantity
+                $charityLineItem = $existingLineItem;
+                $charityLineItem->setQuantity($quantity);
+            }
+            // this persists the cart with the new line item
+            $this->cartService->recalculate($cart, $salesChannelContext);
+
             $this->logger->debug('Added charity products to the cart successfully.');
             // strip GET params by redirecting in this way
-            return $this->redirect($redirectResponse->getTargetUrl());
+            return $redirectResponse;
         }
+
         $this->logger->info('Invalid quantity received for charity line item. Skipping request.');
         return $redirectResponse;
+    }
+
+    /**
+     * @param int|null $maxQuantity
+     * @param int $quantity
+     * @return bool
+     */
+    protected function isProductQuantityValid(?int $maxQuantity, int $quantity): bool
+    {
+        return $maxQuantity != null && $maxQuantity > 0 && $quantity > 0 && $quantity <= $maxQuantity;
     }
 }

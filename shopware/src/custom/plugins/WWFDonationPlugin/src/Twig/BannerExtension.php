@@ -1,18 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace WWFDonationPlugin\Twig;
 
-use exxeta\wwf\banner\AbstractCharityProductManager;
 use exxeta\wwf\banner\Banner;
+use exxeta\wwf\banner\MiniBanner;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Twig\TwigFunction;
 use WWFDonationPlugin\Service\DonationPluginInstance;
 use WWFDonationPlugin\Service\MediaService;
 use WWFDonationPlugin\Service\ShopwareBannerHandler;
 
+/**
+ * Class BannerExtension
+ *
+ * @package WWFDonationPlugin\Twig
+ */
 class BannerExtension extends \Twig\Extension\AbstractExtension
 {
-
     /**
      * @var MediaService
      */
@@ -23,6 +27,11 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      */
     private $csrfTokenManager;
 
+    /**
+     * @var DonationPluginInstance
+     */
+    private $donationPluginInstance;
+
     public function getFunctions()
     {
         return [
@@ -30,12 +39,21 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
         ];
     }
 
-    public function wwfBannerMarkup()
+    /**
+     * this method triggers generating the banner content markup (HTML)
+     *
+     * @param string $campaign
+     * @param bool $isMiniBanner
+     * @return string
+     */
+    public function wwfBannerMarkup(string $campaign, bool $isMiniBanner)
     {
         $bannerHandler = new ShopwareBannerHandler($this->mediaService, $this->csrfTokenManager);
-
-        // TODO make campaign dynamic
-        $banner = new Banner($bannerHandler, new DonationPluginInstance(), AbstractCharityProductManager::$PROTECT_CLIMATE_COIN);
+        if ($isMiniBanner) {
+            $banner = new MiniBanner($bannerHandler, $this->donationPluginInstance, $campaign);
+        } else {
+            $banner = new Banner($bannerHandler, $this->donationPluginInstance, $campaign);
+        }
         return $banner->render();
     }
 
@@ -69,5 +87,13 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
     public function setCsrfTokenManager(CsrfTokenManagerInterface $csrfTokenManager): void
     {
         $this->csrfTokenManager = $csrfTokenManager;
+    }
+
+    /**
+     * @param DonationPluginInstance $donationPluginInstance
+     */
+    public function setDonationPluginInstance(DonationPluginInstance $donationPluginInstance): void
+    {
+        $this->donationPluginInstance = $donationPluginInstance;
     }
 }

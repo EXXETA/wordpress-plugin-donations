@@ -36,6 +36,8 @@ class WWFDonationPlugin extends Plugin
 
     public function postInstall(InstallContext $context): void
     {
+        parent::postInstall($context);
+
         $donationPluginInstance = new DonationPluginInstance();
         // we need to initialize and inject services here manually
         // handle media setup first
@@ -54,6 +56,8 @@ class WWFDonationPlugin extends Plugin
         $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
         // set all products of this plugin ACTIVE
         $productService->setProductsActiveStatus($activateContext->getContext(), true);
+
+        parent::activate($activateContext);
     }
 
     public function deactivate(DeactivateContext $deactivateContext): void
@@ -63,6 +67,8 @@ class WWFDonationPlugin extends Plugin
         $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
         // set all products of this plugin INACTIVE
         $productService->setProductsActiveStatus($deactivateContext->getContext(), false);
+
+        parent::deactivate($deactivateContext);
     }
 
     public function uninstall(UninstallContext $uninstallContext): void

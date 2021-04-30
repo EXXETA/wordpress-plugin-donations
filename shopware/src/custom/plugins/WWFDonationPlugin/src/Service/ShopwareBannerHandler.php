@@ -46,7 +46,6 @@ class ShopwareBannerHandler implements BannerHandlerInterface
     public function getCartImageUrl(): string
     {
         return $this->getBaseUrl() . 'images/icon_cart.svg';
-        // TODO: Implement getCartImageUrl() method.
     }
 
     public function getProductId(CharityProduct $charityProduct): int
@@ -64,17 +63,19 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getCartUrl(): string
     {
-        return '/checkout/cart';
+        return '/wwfdonation/add-donation-line-item';
     }
 
     public function getMiniBannerTargetPageUrl($pageId): string
     {
-        // TODO: Implement getMiniBannerTargetPageUrl() method.
+        // FIXME: this should be more customisable
+        return '/wwfdonation/add-donation-line-item';
     }
 
     public function getCartPageId(): int
     {
-        // TODO: Implement getCartPageId() method.
+        // method not used here in this context
+        return 0;
     }
 
     public function applyMiniBannerCartRowHook(string &$output, CharityProduct $charityProduct): void
