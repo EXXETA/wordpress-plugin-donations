@@ -69,7 +69,7 @@ class Subscriber implements EventSubscriberInterface
         if ($isCartIntegrationActive && $isCartMiniBannerEnabled && empty($cartMiniBannerPageTargetEntity)) {
             $this->logger->addWarning('No target category(=page) entity configured for mini banner. This leads to an empty link of the mini banner. Please setup the plugin correctly.');
         }
-
+        
         // pass config data to the templates
         $data = [
             'isCartIntegrationActive' => $isCartIntegrationActive,

@@ -82,6 +82,18 @@
             <tag name="twig.extension"/>
         </service>
 
+        <!-- job scheduling -->
+        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTask">
+            <tag name="shopware.scheduled.task"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler">
+            <argument type="service" id="scheduled_task.repository"/>
+            <argument type="service" id="wwf_donation_report.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <tag name="messenger.message_handler"/>
+        </service>
+
         <!-- controller -->
         <service id="WWFDonationPlugin\Controller\WWFCartController" public="true">
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
