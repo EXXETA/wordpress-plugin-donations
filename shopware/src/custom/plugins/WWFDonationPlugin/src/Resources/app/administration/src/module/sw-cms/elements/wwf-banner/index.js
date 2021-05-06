@@ -24,6 +24,6 @@ Shopware.Service('cmsService').registerCmsElement({
         miniBannerTargetCategory: {
             source: 'static',
             value: null,
-        }
+        },
     }
 });

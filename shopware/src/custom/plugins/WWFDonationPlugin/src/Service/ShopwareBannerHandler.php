@@ -1,14 +1,20 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace WWFDonationPlugin\Service;
 
-
 use exxeta\wwf\banner\BannerHandlerInterface;
 use exxeta\wwf\banner\model\CharityProduct;
+use Monolog\Logger;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use WWFDonationPlugin\WWFDonationPlugin;
 
+/**
+ * Class ShopwareBannerHandler
+ *
+ * shopware specific implementation details of the generic wwf banners
+ *
+ * @package WWFDonationPlugin\Service
+ */
 class ShopwareBannerHandler implements BannerHandlerInterface
 {
     // injected via setter
@@ -28,6 +34,11 @@ class ShopwareBannerHandler implements BannerHandlerInterface
     protected $productService;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * @var string|null
      */
     protected $targetPageId;
@@ -39,12 +50,15 @@ class ShopwareBannerHandler implements BannerHandlerInterface
      * @param ProductService $productService
      * @param string|null $targetPageId
      */
-    public function __construct(MediaService $mediaService, CsrfTokenManagerInterface $csrfTokenManager, ProductService $productService, ?string $targetPageId)
+    public function __construct(MediaService $mediaService, CsrfTokenManagerInterface $csrfTokenManager,
+                                ProductService $productService, ?string $targetPageId,
+                                Logger $logger)
     {
         $this->mediaService = $mediaService;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->productService = $productService;
         $this->targetPageId = $targetPageId;
+        $this->logger = $logger;
     }
 
     public function getLogoImageUrl(CharityProduct $charityProduct): string
@@ -52,7 +66,8 @@ class ShopwareBannerHandler implements BannerHandlerInterface
         $filenameWithoutExt = basename($charityProduct->getImagePath(), '.png');
         $mediaEntity = $this->mediaService->getPluginMediaRecordByFilename($filenameWithoutExt);
         if (!$mediaEntity) {
-            // TODO log this case!
+            $this->logger->addError(sprintf('Could not find media record for image name "%s"',
+                $charityProduct->getImagePath()));
             return "";
         }
         return $mediaEntity->getUrl();
@@ -63,11 +78,10 @@ class ShopwareBannerHandler implements BannerHandlerInterface
         return $this->getBaseUrl() . 'images/icon_cart.svg';
     }
 
-    public function getProductId(CharityProduct $charityProduct): int
+    public function getProductId(CharityProduct $charityProduct): string
     {
-        // FIXME needs to be of type string!!!
-        return 'e391a3d564224973956fbbf773c89d68';
-        // TODO: Implement getProductId() method.
+        // this method is never used by the shopware implementation
+        return '';
     }
 
     public function getBaseUrl(): string
@@ -87,10 +101,16 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getCartPageId(): int
     {
-        // method not used here in this context
+        // method not used here in this shopware context
         return 0;
     }
 
+    /**
+     * build extra row for mini banner cart add form
+     *
+     * @param string $output
+     * @param CharityProduct $charityProduct
+     */
     public function applyMiniBannerCartRowHook(string &$output, CharityProduct $charityProduct): void
     {
         $output .= '<div class="donation-cart-row">';

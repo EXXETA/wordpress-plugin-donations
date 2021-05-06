@@ -3,12 +3,14 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
     <card>
         <title>WWFDonationPlugin Settings</title>
-        <title lang="de-DE">WWFDonationPlugin Einstellungen</title>
+        <title lang="de-DE">WWF Deutschland Spendenplugin Einstellungen</title>
+        <title lang="en-GB">WWF Germany Donation Plugin Configuration</title>
 
         <input-field type="bool">
             <name>active</name>
             <label>Active</label>
-            <label lang="de-DE">Aktiviert</label>
+            <label lang="de-DE">Banner auf der Warenkorb-Seite anzeigen</label>
+            <label lang="en-GB">Cart-Page integration enabled</label>
         </input-field>
 
         <input-field type="single-select">

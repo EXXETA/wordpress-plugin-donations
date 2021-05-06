@@ -78,7 +78,7 @@ Shopware.Component.register('sw-cms-el-config-wwf-banner', {
             criteria.addFilter(Criteria.equals('type', 'page'))
             criteria.addFilter(Criteria.equals('active', true))
             return criteria;
-        },
+        }
     },
 
     created() {

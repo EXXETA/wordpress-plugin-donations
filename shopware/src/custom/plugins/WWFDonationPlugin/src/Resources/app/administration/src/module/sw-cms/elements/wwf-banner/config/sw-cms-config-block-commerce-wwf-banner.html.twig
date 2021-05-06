@@ -12,11 +12,6 @@
         </sw-checkbox-field>
 
         <div v-if="isMiniBannerEnabled">
-            <sw-checkbox-field
-                    :label="$tc('sw-cms.elements.wwfBanner.isOffCanvasDisplayed.label')"
-                    v-model="isOffCanvasDisplayed">
-            </sw-checkbox-field>
-
             <sw-entity-single-select entity="category"
                                      size="medium"
                                      :required="isMiniBannerEnabled"
@@ -26,6 +21,11 @@
                                      :placeholder="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.placeholder')">
 
             </sw-entity-single-select>
+            <br/>
+            <sw-checkbox-field
+                    :label="$tc('sw-cms.elements.wwfBanner.isOffCanvasDisplayed.label')"
+                    v-model="isOffCanvasDisplayed">
+            </sw-checkbox-field>
         </div>
 
     </div>

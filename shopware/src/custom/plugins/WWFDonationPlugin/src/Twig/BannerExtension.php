@@ -4,6 +4,7 @@ namespace WWFDonationPlugin\Twig;
 
 use exxeta\wwf\banner\Banner;
 use exxeta\wwf\banner\MiniBanner;
+use Monolog\Logger;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Twig\TwigFunction;
 use WWFDonationPlugin\Service\DonationPluginInstance;
@@ -38,6 +39,11 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      */
     private $productService;
 
+    /**
+     * @var Logger
+     */
+    private $logger;
+
     public function getFunctions()
     {
         return [
@@ -55,7 +61,11 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      */
     public function wwfBannerMarkup(string $campaign, bool $isMiniBanner, ?string $miniBannerTargetPage)
     {
-        $bannerHandler = new ShopwareBannerHandler($this->mediaService, $this->csrfTokenManager, $this->productService, $miniBannerTargetPage);
+        $bannerHandler = new ShopwareBannerHandler(
+            $this->mediaService, $this->csrfTokenManager,
+            $this->productService, $miniBannerTargetPage,
+            $this->logger
+        );
         if ($isMiniBanner) {
             $banner = new MiniBanner($bannerHandler, $this->donationPluginInstance, $campaign);
         } else {
@@ -110,5 +120,13 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
     public function setProductService(ProductService $productService): void
     {
         $this->productService = $productService;
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    public function setLogger(Logger $logger): void
+    {
+        $this->logger = $logger;
     }
 }
