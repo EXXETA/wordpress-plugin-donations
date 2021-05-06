@@ -3,7 +3,7 @@
          data-open-offcanvas="{{ block.slots.getSlot('content').config.isOffCanvasDisplayed.value ? 'true' : 'false' }}">
         {{ wwfBanner(block.slots.getSlot('content').config.campaignMode.value,
             block.slots.getSlot('content').config.isMiniBannerEnabled.value,
-            seoUrlNullable('frontend.navigation.page', { navigationId: block.slots.getSlot('content').config.miniBannerTargetCategory.value }),
+            seoUrlNullable('frontend.navigation.page', { navigationId: block.slots.getSlot('content').config.miniBannerTargetCategory.value })
         ) | raw }}
     </div>
 {% endblock %}

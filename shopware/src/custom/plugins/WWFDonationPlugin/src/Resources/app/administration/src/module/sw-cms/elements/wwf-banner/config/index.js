@@ -74,7 +74,7 @@ Shopware.Component.register('sw-cms-el-config-wwf-banner', {
             }
         },
         pageCategoryCriteria() {
-            const criteria = new Criteria(1, 10);
+            const criteria = new Criteria(1, 15);
             criteria.addFilter(Criteria.equals('type', 'page'))
             criteria.addFilter(Criteria.equals('active', true))
             return criteria;

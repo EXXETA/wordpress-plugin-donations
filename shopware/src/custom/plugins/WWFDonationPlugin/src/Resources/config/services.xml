@@ -7,6 +7,8 @@
     <services>
         <service id="WWFDonationPlugin\Subscriber\Storefront\Subscriber">
             <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
         </service>
 
         <service id="WWFDonationPlugin\Service\Logger" class="Monolog\Logger">
@@ -68,6 +70,7 @@
             </call>
             <tag name="twig.extension"/>
         </service>
+
         <service id="WWFDonationPlugin\Twig\SeoUrlNullableExtension">
             <argument type="service" id="twig.extension.routing"/>
             <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>

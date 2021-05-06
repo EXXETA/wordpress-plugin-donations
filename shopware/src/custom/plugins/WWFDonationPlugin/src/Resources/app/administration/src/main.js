@@ -1,6 +1,7 @@
 // import admin block configuration
 import './module/sw-cms/blocks/commerce/wwf-banner';
 import './module/sw-cms/elements/wwf-banner';
+import './module/component/page-selector';
 
 // import and register locales
 import deDE from './module/sw-cms/snippet/de-DE.json';

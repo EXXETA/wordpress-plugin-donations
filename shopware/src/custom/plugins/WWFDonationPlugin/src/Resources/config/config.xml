@@ -2,15 +2,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
     <card>
-        <title>WWFDonationPlugin Settings</title>
-        <title lang="de-DE">WWF Deutschland Spendenplugin Einstellungen</title>
-        <title lang="en-GB">WWF Germany Donation Plugin Configuration</title>
+        <title>General Plugin Configuration</title>
+        <title lang="de-DE">Allgemeine Spendenplugin Einstellungen</title>
 
         <input-field type="bool">
             <name>active</name>
-            <label>Active</label>
+            <label>Cart-Page integration enabled</label>
             <label lang="de-DE">Banner auf der Warenkorb-Seite anzeigen</label>
-            <label lang="en-GB">Cart-Page integration enabled</label>
         </input-field>
 
         <input-field type="single-select">
@@ -42,7 +40,6 @@
             <label>Live-Reporting - Days in past</label>
             <label lang="de-DE">Live-Berichte - Tage in die Vergangenheit</label>
             <defaultValue>30</defaultValue>
-            <copyable>true</copyable>
         </input-field>
 
         <input-field type="text">
@@ -53,5 +50,71 @@
             <disabled>true</disabled>
             <copyable>true</copyable>
         </input-field>
+    </card>
+    <card>
+        <title>Cart Page Integration</title>
+        <title lang="de-DE">Warenkorbintegration</title>
+
+        <input-field type="bool">
+            <name>isCartIntegrationActive</name>
+            <label>Enable cart integration of the WWF banner</label>
+            <label lang="de-DE">Warenkorbintegration des WWF-Banners aktiviert</label>
+            <defaultValue>false</defaultValue>
+            <helpText>If enabled the WWF Banner will be shown in the cart page.</helpText>
+            <helpText lang="de-DE">Wenn aktiviert, dann wird ein WWF-Banner auf der Warenkorbseite angezeigt werden.
+            </helpText>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>cartBannerCampaignKey</name>
+            <label>Banner campaign</label>
+            <label lang="de-DE">Bannerkampagne</label>
+            <defaultValue>protect_species_coin</defaultValue>
+            <required>true</required>
+            <placeholder>Please select a campaign you want to support</placeholder>
+            <placeholder lang="de-DE">Bitte Spendenkampagne auswählen</placeholder>
+            <options>
+                <option>
+                    <id>protect_species_coin</id>
+                    <name>Protection of species</name>
+                    <name lang="de-DE">Artenschutz</name>
+                </option>
+                <option>
+                    <id>protect_ocean_coin</id>
+                    <name>Ocean protection</name>
+                    <name lang="de-DE">Meeresschutz</name>
+                </option>
+                <option>
+                    <id>protect_forest_coin</id>
+                    <name>Forest protection</name>
+                    <name lang="de-DE">Waldschutz</name>
+                </option>
+                <option>
+                    <id>protect_climate_coin</id>
+                    <name>Climate protection</name>
+                    <name lang="de-DE">Klimaschutz</name>
+                </option>
+                <option>
+                    <id>protect_diversity_coin</id>
+                    <name>Protection of biodiversity</name>
+                    <name lang="de-DE">Biodiversität</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="bool">
+            <name>isCartMiniBannerEnabled</name>
+            <label>Show as mini banner</label>
+            <label lang="de-DE">Als Mini-Banner anzeigen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <component name="wwf-banner-page-selector">
+            <name>miniBannerTargetPageEntity</name>
+            <entity>category</entity>
+            <required>true</required>
+            <label>Category target page of the 'more information' reference</label>
+            <label lang="de-DE">Zielseite (Kategorie) des 'Weitere Informationen'-Links</label>
+        </component>
     </card>
 </config>

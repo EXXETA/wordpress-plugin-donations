@@ -20,7 +20,7 @@
           "label": "Open cart sidebar (offcanvas) after adding products to the cart"
         },
         "miniBannerTargetCategory": {
-          "label": "Category target of the 'more information' reference",
+          "label": "Category target page of the 'more information' reference",
           "placeholder": "Choose a category"
         }
       }

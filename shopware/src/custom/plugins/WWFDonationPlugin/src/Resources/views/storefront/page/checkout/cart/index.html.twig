@@ -2,6 +2,12 @@
 
 {% block page_checkout_cart_header %}
     {{ parent() }}
-    <h1>Test</h1>
-    {{ dump(wwf_donation_plugin) }}
+
+    {% if wwf_donation_plugin.isCartIntegrationActive %}
+        <div class="cart-wwf-banner cart-integration sw-cms-block-commerce-wwf-banner" data-open-offcanvas="false">
+            {{ wwfBanner(wwf_donation_plugin.cartBannerCampaignKey, wwf_donation_plugin.isCartMiniBannerEnabled,
+                seoUrlNullable('frontend.navigation.page', { navigationId: wwf_donation_plugin.miniBannerTargetPageEntity
+                })) | raw }}
+        </div>
+    {% endif %}
 {% endblock %}

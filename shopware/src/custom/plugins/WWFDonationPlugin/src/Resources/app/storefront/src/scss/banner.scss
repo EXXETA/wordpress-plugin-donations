@@ -12,7 +12,7 @@ $breakpoint_large: 1024px;
 $breakpoint_xlarge: 1200px;
 $text-shadow-color: #000000;
 $fade-out-link-color: #999999;
-$xlarge-up-content-block-width: 41%;
+$xlarge-up-content-block-width: 47.5%;
 $urlPrefix: '/bundles/wwfdonationplugin/';
 
 /* hide cart button text with this mixin */
@@ -465,6 +465,26 @@ $urlPrefix: '/bundles/wwfdonationplugin/';
   }
 }
 
-@media (min-width: $breakpoint_xlarge) and (max-width: $breakpoint_xlarge + 50px) {
-  @include hide_cart_text;
+/* atm this is shopware specific, which displays the cart banner not full-width */
+@media (min-width: $breakpoint_large) and (max-width: $breakpoint_large+100) {
+  .cart-wwf-banner {
+    .cart-donation-banner .cart-donation-banner-background .cart-banner-content {
+      flex-basis: 64%;
+      text-align: right;
+    }
+  }
 }
+
+@media (min-width: $breakpoint_large+100) {
+  .cart-wwf-banner {
+    .cart-donation-banner .cart-donation-banner-background .cart-banner-content {
+      flex-basis: 60%;
+      text-align: right;
+    }
+  }
+}
+
+// TODO is this rule required?
+//@media (min-width: $breakpoint_xlarge) and (max-width: $breakpoint_xlarge + 50px) {
+//  @include hide_cart_text;
+//}

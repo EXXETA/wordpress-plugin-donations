@@ -27,6 +27,12 @@ export default class MiniBannerPlugin extends Plugin {
                 // TODO handle error case...
                 setTimeout(PageLoadingIndicatorUtil.remove(), 250);
 
+                if (bannerEl.classList.contains('cart-integration')) {
+                    if (window.location) {
+                        window.location.reload();
+                    }
+                    return
+                }
                 const showOffCanvas = DomAccess.getDataAttribute(bannerEl, 'open-offcanvas');
                 if (showOffCanvas) {
                     PluginManager.getPluginInstances('OffCanvasCart').forEach(instance => instance.openOffCanvas(window.router['frontend.cart.offcanvas'], false));

@@ -10,7 +10,8 @@
 
       &.mini-banner-preview {
         max-height: 250px;
-        width: 50%;
+        max-width: 50%;
+        width: auto;
       }
     }
   }
