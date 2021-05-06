@@ -5,12 +5,6 @@
         <title>General Plugin Configuration</title>
         <title lang="de-DE">Allgemeine Spendenplugin Einstellungen</title>
 
-        <input-field type="bool">
-            <name>active</name>
-            <label>Cart-Page integration enabled</label>
-            <label lang="de-DE">Banner auf der Warenkorb-Seite anzeigen</label>
-        </input-field>
-
         <input-field type="single-select">
             <name>reportMethod</name>
             <defaultValue>monthly</defaultValue>

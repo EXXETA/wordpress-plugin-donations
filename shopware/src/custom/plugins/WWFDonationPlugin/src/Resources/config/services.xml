@@ -16,6 +16,11 @@
             <argument type="string">wwf_logs</argument>
         </service>
 
+        <!-- register entity -->
+        <service id="WWFDonationPlugin\Entity\DonationReportDefinition">
+            <tag name="shopware.entity.definition" entity="wwf_donation_report"/>
+        </service>
+
         <service id="Shopware\Core\Content\Product\DataAbstractionLayer\StockUpdater"
                  class="WWFDonationPlugin\Subscriber\WWFProductStockUpdater" public="true">
             <argument type="service" id="Doctrine\DBAL\Connection"/>
