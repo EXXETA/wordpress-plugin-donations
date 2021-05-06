@@ -35,9 +35,9 @@ interface BannerHandlerInterface
      * Method to get the shop-specific product id associated with a charity product.
      *
      * @param CharityProduct $charityProduct
-     * @return int
+     * @return string
      */
-    public function getProductId(CharityProduct $charityProduct): int;
+    public function getProductId(CharityProduct $charityProduct): string;
 
     /**
      * Method to get the base url (of this plugin)
