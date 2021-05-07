@@ -42,37 +42,47 @@ class Migration1620310468AddMailTemplate extends MigrationStep
         $englishName = 'Donation-Report mail template';
         $germanName = 'Spendenreport-Mailvorlage';
 
-        $connection->insert('mail_template_type', [
-            'id' => Uuid::fromHexToBytes($mailTemplateTypeId),
-            'technical_name' => 'wwf_donation_report_mail_template',
-            'available_entities' => json_encode(['product' => 'product']),
-            'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-        ]);
+        $all = $connection->fetchAll('SELECT * FROM mail_template_type WHERE `technical_name` = "wwf_donation_report_mail_template"');
+        $isExisting = false;
+        if ($all && is_array($all) && count($all) > 0) {
+            $isExisting = true;
+            $mailTemplateTypeId = Uuid::fromBytesToHex($all[0]['id']);
+        }
+        if ($isExisting) {
 
-        // add default language entry
-        if ($defaultLangId !== $deLangId) {
-            $connection->insert('mail_template_type_translation', [
-                'mail_template_type_id' => Uuid::fromHexToBytes($mailTemplateTypeId),
-                'language_id' => $defaultLangId,
-                'name' => $englishName,
+        } else {
+            $connection->insert('mail_template_type', [
+                'id' => Uuid::fromHexToBytes($mailTemplateTypeId),
+                'technical_name' => 'wwf_donation_report_mail_template',
+                'available_entities' => json_encode(['product' => 'product']),
                 'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ]);
-        }
-        if ($defaultLangId !== Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM)) {
-            $connection->insert('mail_template_type_translation', [
-                'mail_template_type_id' => Uuid::fromHexToBytes($mailTemplateTypeId),
-                'language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
-                'name' => $englishName,
-                'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-            ]);
-        }
-        if ($deLangId) {
-            $connection->insert('mail_template_type_translation', [
-                'mail_template_type_id' => Uuid::fromHexToBytes($mailTemplateTypeId),
-                'language_id' => $deLangId,
-                'name' => $germanName,
-                'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-            ]);
+
+            // add default language entry
+            if ($defaultLangId !== $deLangId) {
+                $connection->insert('mail_template_type_translation', [
+                    'mail_template_type_id' => Uuid::fromHexToBytes($mailTemplateTypeId),
+                    'language_id' => $defaultLangId,
+                    'name' => $englishName,
+                    'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                ]);
+            }
+            if ($defaultLangId !== Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM)) {
+                $connection->insert('mail_template_type_translation', [
+                    'mail_template_type_id' => Uuid::fromHexToBytes($mailTemplateTypeId),
+                    'language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
+                    'name' => $englishName,
+                    'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                ]);
+            }
+            if ($deLangId) {
+                $connection->insert('mail_template_type_translation', [
+                    'mail_template_type_id' => Uuid::fromHexToBytes($mailTemplateTypeId),
+                    'language_id' => $deLangId,
+                    'name' => $germanName,
+                    'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                ]);
+            }
         }
 
         return $mailTemplateTypeId;

@@ -1,26 +1,23 @@
 <?xml version="1.0" ?>
-
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!-- used to pass config values to the storefront templating engine -->
         <service id="WWFDonationPlugin\Subscriber\Storefront\Subscriber">
             <tag name="kernel.event_subscriber"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
         </service>
 
+        <!-- central logging service for this plugin -->
         <service id="WWFDonationPlugin\Service\Logger" class="Monolog\Logger">
             <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
             <argument type="string">wwf_logs</argument>
         </service>
 
-        <!-- register entity -->
-        <service id="WWFDonationPlugin\Entity\DonationReportDefinition">
-            <tag name="shopware.entity.definition" entity="wwf_donation_report"/>
-        </service>
-
+        <!-- used to "simulate" virtual products via an "endless" stock by resetting the stock amount if necessary -->
         <service id="Shopware\Core\Content\Product\DataAbstractionLayer\StockUpdater"
                  class="WWFDonationPlugin\Subscriber\WWFProductStockUpdater" public="true">
             <argument type="service" id="Doctrine\DBAL\Connection"/>
@@ -32,11 +29,22 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <service class="WWFDonationPlugin\Service\CharityCampaignManager"
-                 id="WWFDonationPlugin\Service\CharityCampaignManager" public="true">
+        <service id="WWFDonationPlugin\Service\CharitySettingsManager" public="true">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\CharityCampaignManager">
         </service>
 
         <service id="WWFDonationPlugin\Service\DonationPluginInstance" public="true">
+            <argument type="service" id="WWFDonationPlugin\Service\CharitySettingsManager"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\ShopwareReportHandler">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="wwf_donation_report.repository"/>
+            <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="Shopware\Core\Content\MailTemplate\Service\MailService"/>
         </service>
 
         <service id="WWFDonationPlugin\Service\MediaService" public="false" shared="true" lazy="false">
@@ -57,6 +65,7 @@
             <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
         </service>
 
+        <!-- "wwfBanner" twig extension of this plugin to render the wwf-banner -->
         <service id="WWFDonationPlugin\Twig\BannerExtension" public="true">
             <call method="setMediaService">
                 <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
@@ -76,21 +85,29 @@
             <tag name="twig.extension"/>
         </service>
 
+        <!-- overwrite a twig extension of the core to handle empty input (here: if no mini-banner is used) -->
         <service id="WWFDonationPlugin\Twig\SeoUrlNullableExtension">
             <argument type="service" id="twig.extension.routing"/>
             <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
             <tag name="twig.extension"/>
         </service>
 
-        <!-- job scheduling -->
+        <!-- registering the report entity -->
+        <service id="WWFDonationPlugin\Entity\DonationReportDefinition">
+            <tag name="shopware.entity.definition" entity="wwf_donation_report"/>
+        </service>
+
+        <!-- report job scheduling -->
         <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTask">
             <tag name="shopware.scheduled.task"/>
         </service>
 
         <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler">
             <argument type="service" id="scheduled_task.repository"/>
-            <argument type="service" id="wwf_donation_report.repository"/>
+            <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
             <tag name="messenger.message_handler"/>
         </service>
 
@@ -102,6 +119,7 @@
             <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
         </service>
 
+        <!-- registering custom admin component of this plugin -->
         <service id="WWFDonationPlugin\DataResolver\WWFBannerCmsElementResolver">
             <tag name="shopware.cms.data_resolver"/>
         </service>

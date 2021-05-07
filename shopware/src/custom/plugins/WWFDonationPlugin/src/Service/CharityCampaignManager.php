@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace WWFDonationPlugin\Service;
 
@@ -21,6 +21,9 @@ class CharityCampaignManager extends AbstractCharityProductManager
 
     public function getRevenueOfCampaignInTimeRange(string $campaignSlug, DateTime $startDate, DateTime $endDate): ReportResultModel
     {
-        // TODO: Implement getRevenueOfCampaignInTimeRange() method.
+        $reportResultModel = new ReportResultModel($startDate, $endDate);
+
+
+        return $reportResultModel;
     }
 }

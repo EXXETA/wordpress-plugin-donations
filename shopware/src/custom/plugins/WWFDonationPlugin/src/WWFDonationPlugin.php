@@ -8,7 +8,9 @@ use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use WWFDonationPlugin\Service\CharitySettingsManager;
 use WWFDonationPlugin\Service\DonationPluginInstance;
 use WWFDonationPlugin\Service\MediaService;
 use WWFDonationPlugin\Service\ProductService;
@@ -38,7 +40,10 @@ class WWFDonationPlugin extends Plugin
     {
         parent::postInstall($context);
 
-        $donationPluginInstance = new DonationPluginInstance();
+        $systemConfigService = $this->container->get(SystemConfigService::class);
+        /* @var $systemConfigService SystemConfigService */
+        $charitySettingsManager = new CharitySettingsManager($systemConfigService);
+        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
         // we need to initialize and inject services here manually
         // handle media setup first
         $mediaService = $this->createMediaService($donationPluginInstance);
@@ -47,11 +52,17 @@ class WWFDonationPlugin extends Plugin
         $productService->install($context->getContext());
         // NOTE: after this step all products of this plugin should be created and disabled
         // enabling/disabling is done in plugin de-/activation steps below
+
+        CharitySettingsManager::setSystemConfigServiceStatic($systemConfigService);
+        CharitySettingsManager::init();
     }
 
     public function activate(ActivateContext $activateContext): void
     {
-        $donationPluginInstance = new DonationPluginInstance();
+        $charitySettingsManager = $this->container->get(CharitySettingsManager::class);
+        /* @var $charitySettingsManager CharitySettingsManager */
+
+        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
         $mediaService = $this->createMediaService($donationPluginInstance);
         $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
         // set all products of this plugin ACTIVE
@@ -62,7 +73,10 @@ class WWFDonationPlugin extends Plugin
 
     public function deactivate(DeactivateContext $deactivateContext): void
     {
-        $donationPluginInstance = new DonationPluginInstance();
+        $charitySettingsManager = $this->container->get(CharitySettingsManager::class);
+        /* @var $charitySettingsManager CharitySettingsManager */
+
+        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
         $mediaService = $this->createMediaService($donationPluginInstance);
         $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
         // set all products of this plugin INACTIVE
@@ -79,14 +93,20 @@ class WWFDonationPlugin extends Plugin
             // TODO do something different when the user want to keep the plugin's data
             return;
         }
-        $donationPluginInstance = new DonationPluginInstance();
-        $productRepository = $this->container->get('product.repository');
+        $systemConfigService = $this->container->get(SystemConfigService::class);
+        /* @var $systemConfigService SystemConfigService */
+        $charitySettingsManager = new CharitySettingsManager($systemConfigService);
+
+        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
 
         $mediaService = $this->createMediaService($donationPluginInstance);
         $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
         // TODO implement deletion of created media!
 //        $mediaService->uninstall();
         $productService->uninstall();
+
+        CharitySettingsManager::setSystemConfigServiceStatic($systemConfigService);
+        CharitySettingsManager::uninstall();
 
         // TODO delete wwf manufacturer ID
         // TODO delete zero rate tax? iff no entities associated?
@@ -130,7 +150,7 @@ class WWFDonationPlugin extends Plugin
         $mediaFolderRepository = $this->container->get('media_folder.repository');
         $productMediaRepository = $this->container->get('product_media.repository');
         $fileSaver = $this->container->get(FileSaver::class);
-
+        
         $mediaService = new MediaService(
             $donationPluginInstance,
             $mediaRepository,

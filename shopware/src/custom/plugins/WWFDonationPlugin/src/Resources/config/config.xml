@@ -6,7 +6,7 @@
         <title lang="de-DE">Allgemeine Spendenplugin Einstellungen</title>
 
         <input-field type="single-select">
-            <name>reportMethod</name>
+            <name>wwfDonationsReportingInterval</name>
             <defaultValue>monthly</defaultValue>
             <label>Donation report interval</label>
             <label lang="de-DE">Regelmäßige Spendenberichte generieren</label>
@@ -30,14 +30,14 @@
         </input-field>
 
         <input-field type="int">
-            <name>liveReportDaysInPast</name>
+            <name>wwfDonationsReportingLiveDaysInPast</name>
             <label>Live-Reporting - Days in past</label>
             <label lang="de-DE">Live-Berichte - Tage in die Vergangenheit</label>
             <defaultValue>30</defaultValue>
         </input-field>
 
         <input-field type="text">
-            <name>targetEmail</name>
+            <name>wwfDonationsReportingRecipient</name>
             <label>Mail-Recipient of donation reports</label>
             <label lang="de-DE">Empfangsadresse der Spendenberichte</label>
             <defaultValue>eshop-spenden@wwf.de</defaultValue>
@@ -45,6 +45,7 @@
             <copyable>true</copyable>
         </input-field>
     </card>
+
     <card>
         <title>Cart Page Integration</title>
         <title lang="de-DE">Warenkorbintegration</title>
@@ -60,7 +61,7 @@
         </input-field>
 
         <input-field type="single-select">
-            <name>cartBannerCampaignKey</name>
+            <name>wwfDonationsMiniBannerCampaign</name>
             <label>Banner campaign</label>
             <label lang="de-DE">Bannerkampagne</label>
             <defaultValue>protect_species_coin</defaultValue>
@@ -97,18 +98,47 @@
         </input-field>
 
         <input-field type="bool">
-            <name>isCartMiniBannerEnabled</name>
+            <name>wwfDonationsMiniBannerShowMiniCart</name>
             <label>Show as mini banner</label>
             <label lang="de-DE">Als Mini-Banner anzeigen</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
         <component name="wwf-banner-page-selector">
-            <name>miniBannerTargetPageEntity</name>
+            <name>wwfDonationsMiniBannerCampaignTargetPage</name>
             <entity>category</entity>
             <required>true</required>
             <label>Category target page of the 'more information' reference</label>
             <label lang="de-DE">Zielseite (Kategorie) des 'Weitere Informationen'-Links</label>
         </component>
+    </card>
+
+    <card>
+        <title>Reporting information</title>
+        <title lang="de-DE">Berichtsinformationen</title>
+
+        <input-field type="datetime">
+            <name>wwfDonationsReportingLastGenerationDate</name>
+            <label>Last report generation</label>
+            <label lang="de-DE">Letzte Berichtserzeugung</label>
+            <copyable>true</copyable>
+            <disabled>true</disabled>
+        </input-field>
+
+        <input-field type="datetime">
+            <name>wwfDonationsReportingLastCheckDate</name>
+            <label>Last report generation check</label>
+            <label lang="de-DE">Letzte Prüfung der Berichtserzeugung</label>
+            <copyable>true</copyable>
+            <disabled>true</disabled>
+        </input-field>
+
+        <input-field type="int">
+            <name>wwfDonationsReportingCounter</name>
+            <label>Report counter</label>
+            <label lang="de-DE">Erzeugte Berichte</label>
+            <copyable>true</copyable>
+            <disabled>true</disabled>
+        </input-field>
     </card>
 </config>

@@ -10,7 +10,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
@@ -46,11 +45,11 @@ class DonationReportDefinition extends EntityDefinition
             (new IntField('order_count', 'orderCount')),
             (new StringField('interval_mode', 'intervalMode'))->addFlags(new Required()),
             (new BoolField('is_regular', 'isRegular')),
-            (new FloatField('total_amount', 'totalAmount'))->addFlags(new Required(), new WriteProtected()),
+            (new FloatField('total_amount', 'totalAmount'))->addFlags(new Required()),
             (new JsonField('campaign_details', 'campaignDetails'))->addFlags(new Required()),
             (new LongTextField('mail_content', 'mailContent'))->addFlags(new AllowHtml()),
-            (new DateTimeField('start_date', 'startDate'))->addFlags(new Required(), new WriteProtected()),
-            (new DateTimeField('end_date', 'endDate'))->addFlags(new Required(), new WriteProtected()),
+            (new DateTimeField('start_date', 'startDate'))->addFlags(new Required()),
+            (new DateTimeField('end_date', 'endDate'))->addFlags(new Required()),
         ]);
     }
 }

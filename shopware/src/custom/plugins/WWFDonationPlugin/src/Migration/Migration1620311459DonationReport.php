@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `wwf_donation_report` (
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
 SQL;
-        $connection->executeStatement($sql);
+        $connection->exec($sql);
     }
 
     public function updateDestructive(Connection $connection): void

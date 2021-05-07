@@ -325,6 +325,9 @@ class ProductService
     public function uninstall()
     {
         // TODO delete product media too!
+        if (!$this->getCharityProductEntities()) {
+            return;
+        }
         $products = $this->getCharityProductEntities()->getIds();
         if (!$products) {
             // TODO log this case

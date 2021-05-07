@@ -54,13 +54,13 @@ class Subscriber implements EventSubscriberInterface
         }
 
         $isCartIntegrationActive = $this->getConfigurationValueBool($config, 'isCartIntegrationActive');
-        $isCartMiniBannerEnabled = $this->getConfigurationValueBool($config, 'isCartMiniBannerEnabled');
-        $cartCampaignKey = $this->getConfigurationValueStr($config, 'cartBannerCampaignKey');
+        $isCartMiniBannerEnabled = $this->getConfigurationValueBool($config, 'wwfDonationsMiniBannerShowMiniCart');
+        $cartCampaignKey = $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerCampaign');
         if (!$cartCampaignKey) {
             $this->logger->addWarning('Invalid empty wwf banner campaign selected in plugin configuration. Fallback to protect_species_coin.');
             $cartCampaignKey = CharityCampaignManager::$PROTECT_SPECIES_COIN; // default fallback value
         }
-        $cartMiniBannerPageTargetEntity = $this->getConfigurationValueStr($config, 'miniBannerTargetPageEntity');
+        $cartMiniBannerPageTargetEntity = $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerCampaignTargetPage');
         if (!$cartMiniBannerPageTargetEntity) {
             $cartMiniBannerPageTargetEntity = null;
         }
@@ -69,13 +69,13 @@ class Subscriber implements EventSubscriberInterface
         if ($isCartIntegrationActive && $isCartMiniBannerEnabled && empty($cartMiniBannerPageTargetEntity)) {
             $this->logger->addWarning('No target category(=page) entity configured for mini banner. This leads to an empty link of the mini banner. Please setup the plugin correctly.');
         }
-        
+
         // pass config data to the templates
         $data = [
             'isCartIntegrationActive' => $isCartIntegrationActive,
-            'isCartMiniBannerEnabled' => $isCartMiniBannerEnabled,
-            'miniBannerTargetPageEntity' => $cartMiniBannerPageTargetEntity,
-            'cartBannerCampaignKey' => $cartCampaignKey,
+            'wwfDonationsMiniBannerShowMiniCart' => $isCartMiniBannerEnabled,
+            'wwfDonationsMiniBannerCampaignTargetPage' => $cartMiniBannerPageTargetEntity,
+            'wwfDonationsMiniBannerCampaign' => $cartCampaignKey,
         ];
         $event->setParameter('wwf_donation_plugin', $data);
     }
