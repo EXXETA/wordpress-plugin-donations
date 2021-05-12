@@ -90,6 +90,11 @@ class DonationPlugin implements DonationPluginInterface
         include(__DIR__ . '/template/report.php');
     }
 
+    public final function includePlainTemplate(array $args): void
+    {
+        include(__DIR__ . '/template/plain.php');
+    }
+
     public function getPluginName(): string
     {
         return $this->pluginName;

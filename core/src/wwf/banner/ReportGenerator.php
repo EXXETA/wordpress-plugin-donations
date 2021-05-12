@@ -118,12 +118,18 @@ final class ReportGenerator
         $mailContent = ob_get_contents();
         ob_end_clean();
 
+        // render mail content plain
+        ob_start();
+        $donationPlugin->includePlainTemplate($args);
+        $mailContentPlain = ob_get_contents();
+        ob_end_clean();
+
         $reportHandler->storeReportRecord($args, $mailBody);
         $recipient = $settingsManager->getReportRecipientMail();
 
         if ($reportGenerationModel->isSendMail()) {
             $headers = ['Content-Type: text/html; charset=UTF-8'];
-            $reportHandler->sendMail($recipient, $args['subject'], $mailContent, $headers);
+            $reportHandler->sendMail($recipient, $args['subject'], $mailContent, $mailContentPlain, $headers);
         }
         // update last execution time
         if ($reportGenerationModel->isRegular()) {
