@@ -13,19 +13,13 @@ use exxeta\wwf\banner\DonationPlugin;
 class DonationPluginInstance extends DonationPlugin
 {
     /**
-     * @var CharitySettingsManager
-     */
-    private $settingsManager;
-
-    /**
      * DonationPluginInstance constructor.
+     *
      * @param CharitySettingsManager $settingsManager
+     * @param ProductService $productService
      */
-    public function __construct(CharitySettingsManager $settingsManager)
+    public function __construct(CharitySettingsManager $settingsManager, ProductService $productService)
     {
-        $this->settingsManager = $settingsManager;
-        $charityProductManager = new CharityCampaignManager();
-
-        parent::__construct('wwf-sw6', $charityProductManager, $settingsManager, null);
+        parent::__construct('wwf-sw6', $productService, $settingsManager, null);
     }
 }

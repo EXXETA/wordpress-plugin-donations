@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace WWFDonationPlugin\Service;
 
-use exxeta\wwf\banner\CharityProductManagerInterface;
+use DateTime;
+use exxeta\wwf\banner\AbstractCharityProductManager;
 use exxeta\wwf\banner\model\CharityCampaign;
+use exxeta\wwf\banner\model\ReportResultModel;
 use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Defaults;
@@ -16,22 +18,18 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class ProductService
  *
  * @package WWFDonationPlugin\Service
  */
-class ProductService
+class ProductService extends AbstractCharityProductManager
 {
     const MANUFACTURER_NAME_WWF_GERMANY = 'WWF Deutschland';
     const WWF_PRODUCT_NUMBER_PREFIX = 'WWF-DE-';
     const WWF_PRODUCT_DEFAULT_STOCK = 5000;
-
-    /**
-     * @var CharityProductManagerInterface
-     */
-    protected $campaignManager;
 
     /**
      * @var EntityRepositoryInterface
@@ -66,7 +64,6 @@ class ProductService
     /**
      * ProductService constructor.
      *
-     * @param CharityProductManagerInterface $campaignManager
      * @param EntityRepository $taxRepository
      * @param EntityRepository $productRepository
      * @param EntityRepository $productCategoryRepository
@@ -74,15 +71,13 @@ class ProductService
      * @param EntityRepository $salesChannelRepository
      * @param MediaService $mediaService
      */
-    public function __construct(CharityProductManagerInterface $campaignManager,
-                                EntityRepository $taxRepository,
+    public function __construct(EntityRepository $taxRepository,
                                 EntityRepository $productRepository,
                                 EntityRepository $productCategoryRepository,
                                 EntityRepository $manufacturerRepository,
                                 EntityRepository $salesChannelRepository,
                                 MediaService $mediaService)
     {
-        $this->campaignManager = $campaignManager;
         $this->taxRepository = $taxRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryRepository = $productCategoryRepository;
@@ -93,7 +88,7 @@ class ProductService
 
     public function install(Context $context): void
     {
-        $charityCampaigns = $this->campaignManager->getAllCampaigns();
+        $charityCampaigns = $this->getAllCampaigns();
         $productManufacturerId = $this->getOrCreateProductManufacturerId($context);
         $taxId = $this->getOrCreateZeroTaxRateEntityId($context);
 
@@ -254,7 +249,7 @@ class ProductService
      * @param Context $context
      * @return ProductEntity|null
      */
-    public function getProductBySlug(string $charityProductSlug, Context $context): ?ProductEntity
+    public function getShopwareProductBySlug(string $charityProductSlug, Context $context): ?ProductEntity
     {
         $productCriteria = new Criteria();
         $productCriteria->addFilter(new EqualsFilter('customFields.wwf_campaign_slug', $charityProductSlug));
@@ -285,7 +280,7 @@ class ProductService
     public function getCharityProductEntities(): ?EntityCollection
     {
         $criteria = new Criteria();
-        $productSlugs = $this->campaignManager->getAllCharityProductSlugs();
+        $productSlugs = $this->getAllCharityProductSlugs();
         $criteria->addFilter(new EqualsAnyFilter('customFields.wwf_campaign_slug', $productSlugs));
 
         $entitySearchResult = $this->productRepository->search($criteria, Context::createDefaultContext());
@@ -338,5 +333,24 @@ class ProductService
             $ids[] = ['id' => $singleProductId];
         }
         $this->productRepository->delete($ids, Context::createDefaultContext());
+    }
+
+    public function getCharityProductCategory()
+    {
+        // this method is not used in shopware 6 context!
+    }
+
+    public function getRevenueOfCampaignInTimeRange(string $campaignSlug, DateTime $startDate, DateTime $endDate): ReportResultModel
+    {
+        $reportResultModel = new ReportResultModel($startDate, $endDate);
+        // TODO do for all sales channels!
+
+        $productEntity = $this->getShopwareProductBySlug($campaignSlug, Context::createDefaultContext());
+        if (!$productEntity) {
+            throw new \Exception(sprintf('Could not find product entity for campaign slug "%s"', $campaignSlug));
+        }
+        VarDumper::dump($productEntity);
+
+        return $reportResultModel;
     }
 }

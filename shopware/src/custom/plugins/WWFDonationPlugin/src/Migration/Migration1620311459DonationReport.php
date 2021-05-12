@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 
 namespace WWFDonationPlugin\Migration;
@@ -7,6 +7,13 @@ namespace WWFDonationPlugin\Migration;
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Migration\MigrationStep;
 
+/**
+ * Class Migration1620311459DonationReport
+ *
+ * Creating a new table to store donation report records
+ *
+ * @package WWFDonationPlugin\Migration
+ */
 class Migration1620311459DonationReport extends MigrationStep
 {
 
@@ -42,6 +49,6 @@ SQL;
 
     public function updateDestructive(Connection $connection): void
     {
-        // Note: We do not delete the db table here to prevent data loss
+        // Note: We do not delete the db table here to prevent data loss issues
     }
 }

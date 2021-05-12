@@ -33,11 +33,9 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="WWFDonationPlugin\Service\CharityCampaignManager">
-        </service>
-
         <service id="WWFDonationPlugin\Service\DonationPluginInstance" public="true">
             <argument type="service" id="WWFDonationPlugin\Service\CharitySettingsManager"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ProductService"/>
         </service>
 
         <service id="WWFDonationPlugin\Service\ShopwareReportHandler">
@@ -47,8 +45,11 @@
             <argument type="service" id="Shopware\Core\Content\MailTemplate\Service\MailService"/>
         </service>
 
+        <service id="WWFDonationPlugin\Service\SimpleCharityProductManager">
+        </service>
+
         <service id="WWFDonationPlugin\Service\MediaService" public="false" shared="true" lazy="false">
-            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument type="service" id="WWFDonationPlugin\Service\SimpleCharityProductManager"/>
             <argument type="service" id="media.repository"/>
             <argument type="service" id="media_folder.repository"/>
             <argument type="service" id="product_media.repository"/>
@@ -56,7 +57,6 @@
         </service>
 
         <service id="WWFDonationPlugin\Service\ProductService" public="true">
-            <argument type="service" id="WWFDonationPlugin\Service\CharityCampaignManager"/>
             <argument type="service" id="tax.repository"/>
             <argument type="service" id="product.repository"/>
             <argument type="service" id="product_category.repository"/>
@@ -122,6 +122,13 @@
         <!-- registering custom admin component of this plugin -->
         <service id="WWFDonationPlugin\DataResolver\WWFBannerCmsElementResolver">
             <tag name="shopware.cms.data_resolver"/>
+        </service>
+
+        <!-- cli command for debugging report generation -->
+        <service id="WWFDonationPlugin\Command\ReportGenerationCommand">
+            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
+            <tag name="console.command"/>
         </service>
     </services>
 </container>

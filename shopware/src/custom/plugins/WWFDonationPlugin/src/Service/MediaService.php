@@ -4,7 +4,7 @@
 namespace WWFDonationPlugin\Service;
 
 
-use exxeta\wwf\banner\DonationPluginInterface;
+use exxeta\wwf\banner\AbstractCharityProductManager;
 use exxeta\wwf\banner\model\CharityProduct;
 use Shopware\Core\Content\Media\Aggregate\MediaFolder\MediaFolderEntity;
 use Shopware\Core\Content\Media\DataAbstractionLayer\MediaFolderRepositoryDecorator;
@@ -26,9 +26,9 @@ class MediaService
     const ASSET_PATH_PREFIX = __DIR__ . '/../../images/';
 
     /**
-     * @var DonationPluginInterface
+     * @var AbstractCharityProductManager
      */
-    protected $donationPlugin;
+    protected $charityProductManager;
 
     /**
      * @var MediaRepositoryDecorator
@@ -58,19 +58,19 @@ class MediaService
     /**
      * MediaService constructor.
      *
-     * @param DonationPluginInterface $donationPluginInstance
+     * @param AbstractCharityProductManager $productManager
      * @param MediaRepositoryDecorator $mediaRepository
      * @param MediaFolderRepositoryDecorator $mediaFolderRepository
      * @param EntityRepository $productMediaRepository
      * @param FileSaver $fileSaver
      */
-    public function __construct(DonationPluginInterface $donationPluginInstance,
+    public function __construct(AbstractCharityProductManager $productManager,
                                 MediaRepositoryDecorator $mediaRepository,
                                 MediaFolderRepositoryDecorator $mediaFolderRepository,
                                 EntityRepository $productMediaRepository,
                                 FileSaver $fileSaver)
     {
-        $this->donationPlugin = $donationPluginInstance;
+        $this->charityProductManager = $productManager;
         $this->mediaRepository = $mediaRepository;
         $this->mediaFolderRepository = $mediaFolderRepository;
         $this->productMediaRepository = $productMediaRepository;
@@ -85,7 +85,7 @@ class MediaService
 
     public function getProductMediaRecordBySlug(string $slug): ?MediaEntity
     {
-        $charityProduct = $this->donationPlugin->getCharityProductManagerInstance()->getProductBySlug($slug);
+        $charityProduct = $this->charityProductManager->getProductBySlug($slug);
         if ($charityProduct instanceof CharityProduct) {
             $baseMediaName = basename($charityProduct->getImagePath(), '.png');
 
@@ -159,7 +159,7 @@ class MediaService
             // FIXME error log!
             return;
         }
-        $charityProducts = $this->donationPlugin->getCharityProductManagerInstance()->getAllProducts();
+        $charityProducts = $this->charityProductManager->getAllProducts();
         foreach ($charityProducts as $charityProduct) {
             $productMediaRecord = $this->getProductMediaRecordBySlug($charityProduct->getSlug());
             if ($productMediaRecord != null) {
@@ -169,7 +169,7 @@ class MediaService
             $this->importProductImage($fileNameWithoutExt, $mediaFolderId, 'png');
         }
 
-        foreach ($this->donationPlugin->getCharityProductManagerInstance()->getAllCampaignBannerFileNames() as $bannerImageFileName) {
+        foreach ($this->charityProductManager->getAllCampaignBannerFileNames() as $bannerImageFileName) {
             $fileType = 'jpg';
             $fileNameWithoutExt = str_replace(sprintf('.%s', $fileType), '', $bannerImageFileName);
             $this->importProductImage($fileNameWithoutExt, $mediaFolderId, $fileType);

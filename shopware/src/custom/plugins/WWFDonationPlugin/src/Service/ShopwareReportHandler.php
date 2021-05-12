@@ -82,11 +82,16 @@ class ShopwareReportHandler implements ReportHandler
             'startDate' => $templateVars['startDate'],
             'endDate' => $templateVars['endDate'],
         ]], Context::createDefaultContext());
-
-        // TODO: Implement storeReportRecord() method.
     }
 
-    public function sendMail(string $recipient, string $subject, string $body, array $headers): void
+    /**
+     * @param string $recipient
+     * @param string $subject
+     * @param string $body
+     * @param string $bodyPlain
+     * @param array $headers
+     */
+    public function sendMail(string $recipient, string $subject, string $body, string $bodyPlain, array $headers): void
     {
         $mailParams = new ParameterBag();
         $mailParams->set('recipients', [
@@ -94,7 +99,7 @@ class ShopwareReportHandler implements ReportHandler
         ]);
         $mailParams->set('senderName', sprintf('%s Spendenplugin', $this->getShopName()));
         $mailParams->set('contentHtml', $body);
-        $mailParams->set('contentPlain', 'HTML mail only');
+        $mailParams->set('contentPlain', $bodyPlain);
         $mailParams->set('subject', $subject);
         $mailParams->set('salesChannelId', Defaults::SALES_CHANNEL);
 

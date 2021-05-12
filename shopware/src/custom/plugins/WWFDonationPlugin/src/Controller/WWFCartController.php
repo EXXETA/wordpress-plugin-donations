@@ -115,19 +115,18 @@ class WWFCartController extends StorefrontController
         $productSlug = strval($request->query->get('donation'));
         $quantity = intval($request->query->get('quantity'));
 
-        $charityCampaignManager = new CharityCampaignManager();
-        if (!in_array($productSlug, $charityCampaignManager->getAllCharityProductSlugs()) || $quantity <= 0) {
+        if (!in_array($productSlug, $this->productService->getAllCharityProductSlugs()) || $quantity <= 0) {
             // invalid charity product slug!
             $this->logger->warn('Invalid charity product slug received. Cancelled request.');
             return $redirectResponse;
         }
-        $charityProduct = $charityCampaignManager->getProductBySlug($productSlug);
+        $charityProduct = $this->productService->getProductBySlug($productSlug);
         if (!$charityProduct instanceof CharityProduct) {
             $this->logger->warn('Could not find charity product object for campaign slug. Cancelled request.');
             // invalid charity product slug!
             return $redirectResponse;
         }
-        $productEntity = $this->productService->getProductBySlug($charityProduct->getSlug(), $salesChannelContext->getContext());
+        $productEntity = $this->productService->getShopwareProductBySlug($charityProduct->getSlug(), $salesChannelContext->getContext());
         if (!$productEntity instanceof ProductEntity) {
             $this->logger->err('Could not find sw product entity for charity campaign. Cancelled request.');
             // could not find product
