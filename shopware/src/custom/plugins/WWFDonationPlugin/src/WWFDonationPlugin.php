@@ -14,6 +14,7 @@ use WWFDonationPlugin\Service\CharitySettingsManager;
 use WWFDonationPlugin\Service\DonationPluginInstance;
 use WWFDonationPlugin\Service\MediaService;
 use WWFDonationPlugin\Service\ProductService;
+use WWFDonationPlugin\Service\SimpleCharityProductManager;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
@@ -41,14 +42,11 @@ class WWFDonationPlugin extends Plugin
         parent::postInstall($context);
 
         $systemConfigService = $this->container->get(SystemConfigService::class);
-        /* @var $systemConfigService SystemConfigService */
-        $charitySettingsManager = new CharitySettingsManager($systemConfigService);
-        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
         // we need to initialize and inject services here manually
         // handle media setup first
-        $mediaService = $this->createMediaService($donationPluginInstance);
+        $mediaService = $this->createMediaService();
         $mediaService->install();
-        $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
+        $productService = $this->createProductServiceInstance($mediaService);
         $productService->install($context->getContext());
         // NOTE: after this step all products of this plugin should be created and disabled
         // enabling/disabling is done in plugin de-/activation steps below
@@ -59,12 +57,8 @@ class WWFDonationPlugin extends Plugin
 
     public function activate(ActivateContext $activateContext): void
     {
-        $charitySettingsManager = $this->container->get(CharitySettingsManager::class);
-        /* @var $charitySettingsManager CharitySettingsManager */
-
-        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
-        $mediaService = $this->createMediaService($donationPluginInstance);
-        $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
+        $mediaService = $this->createMediaService();
+        $productService = $this->createProductServiceInstance($mediaService);
         // set all products of this plugin ACTIVE
         $productService->setProductsActiveStatus($activateContext->getContext(), true);
 
@@ -73,12 +67,8 @@ class WWFDonationPlugin extends Plugin
 
     public function deactivate(DeactivateContext $deactivateContext): void
     {
-        $charitySettingsManager = $this->container->get(CharitySettingsManager::class);
-        /* @var $charitySettingsManager CharitySettingsManager */
-
-        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
-        $mediaService = $this->createMediaService($donationPluginInstance);
-        $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
+        $mediaService = $this->createMediaService();
+        $productService = $this->createProductServiceInstance($mediaService);
         // set all products of this plugin INACTIVE
         $productService->setProductsActiveStatus($deactivateContext->getContext(), false);
 
@@ -95,12 +85,8 @@ class WWFDonationPlugin extends Plugin
         }
         $systemConfigService = $this->container->get(SystemConfigService::class);
         /* @var $systemConfigService SystemConfigService */
-        $charitySettingsManager = new CharitySettingsManager($systemConfigService);
-
-        $donationPluginInstance = new DonationPluginInstance($charitySettingsManager);
-
-        $mediaService = $this->createMediaService($donationPluginInstance);
-        $productService = $this->createProductServiceInstance($donationPluginInstance, $mediaService);
+        $mediaService = $this->createMediaService();
+        $productService = $this->createProductServiceInstance($mediaService);
         // TODO implement deletion of created media!
 //        $mediaService->uninstall();
         $productService->uninstall();
@@ -117,24 +103,24 @@ class WWFDonationPlugin extends Plugin
     // TODO activation event: activate products! already done?
     // TODO deactivation event: deactivate products! already done?
     /**
-     * @param DonationPluginInstance $donationPluginInstance
      * @param MediaService $mediaService
      * @return ProductService
      */
-    private function createProductServiceInstance(DonationPluginInstance $donationPluginInstance, MediaService $mediaService): ProductService
+    private function createProductServiceInstance(MediaService $mediaService): ProductService
     {
         $taxRepository = $this->container->get('tax.repository');
         $productRepository = $this->container->get('product.repository');
         $productCategoryRepository = $this->container->get('product_category.repository');
         $manufacturerRepository = $this->container->get('product_manufacturer.repository');
         $salesChannelRepository = $this->container->get('sales_channel.repository');
+        $orderLineItemRepository = $this->container->get('order_line_item.repository');
 
         // handle product generation second
         $productService = new ProductService(
-            $donationPluginInstance->getCharityProductManagerInstance(), $taxRepository,
+            $taxRepository,
             $productRepository, $productCategoryRepository,
             $manufacturerRepository, $salesChannelRepository,
-            $mediaService
+            $orderLineItemRepository, $mediaService
         );
         return $productService;
     }
@@ -143,16 +129,16 @@ class WWFDonationPlugin extends Plugin
      * @param DonationPluginInstance $donationPluginInstance
      * @return MediaService
      */
-    private function createMediaService(DonationPluginInstance $donationPluginInstance): MediaService
+    private function createMediaService(): MediaService
     {
         // create needed services manually
         $mediaRepository = $this->container->get('media.repository');
         $mediaFolderRepository = $this->container->get('media_folder.repository');
         $productMediaRepository = $this->container->get('product_media.repository');
         $fileSaver = $this->container->get(FileSaver::class);
-        
+
         $mediaService = new MediaService(
-            $donationPluginInstance,
+            new SimpleCharityProductManager(),
             $mediaRepository,
             $mediaFolderRepository,
             $productMediaRepository,

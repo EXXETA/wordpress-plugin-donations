@@ -6,7 +6,7 @@ use Monolog\Logger;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Event\StorefrontRenderEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use WWFDonationPlugin\Service\CharityCampaignManager;
+use WWFDonationPlugin\Service\SimpleCharityProductManager;
 
 class Subscriber implements EventSubscriberInterface
 {
@@ -58,7 +58,7 @@ class Subscriber implements EventSubscriberInterface
         $cartCampaignKey = $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerCampaign');
         if (!$cartCampaignKey) {
             $this->logger->addWarning('Invalid empty wwf banner campaign selected in plugin configuration. Fallback to protect_species_coin.');
-            $cartCampaignKey = CharityCampaignManager::$PROTECT_SPECIES_COIN; // default fallback value
+            $cartCampaignKey = SimpleCharityProductManager::$PROTECT_SPECIES_COIN; // default fallback value
         }
         $cartMiniBannerPageTargetEntity = $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerCampaignTargetPage');
         if (!$cartMiniBannerPageTargetEntity) {

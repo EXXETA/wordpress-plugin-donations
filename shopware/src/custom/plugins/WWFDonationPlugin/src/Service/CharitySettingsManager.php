@@ -83,6 +83,8 @@ class CharitySettingsManager extends AbstractSettingsManager
     }
 
     /**
+     * used in (un-)install context only
+     *
      * @param SystemConfigService $systemConfigServiceStatic
      */
     public static function setSystemConfigServiceStatic(SystemConfigService $systemConfigServiceStatic): void

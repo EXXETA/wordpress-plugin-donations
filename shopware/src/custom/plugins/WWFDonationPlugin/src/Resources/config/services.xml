@@ -62,6 +62,7 @@
             <argument type="service" id="product_category.repository"/>
             <argument type="service" id="product_manufacturer.repository"/>
             <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="order_line_item.repository"/>
             <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
         </service>
 

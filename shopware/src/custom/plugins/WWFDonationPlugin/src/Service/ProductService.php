@@ -7,18 +7,18 @@ use DateTime;
 use exxeta\wwf\banner\AbstractCharityProductManager;
 use exxeta\wwf\banner\model\CharityCampaign;
 use exxeta\wwf\banner\model\ReportResultModel;
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Class ProductService
@@ -52,9 +52,14 @@ class ProductService extends AbstractCharityProductManager
     protected $manufacturerRepository;
 
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     protected $salesChannelRepository;
+
+    /**
+     * @var EntityRepositoryInterface
+     */
+    protected $orderLineItemRepository;
 
     /**
      * @var MediaService
@@ -64,18 +69,20 @@ class ProductService extends AbstractCharityProductManager
     /**
      * ProductService constructor.
      *
-     * @param EntityRepository $taxRepository
-     * @param EntityRepository $productRepository
-     * @param EntityRepository $productCategoryRepository
-     * @param EntityRepository $manufacturerRepository
-     * @param EntityRepository $salesChannelRepository
+     * @param EntityRepositoryInterface $taxRepository
+     * @param EntityRepositoryInterface $productRepository
+     * @param EntityRepositoryInterface $productCategoryRepository
+     * @param EntityRepositoryInterface $manufacturerRepository
+     * @param EntityRepositoryInterface $salesChannelRepository
+     * @param EntityRepositoryInterface $orderLineItemRepository
      * @param MediaService $mediaService
      */
-    public function __construct(EntityRepository $taxRepository,
-                                EntityRepository $productRepository,
-                                EntityRepository $productCategoryRepository,
-                                EntityRepository $manufacturerRepository,
-                                EntityRepository $salesChannelRepository,
+    public function __construct(EntityRepositoryInterface $taxRepository,
+                                EntityRepositoryInterface $productRepository,
+                                EntityRepositoryInterface $productCategoryRepository,
+                                EntityRepositoryInterface $manufacturerRepository,
+                                EntityRepositoryInterface $salesChannelRepository,
+                                EntityRepositoryInterface $orderLineItemRepository,
                                 MediaService $mediaService)
     {
         $this->taxRepository = $taxRepository;
@@ -83,6 +90,7 @@ class ProductService extends AbstractCharityProductManager
         $this->productCategoryRepository = $productCategoryRepository;
         $this->manufacturerRepository = $manufacturerRepository;
         $this->salesChannelRepository = $salesChannelRepository;
+        $this->orderLineItemRepository = $orderLineItemRepository;
         $this->mediaService = $mediaService;
     }
 
@@ -340,16 +348,81 @@ class ProductService extends AbstractCharityProductManager
         // this method is not used in shopware 6 context!
     }
 
+    /**
+     * @param string $campaignSlug
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @return ReportResultModel
+     * @throws \Exception
+     */
     public function getRevenueOfCampaignInTimeRange(string $campaignSlug, DateTime $startDate, DateTime $endDate): ReportResultModel
     {
         $reportResultModel = new ReportResultModel($startDate, $endDate);
         // TODO do for all sales channels!
 
-        $productEntity = $this->getShopwareProductBySlug($campaignSlug, Context::createDefaultContext());
+        $salesChannelContext = Context::createDefaultContext();
+        
+
+        $productEntity = $this->getShopwareProductBySlug($campaignSlug, $salesChannelContext);
         if (!$productEntity) {
             throw new \Exception(sprintf('Could not find product entity for campaign slug "%s"', $campaignSlug));
         }
-        VarDumper::dump($productEntity);
+        $productId = $productEntity->getId();
+
+        $orderLineItemCriteria = new Criteria();
+        $orderLineItemCriteria->addFilter(new EqualsFilter('productId', $productId));
+        $orderLineItemCriteria->addAssociation('order');
+        // unfortunately atm there is not programmatic way to use a "between"-sql condition...
+        // therefore we need to check the orders to be in range of given start and end date
+        $orderLineItemCriteria->addFilter(new RangeFilter('order.orderDateTime', [
+            RangeFilter::GTE => $startDate->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+        ]));
+
+        // some order/payment states are not considered during report, e.g. cancelled orders..
+        $excludedOrderStates = [
+//            'failed',
+            'cancelled',
+//            'refunded',
+            //'refunded_partially', // ? TODO
+            //'reminded', // ?
+            //'paid_partially', // ?
+//            'chargeback'
+        ];
+
+        $sum = 0;
+        $orderIDs = [];
+        $entitySearchResult = $this->orderLineItemRepository->search($orderLineItemCriteria, $salesChannelContext);
+        if ($entitySearchResult->getTotal() > 0) {
+            foreach ($entitySearchResult->getEntities() as $singleOrderLineItem) {
+                /* @var $singleOrderLineItem OrderLineItemEntity */
+                $orderEntity = $singleOrderLineItem->getOrder();
+                if (!$orderEntity) {
+                    // this should never happen!
+                    // TODO log!
+                    continue;
+                }
+                // the db dal query criteria above ensures the iterated orders are >= startDate
+                if ($orderEntity->getOrderDateTime() <= $endDate) {
+                    // .. so we need to filter out the orders which are out of the range interval [on the right/end side]
+                    continue;
+                }
+                $stateMachineState = $orderEntity->getStateMachineState();
+                if (!$stateMachineState) {
+                    // TODO log error
+                    continue;
+                }
+                if (in_array($stateMachineState->getTechnicalName(), $excludedOrderStates)) {
+                    // skip excluded line items by current order transaction state
+                    continue;
+                }
+                $sum += $singleOrderLineItem->getTotalPrice();
+                $orderIDs[] = $singleOrderLineItem->getOrderId();
+            }
+        }
+        $orderIDs = array_unique($orderIDs);
+
+        $reportResultModel->setAmount($sum);
+        $reportResultModel->setOrderCountTotal(count($orderIDs));
 
         return $reportResultModel;
     }
