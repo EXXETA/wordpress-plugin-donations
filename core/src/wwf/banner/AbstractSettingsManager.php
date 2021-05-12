@@ -158,6 +158,17 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
     }
 
     /**
+     * current value of the report counter
+     *
+     * @return int
+     */
+    public function getReportCounter(): int
+    {
+        return intval($this->getSetting(static::WWF_DONATIONS_REPORTING_COUNTER,
+            static::$settings[static::WWF_DONATIONS_MINI_BANNER_SHOW_IN_MINI_CART]));
+    }
+
+    /**
      * indicator to show mini banner in mini cart
      *
      * @return bool
