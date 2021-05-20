@@ -1,0 +1,63 @@
+{% block wwf_banner_donation_reports_list_view %}
+    <sw-page class="wwf-banner-donation-reports-list-view">
+        {% block wwf_banner_donation_reports_list_view_search_bar %}
+            <template #search-bar>
+                <sw-search-bar :initialSearchType="$tc('wwfPluginAdminIntegration.donationReports.full')"
+                               :typeSearchAlwaysInContainer="false"
+                               :initialSearch="term"
+                               @search="onSearch">
+                </sw-search-bar>
+            </template>
+        {% endblock %}
+
+        {% block wwf_banner_donation_reports_list_view_smart_bar_header %}
+            <template #smart-bar-header>
+                {% block wwf_banner_donation_reports_list_view_smart_bar_header_title %}
+                    <h2>
+                        {% block sw_newsletter_recipientlist_list_smart_bar_header_title_text %}
+                            {{ $tc('global.sw-admin-menu.navigation.mainMenuItemMarketing') }}
+                            <sw-icon name="small-arrow-medium-right" small></sw-icon>
+                            {{ $tc('wwfPluginAdminIntegration.donationReports.label') }}
+                        {% endblock %}
+                        {% block wwf_banner_donation_reports_list_view_smart_bar_header_amount %}
+                            <span v-if="!isLoading" class="sw-page__smart-bar-amount">
+                                ({{ total }})
+                            </span>
+                        {% endblock %}
+                    </h2>
+
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block wwf_banner_donation_reports_list_view_content %}
+            <template slot="content">
+                <div class="wwf-banner-donation-reports-list-view__content">
+                    {% block wwf_banner_donation_reports_list_view_grid %}
+                        <sw-entity-listing
+                                v-if="reports"
+                                class="wwf-donation-reports-list__grid"
+                                slot="grid"
+                                :isLoading="!reports"
+                                :columns="donationReportColumns"
+                                :repository="reportRepository"
+                                :items="reports"
+                                @update-records="updateTotal"
+                                :showSelection="false"
+                                :showActions="false"
+                                :showSettings="false"
+                                :allowEdit="false"
+                                :allowColumnEdit="false"
+                                :allowInlineEdit="false"
+                                :allowDelete="false">
+                        </sw-entity-listing>
+                    {% endblock %}
+
+                    {% block wwf_banner_donation_reports_list_view_grid_loader %}
+                        <sw-loader v-if="isLoading"></sw-loader>
+                    {% endblock %}
+                </div>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}

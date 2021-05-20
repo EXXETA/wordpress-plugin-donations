@@ -32,5 +32,33 @@
     "protect_forest_coin": "Waldschutz",
     "protect_climate_coin": "Klimaschutz",
     "protect_diversity_coin": "Biodiversität"
+  },
+  "wwfPluginAdminIntegration": {
+    "donationReports": {
+      "full": "WWF-Spendenbericht",
+      "label": "Spendenberichte",
+      "name": "Berichtsname"
+    },
+    "intervalModes": {
+      "label": "Berichtsintervall",
+      "quarterly": "Quartalsweise",
+      "monthly": "Monatlich",
+      "weekly": "Wöchentlich"
+    },
+    "orderCount": {
+      "label": "Anzahl Bestellungen"
+    },
+    "totalAmount": {
+      "label": "Spendensumme"
+    },
+    "startDate": {
+      "label": "Berichtszeitraum-Beginn"
+    },
+    "endDate": {
+      "label": "Berichtszeitraum-Ende"
+    },
+    "createdAt": {
+      "label": "Erstellt am"
+    }
   }
 }

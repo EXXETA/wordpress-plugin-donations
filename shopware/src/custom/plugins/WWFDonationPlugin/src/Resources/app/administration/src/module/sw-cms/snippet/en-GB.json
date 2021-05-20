@@ -32,5 +32,33 @@
     "protect_forest_coin": "Forest protection",
     "protect_climate_coin": "Climate protection",
     "protect_diversity_coin": "Protection of biodiversity"
+  },
+  "wwfPluginAdminIntegration": {
+    "donationReports": {
+      "full": "WWF Donation Report",
+      "label": "Donation Reports",
+      "name": "Report Title"
+    },
+    "intervalModes": {
+      "label": "Report Interval",
+      "quarterly": "Quarterly",
+      "monthly": "Monthly",
+      "weekly": "Weekly"
+    },
+    "orderCount": {
+      "label": "Order Count"
+    },
+    "totalAmount": {
+      "label": "Donated Total"
+    },
+    "startDate": {
+      "label": "Report Interval Start"
+    },
+    "endDate": {
+      "label": "Report Interval End"
+    },
+    "createdAt": {
+      "label": "Created At"
+    }
   }
 }

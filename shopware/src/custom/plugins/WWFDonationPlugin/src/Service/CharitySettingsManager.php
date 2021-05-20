@@ -76,7 +76,7 @@ class CharitySettingsManager extends AbstractSettingsManager
      */
     private static function convertSettingKey(string $settingKey): string
     {
-        $output = str_replace('_', ' ', $settingKey);
+        $output = str_replace('_', ' ', trim($settingKey));
         $output = lcfirst(ucwords($output)); // lower camel case
         $output = str_replace(' ', '', $output);
         return sprintf('%s.%s', self::SETTING_PREFIX, $output);
