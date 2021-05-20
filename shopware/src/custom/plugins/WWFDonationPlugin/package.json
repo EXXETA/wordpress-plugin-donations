@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "npm configuration to fetch common wwf banner assets",
   "scripts": {
-    "build": "cd \"../../../../../assets\" && npm run assemble && cd \"../shopware/src/custom/plugins/WWFDonationPlugin\" && shx mkdir -p images && shx cp -fr \"../../../../../assets/dist/banner.css\" . && shx cp -fr \"../../../../../assets/dist/images/*\" \"images/\""
+    "build": "cd \"../../../../../assets\" && npm run assemble && cd \"../shopware/src/custom/plugins/WWFDonationPlugin\" && shx mkdir -p images && shx cp -fr \"../../../../../assets/dist/banner.css\" . && shx cp -fr \"../../../../../assets/dist/images/*\" \"./src/Resources/public/images/\" ; shx cp -fr \"../../../../../assets/dist/images/*\" \"./src/Resources/app/administration/static\""
   },
   "author": "EXXETA AG",
   "license": "GPL-3.0-or-later",
