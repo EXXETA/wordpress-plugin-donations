@@ -5,12 +5,14 @@ set -e
 echo "Sync this repository with dockware container and (re-)build afterwards..."
 date +%c
 
-cd "$(dirname "$0")"
+dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+cd "$dir"
 pwd
 
 # download shopware-directories to local directory
 docker exec shopware bash -c 'sudo chown -R www-data:www-data /var/www/html'
 docker cp shopware:/var/www/html/vendor ./src/ || true
+docker cp shopware:/var/www/html/bin ./src/
 docker cp shopware:/var/www/html/var ./src/
 docker cp shopware:/var/www/html/config ./src/
 docker cp shopware:/var/www/html/public ./src/
@@ -23,7 +25,6 @@ docker cp shopware:/var/www/html/PLATFORM_COMMIT_SHA ./src/PLATFORM_COMMIT_SHA
 
 docker cp shopware:/var/www/html/composer.json ./src/composer.json
 docker cp shopware:/var/www/html/composer.lock ./src/composer.lock
-
 
 # copy local plugin code to the container
 docker exec shopware bash -c 'rm -rf /var/www/html/custom/plugins/DockwareSamplePlugin'

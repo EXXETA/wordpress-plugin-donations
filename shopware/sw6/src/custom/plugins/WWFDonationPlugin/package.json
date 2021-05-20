@@ -1,7 +1,7 @@
 {
   "name": "wwf-donations-plugin-sw6",
   "version": "1.0.0",
-  "description": "npm configuration to fetch common wwf banner assets",
+  "description": "npm configuration to assemble assets for the plugin",
   "scripts": {
     "clean": "node_modules/.bin/rimraf \"./src/Resources/public/images/\" && node_modules/.bin/rimraf \"./src/Resources/app/administration/static\"",
     "build": "shx mkdir -p src/Resources/public/images && shx mkdir -p src/Resources/app/administration/static && bash ./assemble.sh"

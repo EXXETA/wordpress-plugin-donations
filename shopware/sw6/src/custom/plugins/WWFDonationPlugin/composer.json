@@ -16,7 +16,8 @@
   ],
   "extra": {
     "shopware-plugin-class": "WWFDonationPlugin\\WWFDonationPlugin",
-    "plugin-icon": "Resources/config/plugin.png",
+    "plugin-icon": "src/Resources/config/plugin.png",
+    "copyright": "by WWF Germany",
     "author": "EXXETA AG",
     "label": {
       "de-DE": "WWF Germany Donation Plugin",
@@ -29,6 +30,10 @@
     "manufacturerLink": {
       "de-DE": "https://github.com/EXXETA/wordpress-plugin-donations",
       "en-GB": "https://github.com/EXXETA/wordpress-plugin-donations"
+    },
+    "supportLink": {
+      "de-DE": "https://github.com/EXXETA/wordpress-plugin-donations",
+      "en-GB": "https://github.com/EXXETA/wordpress-plugin-donations"
     }
   },
   "require": {
@@ -37,6 +42,8 @@
     "exxeta/wwf-donations-shop-banner-core": "1.0.4"
   },
   "require-dev": {
+    "shopware/core": "~6.3 || ~6.4",
+    "shopware/administration": "~6.3 || ~6.4",
     "phpunit/phpunit": "~8.5.8",
     "phpstan/phpstan": "^0.12.18"
   },
@@ -53,7 +60,7 @@
   "repositories": [
     {
       "type": "path",
-      "url": "../../../../../core",
+      "url": "../../../../../../core",
       "options": {
         "symlink": false
       }
