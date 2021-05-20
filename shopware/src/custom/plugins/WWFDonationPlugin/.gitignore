@@ -1,1 +1,4 @@
 vendor
+
+src/Resources/public/images
+src/Resources/app/administration/static

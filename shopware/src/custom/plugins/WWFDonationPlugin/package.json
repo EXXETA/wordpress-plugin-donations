@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "npm configuration to fetch common wwf banner assets",
   "scripts": {
-    "build": "cd \"../../../../../assets\" && npm run assemble && cd \"../shopware/src/custom/plugins/WWFDonationPlugin\" && shx mkdir -p images && shx cp -fr \"../../../../../assets/dist/banner.css\" . && shx cp -fr \"../../../../../assets/dist/images/*\" \"./src/Resources/public/images/\" ; shx cp -fr \"../../../../../assets/dist/images/*\" \"./src/Resources/app/administration/static\""
+    "clean": "node_modules/.bin/rimraf \"./src/Resources/public/images/\" && node_modules/.bin/rimraf \"./src/Resources/app/administration/static\"",
+    "build": "shx mkdir -p src/Resources/public/images && shx mkdir -p src/Resources/app/administration/static && bash ./assemble.sh"
   },
   "author": "EXXETA AG",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
+    "rimraf": "^3.0.2",
     "shx": "^0.3.3"
   }
 }
