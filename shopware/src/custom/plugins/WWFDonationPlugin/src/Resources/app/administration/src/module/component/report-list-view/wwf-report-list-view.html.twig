@@ -1,7 +1,7 @@
 {% block wwf_banner_donation_reports_list_view %}
     <sw-page class="wwf-banner-donation-reports-list-view">
         {% block wwf_banner_donation_reports_list_view_search_bar %}
-            <template #search-bar>
+            <template slot="search-bar">
                 <sw-search-bar :initialSearchType="$tc('wwfPluginAdminIntegration.donationReports.full')"
                                :typeSearchAlwaysInContainer="false"
                                :initialSearch="term"
@@ -11,7 +11,7 @@
         {% endblock %}
 
         {% block wwf_banner_donation_reports_list_view_smart_bar_header %}
-            <template #smart-bar-header>
+            <template slot="smart-bar-header">
                 {% block wwf_banner_donation_reports_list_view_smart_bar_header_title %}
                     <h2>
                         {% block sw_newsletter_recipientlist_list_smart_bar_header_title_text %}
@@ -25,7 +25,6 @@
                             </span>
                         {% endblock %}
                     </h2>
-
                 {% endblock %}
             </template>
         {% endblock %}

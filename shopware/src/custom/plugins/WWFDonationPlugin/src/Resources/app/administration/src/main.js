@@ -9,6 +9,7 @@ import deDE from './module/sw-cms/snippet/de-DE.json';
 import enGB from './module/sw-cms/snippet/en-GB.json';
 
 Shopware.Module.register('wwf-plugin-admin', {
+    color: '#FFD700',
     routes: {
         overview: {
             component: 'wwf-banner-donation-reports-list-view',
