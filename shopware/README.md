@@ -1,4 +1,4 @@
-# WWFDonationPlugin for Shopware 6
+# WWFDonationPlugin for Shopware 5 + 6
 
 This plugin is developed using [Dockware](https://dockware.io/).
 
@@ -7,7 +7,7 @@ This plugin is developed using [Dockware](https://dockware.io/).
 - Run the dockware container with `docker-compose up`
 - Copy over files `docker cp shopware:/var/www/html/. ./src`
 
-Run: `composer install` both in `./shopware/src` and in `./shopware/src/custom/plugins/WWFDonationPlugin`.
+Run: `composer install` both in `./shopware/sw6/src` and in `./shopware/sw6/src/custom/plugins/WWFDonationPlugin`.
 
 For development run `docker-compose up` and sync changes of plugin's code via SFTP into the container.
 

@@ -19,19 +19,18 @@ assets/dist
 
 # sw specific stuff
 # remove all except the plugin
-shopware/src/*
-!shopware/src/custom/
-!shopware/src/composer.json
+shopware/sw6/src/*
+!shopware/sw6/src/custom/
+!shopware/sw6/src/composer.json
 
-shopware/src/bin
-shopware/src/config
-shopware/src/files
-shopware/src/public
-shopware/src/src
-shopware/src/var
-
+shopware/sw6/src/bin
+shopware/sw6/src/config
+shopware/sw6/src/files
+shopware/sw6/src/public
+shopware/sw6/src/src
+shopware/sw6/src/var
 
 # images are copied from assets package in this repo and should not be stored twice
-shopware/src/custom/plugins/WWFDonationPlugin/images
+#shopware/sw6/src/custom/plugins/WWFDonationPlugin/images
 
 .phpunit.result.cache

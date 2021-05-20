@@ -6,7 +6,7 @@ cd "$dir"
 
 cd "../../../../../assets"
 npm run assemble
-cd "../shopware/src/custom/plugins/WWFDonationPlugin"
+cd "../shopware/sw6/src/custom/plugins/WWFDonationPlugin"
 
 # copy files
 # TODO handle SCSS stuff
