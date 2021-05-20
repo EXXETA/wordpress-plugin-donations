@@ -21,4 +21,7 @@ node_modules/.bin/shx cp -fr "../../../../../../assets/dist/images/*" "./src/Res
 node_modules/.bin/shx cp -fr "../../../../../../assets/dist/sample-images/*" "./src/Resources/app/administration/static"
 
 # remove -s.png images, because we don't use them here
+node_modules/.bin/rimraf "./src/Resources/public/images/banner_protect_*.jpg"
+node_modules/.bin/rimraf "./src/Resources/public/images/product_protect_*.png"
+
 node_modules/.bin/rimraf "./src/Resources/app/administration/static/*-s.png"

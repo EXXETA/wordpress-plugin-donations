@@ -7,20 +7,21 @@ cd "$dir"
 
 cd sw6
 
+cd test
+# just to be sure its down
+docker-compose down || true
+cd ..
+
 docker-compose down || true
 docker-compose pull
 docker-compose up -d
+#sleep 10 # give the container some time to startup (the db etc.)
 
-bash ./sync_dev.sh
-mkdir -p sw6/src/custom/plugins2/
-docker cp shopware:/var/www/html/custom/plugins sw6/src/custom/plugins2/
+# FIXME uncomment!
+#rm -rf ../../release/sw6 || true
+mkdir -p ../../release/sw6
 
-cd ..
-
-rm -rf ../release/sw6
-mkdir -p ../release/sw6
-
-cd sw6/src/custom/plugins/WWFDonationPlugin/
+cd src/custom/plugins/WWFDonationPlugin/
 rm -rf node_modules || true
 rm -rf vendor || true
 
@@ -28,6 +29,15 @@ npm install
 npm run clean
 npm run build
 php ../../../../../../composer.phar install --no-dev
+
+cd "$dir/sw6"
+
+bash ./sync_release.sh
+
+cd "$dir"
+
+echo -e "\n\nBuild process finished. Retrieving release files..."
+docker cp shopware:/var/www/html/custom/plugins/WWFDonationPlugin sw6/src/custom/plugins
 
 cd "$dir"
 cp -fr sw6/src/custom/plugins/WWFDonationPlugin ../release/sw6
@@ -52,3 +62,6 @@ cd ..
 
 zip -r sw6-wwf-donations-plugin.zip WWFDonationPlugin
 du -d0 -h sw6-wwf-donations-plugin.zip
+
+cd "$dir/sw6"
+docker-compose down || true
