@@ -106,7 +106,6 @@
         <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler">
             <argument type="service" id="scheduled_task.repository"/>
             <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
             <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
             <tag name="messenger.message_handler"/>

@@ -9,7 +9,6 @@ use exxeta\wwf\banner\ReportGenerator;
 use Monolog\Logger;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 use WWFDonationPlugin\Service\ShopwareReportHandler;
 
 /**
@@ -27,11 +26,6 @@ class ReportTaskHandler extends ScheduledTaskHandler
     private $logger;
 
     /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
-
-    /**
      * @var DonationPluginInterface
      */
     private $donationPluginInstance;
@@ -46,20 +40,17 @@ class ReportTaskHandler extends ScheduledTaskHandler
      *
      * @param EntityRepository $scheduledTaskRepository
      * @param Logger $logger
-     * @param SystemConfigService $systemConfigService
      * @param DonationPluginInterface $donationPluginInstance
      * @param ShopwareReportHandler $shopwareReportHandler
      */
     public function __construct(EntityRepository $scheduledTaskRepository,
                                 Logger $logger,
-                                SystemConfigService $systemConfigService,
                                 DonationPluginInterface $donationPluginInstance,
                                 ShopwareReportHandler $shopwareReportHandler)
     {
         parent::__construct($scheduledTaskRepository);
 
         $this->logger = $logger;
-        $this->systemConfigService = $systemConfigService;
         $this->donationPluginInstance = $donationPluginInstance;
         $this->shopwareReportHandler = $shopwareReportHandler;
     }
