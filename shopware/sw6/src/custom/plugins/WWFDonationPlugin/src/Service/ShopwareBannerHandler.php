@@ -75,7 +75,7 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getCartImageUrl(): string
     {
-        return $this->getBaseUrl() . 'images/icon_cart.svg';
+        return $this->getBaseUrl() . 'static/icon_cart.svg';
     }
 
     public function getProductId(CharityProduct $charityProduct): string

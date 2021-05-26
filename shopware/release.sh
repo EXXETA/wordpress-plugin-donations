@@ -17,8 +17,7 @@ docker-compose pull
 docker-compose up -d
 #sleep 10 # give the container some time to startup (the db etc.)
 
-# FIXME uncomment!
-#rm -rf ../../release/sw6 || true
+rm -rf ../../release/sw6 || true
 mkdir -p ../../release/sw6
 
 cd src/custom/plugins/WWFDonationPlugin/
@@ -44,6 +43,7 @@ cp -fr sw6/src/custom/plugins/WWFDonationPlugin ../release/sw6
 cd ../release/sw6/WWFDonationPlugin
 
 # cleanup release directory
+rm -rf src/Resources/app/administration/static
 rm .gitignore
 rm assemble.sh
 rm makefile

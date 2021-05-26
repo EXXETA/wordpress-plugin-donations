@@ -13,7 +13,7 @@ $breakpoint_xlarge: 1200px;
 $text-shadow-color: #000000;
 $fade-out-link-color: #999999;
 $xlarge-up-content-block-width: 47.5%;
-$urlPrefix: '/bundles/wwfdonationplugin/';
+$urlPrefix: '/bundles/wwfdonationplugin/static/';
 
 /* hide cart button text with this mixin */
 @mixin hide_cart_text() {
@@ -90,23 +90,23 @@ $urlPrefix: '/bundles/wwfdonationplugin/';
     align-items: stretch;
 
     &.protect-climate {
-      background-image: url($urlPrefix + "images/banner_protect_climate.jpg");
+      background-image: url($urlPrefix + "banner_protect_climate.jpg");
     }
 
     &.protect-species {
-      background-image: url($urlPrefix + "images/banner_protect_species.jpg");
+      background-image: url($urlPrefix + "banner_protect_species.jpg");
     }
 
     &.protect-oceans {
-      background-image: url($urlPrefix + "images/banner_protect_oceans.jpg");
+      background-image: url($urlPrefix + "banner_protect_oceans.jpg");
     }
 
     &.protect-forests {
-      background-image: url($urlPrefix + "images/banner_protect_forests.jpg");
+      background-image: url($urlPrefix + "banner_protect_forests.jpg");
     }
 
     &.protect-diversity {
-      background-image: url($urlPrefix + "images/banner_protect_diversity.jpg");
+      background-image: url($urlPrefix + "banner_protect_diversity.jpg");
     }
 
     .cart-banner-content {
@@ -144,7 +144,7 @@ $urlPrefix: '/bundles/wwfdonationplugin/';
         text-align: right;
 
         .times {
-          background: url($urlPrefix + "images/icon_times.svg") no-repeat;
+          background: url($urlPrefix + "icon_times.svg") no-repeat;
           background-size: contain;
           display: inline-block;
           width: 0.75rem;
