@@ -1,0 +1,42 @@
+{
+  "name": "exxeta/sw5-wwf-donation-plugin",
+  "type": "shopware-plugin",
+  "description": "WWF Germany Donation Plugin Shopware 5",
+  "license": "GPL-3.0-or-later",
+  "extra": {
+    "installer-name": "WWFDonationPlugin"
+  },
+  "authors": [
+    {
+      "name": "Exxeta AG",
+      "role": "Manufacturer"
+    },
+    {
+      "name": "Marius Schuppert",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "php": ">= 7.3",
+    "ext-pdo": "*",
+    "exxeta/wwf-donations-shop-banner-core": "1.0.4"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^4.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "WWFDonationPlugin\\": "src/",
+      "Shopware\\Plugins\\WWFDonationPlugin\\": "src/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../../../../../core",
+      "options": {
+        "symlink": false
+      }
+    }
+  ]
+}
