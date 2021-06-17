@@ -2,38 +2,84 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
     <elements>
-        <element type="text" scope="locale">
-            <name>swagSloganContent</name>
-            <label lang="de">Dein Slogan</label>
-            <label lang="en">Your slogan</label>
-            <description lang="de">Dieser Slogan wird in in der Storefront angezeigt</description>
-            <description lang="en">This slogan will be shown on the storefront</description>
-        </element>
-        <element type="select" scope="locale">
-            <name>swagSloganFontSize</name>
-            <label lang="de">Schriftgröße</label>
-            <label lang="en">Font size</label>
-            <value>12</value>
+        <element required="true" type="select" scope="locale">
+            <name>wwfDonationsReportingInterval</name>
+            <label lang="en">Reporting interval</label>
+            <label lang="de">Berichtsintervall</label>
+            <value>monthly</value>
             <store>
                 <option>
-                    <value>12</value>
-                    <label>12px</label>
+                    <value>weekly</value>
+                    <label lang="en">Weekly</label>
+                    <label lang="de">Wöchentlich</label>
                 </option>
                 <option>
-                    <value>18</value>
-                    <label>18px</label>
+                    <value>monthly</value>
+                    <label lang="en">Monthly</label>
+                    <label lang="de">Monatlich</label>
                 </option>
                 <option>
-                    <value>24</value>
-                    <label>24px</label>
+                    <value>quarterly</value>
+                    <label lang="en">Quarterly</label>
+                    <label lang="de">Quartalsweise</label>
                 </option>
             </store>
         </element>
-        <element type="boolean" scope="locale">
-            <name>swagSloganItalic</name>
-            <label lang="de">Kursiv</label>
-            <label lang="en">Italic</label>
-            <value>false</value>
+        <element required="true" type="number" scope="locale">
+            <name>wwfDonationsReportingLiveDaysInPast</name>
+            <label lang="en">Days in past of live report</label>
+            <label lang="de">Tage in die Vergangenheit des Live-Berichtszeitraums</label>
+        </element>
+        <element required="true" type="boolean" scope="locale">
+            <name>wwfDonationsMiniBannerShowMiniCart</name>
+            <label lang="en">Show mini cart after donation mini banner was used</label>
+            <label lang="de">Zeige aufgeklappten Warenkorb bei der Verwendung des Mini-Spendenbanners</label>
+        </element>
+        <element required="true" type="select" scope="locale">
+            <name>wwfDonationsMiniBannerCampaign</name>
+            <label lang="en">Choose mini banner campaign</label>
+            <label lang="de">Spendenkampagne des Mini-Spendenbanners</label>
+        </element>
+        <element required="true" type="text" scope="locale">
+            <name>wwfDonationsMiniBannerCampaignTargetPage</name>
+            <label lang="en">Choose mini banner campaign target page link</label>
+            <label lang="de">Kampagneninformationsseite des Mini-Spendenbanners</label>
+        </element>
+
+        <!-- readonly stuff -->
+        <element required="true" type="text" scope="locale">
+            <name>wwfDonationsReportingRecipient</name>
+            <label lang="en">Donation report recipient</label>
+            <label lang="de">Spendenberichtsempfangsadresse</label>
+            <options>
+                <readOnly>true</readOnly>
+            </options>
+        </element>
+        <element required="true" type="datetime" scope="locale">
+            <name>wwfDonationsReportingLastGenerationDate</name>
+            <label lang="en">Last report generated at</label>
+            <label lang="de">Letzter Bericht erstellt am</label>
+            <options>
+                <readOnly>true</readOnly>
+            </options>
+        </element>
+        <element required="true" type="datetime" scope="locale">
+            <name>wwfDonationsReportingLastCheckDate</name>
+            <label lang="en">Last time for report generation checked at</label>
+            <label lang="de">Letzter Überprüfungszeitpunkt für die Berichtserzeugung</label>
+            <options>
+                <readOnly>true</readOnly>
+            </options>
+        </element>
+        <element required="true" type="number" scope="locale">
+            <name>wwfDonationsReportingCounter</name>
+            <label lang="en">Report counter</label>
+            <label lang="de">Berichtszähler</label>
+            <value>0</value>
+            <options>
+                <minValue>0</minValue>
+                <readOnly>true</readOnly>
+            </options>
         </element>
     </elements>
 </config>

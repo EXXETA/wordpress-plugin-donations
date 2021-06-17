@@ -2,10 +2,10 @@
 <cronjobs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/cronjob.xsd">
     <cronjob>
-        <name>Send birthday email</name>
-        <action>Shopware_CronJob_SendBirthdayMail</action>
+        <name>WWF Donation Report Check Job</name>
+        <action>WWFDonationPlugin_CronJob_WWFDonationReportCheck</action>
         <active>true</active>
-        <interval>86400</interval>
-        <disableOnError>true</disableOnError>
+        <interval>86400</interval> <!-- == daily -->
+        <disableOnError>false</disableOnError>
     </cronjob>
 </cronjobs>

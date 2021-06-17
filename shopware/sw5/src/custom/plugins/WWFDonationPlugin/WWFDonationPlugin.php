@@ -12,10 +12,13 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Models\Article\Detail;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use WWFDonationPlugin\Bootstrap\Database;
+use WWFDonationPlugin\Service\CharitySettingsManager;
 use WWFDonationPlugin\Service\MediaService;
 use WWFDonationPlugin\Service\ProductService;
 use WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler;
 use WWFDonationPlugin\Service\SimpleCharityProductManager;
+use WWFDonationPlugin\Service\SystemConfigService;
 
 
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
@@ -50,14 +53,15 @@ class WWFDonationPlugin extends Plugin
         $productService->install($context);
         // NOTE: after this step all products of this plugin should be created and disabled
         // enabling/disabling is done in plugin de-/activation steps below
+
+        $database = new Database($this->container->get('models'));
+        $database->install();
     }
 
     public function activate(ActivateContext $activateContext): void
     {
-//        $configWriter = $this->container->get('shopware.plugin.config_writer');
-//        /* @var ConfigWriter $configWriter */
-//        CharitySettingsManager::setConfigWriterStatic($configWriter);
-//        CharitySettingsManager::init();
+        CharitySettingsManager::setSystemConfigServiceStatic($this->createSystemConfigService());
+        CharitySettingsManager::init();
 
         $mediaService = $this->createMediaService();
         $productService = $this->createProductServiceInstance($mediaService);
@@ -81,18 +85,24 @@ class WWFDonationPlugin extends Plugin
 
     public function uninstall(UninstallContext $uninstallContext): void
     {
+        $database = new Database(
+            $this->container->get('models')
+        );
+
         if ($uninstallContext->keepUserData()) {
             // TODO do something different when the user want to keep the plugin's data
             return;
         }
-        $configWriter = $this->container->get('shopware.plugin.config_writer');
-        /* @var $configWriter Plugin\ConfigWriter */
+
+        $database->uninstall();
+
         $mediaService = $this->createMediaService();
         $productService = $this->createProductServiceInstance($mediaService);
         $productService->uninstall();
 
-//        CharitySettingsManager::setConfigWriterStatic($configWriter);
-//        CharitySettingsManager::uninstall();
+        $systemConfigService = $this->createSystemConfigService();
+        CharitySettingsManager::setSystemConfigServiceStatic($systemConfigService);
+        CharitySettingsManager::uninstall();
 
         if ($uninstallContext->getPlugin()->getActive()) {
             $uninstallContext->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
@@ -140,6 +150,15 @@ class WWFDonationPlugin extends Plugin
             $entityManager,
             $mediaService
         );
+    }
+
+    private function createSystemConfigService(): SystemConfigService
+    {
+        $configReader = $this->container->get('shopware.plugin.config_reader');
+        /* @var $configReader Plugin\ConfigReader */
+        $configWriter = $this->container->get('shopware.plugin.config_writer');
+        /* @var $configWriter Plugin\ConfigWriter */
+        return new SystemConfigService($configReader, $configWriter);
     }
 
     public static function getSubscribedEvents()

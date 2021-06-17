@@ -5,9 +5,7 @@ namespace WWFDonationPlugin\Service;
 use exxeta\wwf\banner\AbstractSettingsManager;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopNotFoundException;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\Plugin\ConfigWriter;
 use Shopware\Models\Shop\Shop;
-use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\WWFDonationPlugin;
 
 /**
@@ -29,9 +27,9 @@ class CharitySettingsManager extends AbstractSettingsManager
     /**
      * only used in static install context!
      *
-     * @var ConfigWriter
+     * @var SystemConfigService
      */
-    private static $configWriterStatic;
+    private static $systemConfigServiceStatic;
 
     /**
      * CharitySettingsManager constructor.
@@ -44,30 +42,26 @@ class CharitySettingsManager extends AbstractSettingsManager
 
     public static function init(): void
     {
-        VarDumper::dump(Shopware()->Config()->getByNamespace(WWFDonationPlugin::PLUGIN_NAME, ""));
-
         $shop = Shopware()->Models()
             ->getRepository(Shop::class)
-            ->findOneBy(['default' => true]);
+            ->findOneBy(['default' => true, 'active' => true]);
         /* @var Shop $shop */
         if (!$shop || !$shop instanceof Shop) {
-            throw new ShopNotFoundException("Could not find a default shop!");
+            throw new ShopNotFoundException("Could not find an active default shop!");
         }
         $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
         /* @var InstallerService $pluginManager */
         $plugin = $pluginManager->getPluginByName(WWFDonationPlugin::PLUGIN_NAME);
 
         foreach (static::$settings as $settingKey => $defaultValue) {
-            VarDumper::dump($settingKey);
             $pluginManager->saveConfigElement($plugin, static::convertSettingKey($settingKey), $defaultValue, $shop);
         }
     }
 
     public static function uninstall()
     {
-
-        foreach (static::$settings as $settingKey => $defaultValue) {
-//            static::$configWriterStatic->delete(static::convertSettingKey($settingKey));
+        foreach (static::$settings as $settingKey => $value) {
+            static::$systemConfigServiceStatic->delete($settingKey);
         }
     }
 
@@ -78,7 +72,6 @@ class CharitySettingsManager extends AbstractSettingsManager
 
     public function getSetting(string $settingKey, $defaultValue)
     {
-        VarDumper::dump($settingKey);
         $value = $this->systemConfigService->get(static::convertSettingKey($settingKey));
         if ($value === null) {
             return $defaultValue;
@@ -109,10 +102,10 @@ class CharitySettingsManager extends AbstractSettingsManager
     /**
      * used in (un-)install context only
      *
-     * @param ConfigWriter $configWriter
+     * @param SystemConfigService $systemConfigService
      */
-    public static function setConfigWriterStatic(ConfigWriter $configWriter): void
+    public static function setSystemConfigServiceStatic(SystemConfigService $systemConfigService): void
     {
-        self::$configWriterStatic = $configWriter;
+        self::$systemConfigServiceStatic = $systemConfigService;
     }
 }

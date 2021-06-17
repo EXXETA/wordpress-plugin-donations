@@ -39,7 +39,7 @@
 
         <service id="WWFDonationPlugin\Service\CharitySettingsManager" public="true">
             <!-- FIXME: Use cached reader? -->
-            <argument type="service" id="shopware.plugin.config_reader"/>
+            <argument type="service" id="WWFDonationPlugin\Service\SystemConfigService"/>
         </service>
 
         <service id="WWFDonationPlugin\Service\DonationPluginInstance" public="true">
@@ -48,7 +48,7 @@
         </service>
 
         <service id="WWFDonationPlugin\Service\ShopwareReportHandler">
-            <argument type="service" id="shopware.plugin.config_reader"/>
+            <argument type="service" id="WWFDonationPlugin\Service\SystemConfigService"/>
             <argument type="service" id="models"/>
         </service>
 
@@ -58,16 +58,11 @@
         <service id="WWFDonationPlugin\Service\MediaService" public="false" shared="true" lazy="false">
             <argument type="service" id="WWFDonationPlugin\Service\SimpleCharityProductManager"/>
             <argument type="service" id="models"/>
-            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+            <argument type="service" id="shopware_media.media_service"/>
         </service>
 
         <service id="WWFDonationPlugin\Service\ProductService" public="true">
-            <argument type="service" id="tax.repository"/>
-            <argument type="service" id="product.repository"/>
-            <argument type="service" id="product_category.repository"/>
-            <argument type="service" id="product_manufacturer.repository"/>
-            <argument type="service" id="sales_channel.repository"/>
-            <argument type="service" id="order_line_item.repository"/>
+            <argument type="service" id="models"/>
             <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
         </service>
 
@@ -78,18 +73,12 @@
         <!--            <tag name="twig.extension"/>-->
         <!--        </service>-->
 
-        <!-- report job scheduling -->
-        <!--        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTask">-->
-        <!--            <tag name="shopware.scheduled.task"/>-->
-        <!--        </service>-->
-
-        <!--        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler">-->
-        <!--            <argument type="service" id="scheduled_task.repository"/>-->
-        <!--            <argument type="service" id="pluginLogger"/>-->
-        <!--            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>-->
-        <!--            <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>-->
-        <!--            <tag name="messenger.message_handler"/>-->
-        <!--        </service>-->
+        <!-- report cron job scheduling -->
+        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler">
+            <argument type="service" id="pluginLogger"/>
+            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
+        </service>
 
         <!-- controller -->
         <!--        <service id="WWFDonationPlugin\Controller\WWFCartController" public="true">-->
@@ -108,7 +97,7 @@
         <service id="WWFDonationPlugin\Command\ReportGenerationCommand">
             <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
             <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
-            <tag name="console.command"/>
+            <tag name="console.command" command="wwf:report-generate"/>
         </service>
     </services>
 </container>
