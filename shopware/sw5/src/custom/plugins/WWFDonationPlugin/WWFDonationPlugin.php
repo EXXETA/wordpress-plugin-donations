@@ -10,15 +10,11 @@ use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
-use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
-use Shopware\Models\Article\Supplier;
-use Shopware\Models\Category\Category;
-use Shopware\Models\Shop\Currency;
-use Shopware\Models\Tax\Tax;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use WWFDonationPlugin\Service\MediaService;
 use WWFDonationPlugin\Service\ProductService;
+use WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler;
 use WWFDonationPlugin\Service\SimpleCharityProductManager;
 
 
@@ -117,22 +113,9 @@ class WWFDonationPlugin extends Plugin
         if (!$entityManager instanceof EntityManager) {
             throw new WWFDonationPluginException('Could not retrieve EntityManager!');
         }
-
-        $taxRepository = $entityManager->getRepository(Tax::class);
-        $currencyRepository = $entityManager->getRepository(Currency::class);
-        $productRepository = $entityManager->getRepository(Article::class);
-        $productCategoryRepository = $entityManager->getRepository(Category::class);
-        $manufacturerRepository = $entityManager->getRepository(Supplier::class);
-        $orderDetailsRepository = $entityManager->getRepository(Detail::class);
-
         // handle product generation second
         $productService = new ProductService(
-            $entityManager,
-            $taxRepository, $productRepository,
-            $currencyRepository,
-            $productCategoryRepository,
-            $manufacturerRepository,
-            $orderDetailsRepository, $mediaService
+            $entityManager, $mediaService
         );
         return $productService;
     }
@@ -162,7 +145,8 @@ class WWFDonationPlugin extends Plugin
     public static function getSubscribedEvents()
     {
         return [
-            'product_stock_was_changed' => 'onStockUpdate'
+            'product_stock_was_changed' => 'onStockUpdate',
+            'WWFDonationPlugin_CronJob_WWFDonationReportCheck' => 'onDonationReportCheck',
         ];
     }
 
@@ -174,7 +158,7 @@ class WWFDonationPlugin extends Plugin
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function onStockUpdate(\Enlight_Event_EventArgs $args)
+    public function onStockUpdate(\Enlight_Event_EventArgs $args): void
     {
         $entityManager = $this->container->get('models');
         if (!$entityManager instanceof EntityManager) {
@@ -196,5 +180,14 @@ class WWFDonationPlugin extends Plugin
             $entityManager->persist($articleDetailRecord);
             $entityManager->flush();
         }
+    }
+
+    public function onDonationReportCheck(\Shopware_Components_Cron_CronJob $cronJobArgs): void
+    {
+        $reportTaskHandler = $this->container->get(ReportTaskHandler::class);
+        if (!$reportTaskHandler instanceof ReportTaskHandler) {
+            throw new WWFDonationPluginException('Could not get service instance of ReportTaskHandler');
+        }
+        $reportTaskHandler->run();
     }
 }

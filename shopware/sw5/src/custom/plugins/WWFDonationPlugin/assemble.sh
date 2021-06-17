@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -eu
+
+dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+cd "$dir"
+
+# TODO adjust for sw5
+
+#cd "../../../../../../assets"
+#npm run assemble
+#
+#cd "../shopware/sw6/src/custom/plugins/WWFDonationPlugin"
+#
+## copy files
+## TODO handle SCSS stuff
+## shx cp -fr "../../../../../assets/dist/banner.css" .
+#
+## copy over sample images
+#node_modules/.bin/shx cp -fr "../../../../../../assets/dist/images/*" "./src/Resources/app/administration/static"
+#node_modules/.bin/shx cp -fr "../../../../../../assets/dist/sample-images/*" "./src/Resources/app/administration/static"
+#
+#node_modules/.bin/rimraf "./src/Resources/app/administration/static/*-s.png"

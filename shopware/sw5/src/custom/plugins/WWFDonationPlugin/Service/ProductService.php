@@ -62,11 +62,6 @@ class ProductService extends AbstractCharityProductManager
     /**
      * @var EntityRepository
      */
-    protected $productCategoryRepository;
-
-    /**
-     * @var EntityRepository
-     */
     protected $customerGroupRepository;
 
     /**
@@ -78,11 +73,6 @@ class ProductService extends AbstractCharityProductManager
      * @var EntityRepository
      */
     protected $supplierRepository;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $orderLineItemRepository;
 
     /**
      * @var EntityRepository
@@ -111,14 +101,7 @@ class ProductService extends AbstractCharityProductManager
      * @param EntityRepository $orderLineItemRepository
      * @param MediaService $mediaService
      */
-    public function __construct(EntityManager $entityManager,
-                                EntityRepository $taxRepository,
-                                EntityRepository $productRepository,
-                                EntityRepository $currencyRepository,
-                                EntityRepository $productCategoryRepository,
-                                EntityRepository $manufacturerRepository,
-                                EntityRepository $orderLineItemRepository,
-                                MediaService $mediaService)
+    public function __construct(EntityManager $entityManager, MediaService $mediaService)
     {
         parent::__construct();
         $this->entityManager = $entityManager;
@@ -127,13 +110,11 @@ class ProductService extends AbstractCharityProductManager
         $this->customerGroupRepository = $entityManager->getRepository(Group::class);
         $this->priceUnitRepository = $entityManager->getRepository(Unit::class);
         $this->articleImageRepository = $entityManager->getRepository(Image::class);
+        $this->taxRepository = $entityManager->getRepository(Tax::class);
+        $this->articleRepository = $entityManager->getRepository(Article::class);
+        $this->currencyRepository = $entityManager->getRepository(Currency::class);;
+        $this->supplierRepository = $entityManager->getRepository(Supplier::class);
 
-        $this->taxRepository = $taxRepository;
-        $this->articleRepository = $productRepository;
-        $this->currencyRepository = $currencyRepository;
-        $this->productCategoryRepository = $productCategoryRepository;
-        $this->supplierRepository = $manufacturerRepository;
-        $this->orderLineItemRepository = $orderLineItemRepository;
         $this->mediaService = $mediaService;
     }
 
@@ -385,7 +366,7 @@ class ProductService extends AbstractCharityProductManager
         } else {
             throw new WWFDonationPluginException('Could not find article detail record of shopware product');
         }
-        
+
         return false;
     }
 
