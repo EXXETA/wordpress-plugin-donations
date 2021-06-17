@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Register TemplateRegistration subscriber -->
+        <service id="wwf_donation_plugin.subscriber.template_registration"
+                 class="WWFDonationPlugin\Subscriber\TemplateRegistration">
+            <argument>%w_w_f_donation_plugin.plugin_dir%</argument>
+            <argument type="service" id="template"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\SystemConfigService"
+                 class="WWFDonationPlugin\Service\SystemConfigService">
+            <argument type="service" id="shopware.plugin.config_reader"/>
+            <argument type="service" id="shopware.plugin.config_writer"/>
+        </service>
+
+        <!-- used to pass config values to the storefront templating engine -->
+        <!--        <service id="WWFDonationPlugin\Subscriber\Storefront\Subscriber">-->
+        <!--            <tag name="kernel.event_subscriber"/>-->
+        <!--            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>-->
+        <!--            <argument type="service" id="WWFDonationPlugin\Service\Logger"/>-->
+        <!--        </service>-->
+
+        <!-- used to "simulate" virtual products via an "endless" stock by resetting the stock amount if necessary -->
+        <!--        <service id="Shopware\Core\Content\Product\DataAbstractionLayer\StockUpdater"-->
+        <!--                 class="WWFDonationPlugin\Subscriber\WWFProductStockUpdater" public="true">-->
+        <!--            <argument type="service" id="Doctrine\DBAL\Connection"/>-->
+        <!--            <argument type="service" id="Shopware\Core\Content\Product\ProductDefinition"/>-->
+        <!--            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>-->
+        <!--            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator"/>-->
+        <!--            <argument type="service" id="pluginLogger"/>-->
+        <!--            <argument type="service" id="product.repository"/>-->
+        <!--            <tag name="kernel.event_subscriber"/>-->
+        <!--        </service>-->
+
+        <service id="WWFDonationPlugin\Service\CharitySettingsManager" public="true">
+            <!-- FIXME: Use cached reader? -->
+            <argument type="service" id="shopware.plugin.config_reader"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\DonationPluginInstance" public="true">
+            <argument type="service" id="WWFDonationPlugin\Service\CharitySettingsManager"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ProductService"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\ShopwareReportHandler">
+            <argument type="service" id="shopware.plugin.config_reader"/>
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\SimpleCharityProductManager">
+        </service>
+
+        <service id="WWFDonationPlugin\Service\MediaService" public="false" shared="true" lazy="false">
+            <argument type="service" id="WWFDonationPlugin\Service\SimpleCharityProductManager"/>
+            <argument type="service" id="models"/>
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver"/>
+        </service>
+
+        <service id="WWFDonationPlugin\Service\ProductService" public="true">
+            <argument type="service" id="tax.repository"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="product_category.repository"/>
+            <argument type="service" id="product_manufacturer.repository"/>
+            <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="order_line_item.repository"/>
+            <argument type="service" id="WWFDonationPlugin\Service\MediaService"/>
+        </service>
+
+        <!-- overwrite a twig extension of the core to handle empty input (here: if no mini-banner is used) -->
+        <!--        <service id="WWFDonationPlugin\Twig\SeoUrlNullableExtension">-->
+        <!--            <argument type="service" id="twig.extension.routing"/>-->
+        <!--            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>-->
+        <!--            <tag name="twig.extension"/>-->
+        <!--        </service>-->
+
+        <!-- report job scheduling -->
+        <!--        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTask">-->
+        <!--            <tag name="shopware.scheduled.task"/>-->
+        <!--        </service>-->
+
+        <!--        <service id="WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler">-->
+        <!--            <argument type="service" id="scheduled_task.repository"/>-->
+        <!--            <argument type="service" id="pluginLogger"/>-->
+        <!--            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>-->
+        <!--            <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>-->
+        <!--            <tag name="messenger.message_handler"/>-->
+        <!--        </service>-->
+
+        <!-- controller -->
+        <!--        <service id="WWFDonationPlugin\Controller\WWFCartController" public="true">-->
+        <!--            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>-->
+        <!--            <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>-->
+        <!--            <argument type="service" id="WWFDonationPlugin\Service\ProductService"/>-->
+        <!--            <argument type="service" id="pluginLogger"/>-->
+        <!--        </service>-->
+
+        <!--        &lt;!&ndash; registering custom admin component of this plugin &ndash;&gt;-->
+        <!--        <service id="WWFDonationPlugin\DataResolver\WWFBannerCmsElementResolver">-->
+        <!--            <tag name="shopware.cms.data_resolver"/>-->
+        <!--        </service>-->
+
+        <!-- cli command for debugging report generation -->
+        <service id="WWFDonationPlugin\Command\ReportGenerationCommand">
+            <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
+            <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
+            <tag name="console.command"/>
+        </service>
+    </services>
+</container>

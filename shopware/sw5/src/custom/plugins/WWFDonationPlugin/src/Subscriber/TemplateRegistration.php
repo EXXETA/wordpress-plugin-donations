@@ -16,7 +16,7 @@ class TemplateRegistration implements SubscriberInterface
     /**
      * @var string
      */
-    private $pluginDir;
+    private $pluginDirectory;
 
     /**
      * @var \Enlight_Template_Manager

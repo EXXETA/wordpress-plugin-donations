@@ -11,9 +11,9 @@ use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
-use Shopware\Models\Order\Detail;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Tax\Tax;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -50,7 +50,6 @@ class WWFDonationPlugin extends Plugin
         // we need to initialize and inject services here manually
         // handle media setup first
         $mediaService = $this->createMediaService();
-        $mediaService->install();
         $productService = $this->createProductServiceInstance($mediaService);
         $productService->install($context);
         // NOTE: after this step all products of this plugin should be created and disabled
@@ -63,46 +62,46 @@ class WWFDonationPlugin extends Plugin
 //        /* @var ConfigWriter $configWriter */
 //        CharitySettingsManager::setConfigWriterStatic($configWriter);
 //        CharitySettingsManager::init();
-//
-//        $mediaService = $this->createMediaService();
-//        $productService = $this->createProductServiceInstance($mediaService);
-//        // set all products of this plugin ACTIVE
-//        $productService->setProductsActiveStatus($activateContext, true);
-//
-//        $activateContext->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
-//
-//        parent::activate($activateContext);
+
+        $mediaService = $this->createMediaService();
+        $productService = $this->createProductServiceInstance($mediaService);
+        // set all products of this plugin ACTIVE
+        $productService->setProductsActiveStatus(true);
+
+        $activateContext->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
+
+        parent::activate($activateContext);
     }
 
     public function deactivate(DeactivateContext $deactivateContext): void
     {
-//        $mediaService = $this->createMediaService();
-//        $productService = $this->createProductServiceInstance($mediaService);
-//        // set all products of this plugin INACTIVE
-//        $productService->setProductsActiveStatus($deactivateContext->getContext(), false);
-//
-//        parent::deactivate($deactivateContext);
+        $mediaService = $this->createMediaService();
+        $productService = $this->createProductServiceInstance($mediaService);
+        // set all products of this plugin INACTIVE
+        $productService->setProductsActiveStatus(false);
+
+        parent::deactivate($deactivateContext);
     }
 
     public function uninstall(UninstallContext $uninstallContext): void
     {
-//        if ($uninstallContext->keepUserData()) {
-//            // TODO do something different when the user want to keep the plugin's data
-//            return;
-//        }
-//        $configWriter = $this->container->get('shopware.plugin.config_writer');
-//        /* @var $configWriter Plugin\ConfigWriter */
-//        $mediaService = $this->createMediaService();
-//        $productService = $this->createProductServiceInstance($mediaService);
-//        $productService->uninstall();
-//
+        if ($uninstallContext->keepUserData()) {
+            // TODO do something different when the user want to keep the plugin's data
+            return;
+        }
+        $configWriter = $this->container->get('shopware.plugin.config_writer');
+        /* @var $configWriter Plugin\ConfigWriter */
+        $mediaService = $this->createMediaService();
+        $productService = $this->createProductServiceInstance($mediaService);
+        $productService->uninstall();
+
 //        CharitySettingsManager::setConfigWriterStatic($configWriter);
 //        CharitySettingsManager::uninstall();
-//
-//        if ($uninstallContext->getPlugin()->getActive()) {
-//            $uninstallContext->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
-//        }
-//        parent::uninstall($uninstallContext);
+
+        if ($uninstallContext->getPlugin()->getActive()) {
+            $uninstallContext->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
+        }
+        parent::uninstall($uninstallContext);
     }
 
     // TODO activation event: activate products! already done?
@@ -158,5 +157,44 @@ class WWFDonationPlugin extends Plugin
             $entityManager,
             $mediaService
         );
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            'product_stock_was_changed' => 'onStockUpdate'
+        ];
+    }
+
+    /**
+     * This event is fired right after an order was placed and the sw5 stock update logic took place.
+     * We use this to
+     *
+     * @param \Enlight_Event_EventArgs $args
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function onStockUpdate(\Enlight_Event_EventArgs $args)
+    {
+        $entityManager = $this->container->get('models');
+        if (!$entityManager instanceof EntityManager) {
+            return;
+        }
+        $orderNumber = $args->get('number');
+        if (empty($orderNumber)) {
+            return;
+        }
+        $articleDetailRecord = $entityManager
+            ->getRepository(\Shopware\Models\Article\Detail::class)
+            ->findOneBy(['number' => $orderNumber]);
+        /* @var Detail $articleDetailRecord */
+        $articleRecord = $articleDetailRecord->getArticle();
+
+        if (ProductService::isWWFProduct($articleRecord) && $articleDetailRecord instanceof Detail) {
+            $articleDetailRecord->setInStock(ProductService::WWF_PRODUCT_DEFAULT_STOCK);
+
+            $entityManager->persist($articleDetailRecord);
+            $entityManager->flush();
+        }
     }
 }

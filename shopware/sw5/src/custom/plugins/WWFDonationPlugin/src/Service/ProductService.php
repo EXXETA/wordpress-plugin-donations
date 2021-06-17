@@ -21,7 +21,6 @@ use Shopware\Models\Customer\Group;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Tax\Tax;
-use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\WWFDonationPluginException;
 
 /**
@@ -196,8 +195,10 @@ class ProductService extends AbstractCharityProductManager
 
             // set article details information
             $articleDetailsRecord->setNumber($productNumber);
+            $articleDetailsRecord->setAdditionalText($charityCampaign->getSlug());
             $articleDetailsRecord->setActive(true);
             $articleDetailsRecord->setKind(1);
+            $articleDetailsRecord->setInStock(static::WWF_PRODUCT_DEFAULT_STOCK);
             $articleDetailsRecord->setMinPurchase(1);
             $articleDetailsRecord->setPurchasePrice(0);
             $articleDetailsRecord->setStockMin(0);
@@ -254,9 +255,9 @@ class ProductService extends AbstractCharityProductManager
                 // media entry will be created
                 $mediaRecord = $this->mediaService->importProductImage($internalMediaPath, $charityProduct->getImagePath(), $mediaAlbum);
             }
-            $mediaCollection[] = $mediaRecord;
 
             if ($mediaRecord instanceof Media) {
+                $mediaCollection[] = $mediaRecord;
                 // product images
                 $articleImagePreview->setMain(1);
                 $articleImagePreview->setMedia($mediaRecord);
@@ -283,53 +284,13 @@ class ProductService extends AbstractCharityProductManager
                 $articleRecord->getImages()->add($articleImagePreview);
                 $articleRecord->getImages()->add($articleImageMain);
             } else {
-//                $context = \Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-                VarDumper::dump('no media record found!');
+                throw new WWFDonationPluginException('Problem handling media record of wwf products!');
             }
-
-//            $imageArticleMapping = new Image\Mapping();
-//            $imageArticleMapping->setImage($articleImage);
 
             $this->entityManager->persist($articleRecord);
             $this->entityManager->persist($articleDetailsRecord);
             $this->entityManager->persist($articlePrice);
             $this->entityManager->persist($priceUnitRecord);
-
-//            if ($isUpdate) {
-//                // update
-//                $data = [
-//                    'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
-//                    'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
-//                    'restockTime' => 1,
-//                    'media' => $mediaInfo,
-//                    'cover' => $mediaInfo[0],
-//                    'customFields' => [
-//                        'wwf_campaign_slug' => $charityCampaign->getSlug()
-//                    ]
-//                ];
-//                $this->productRepository->update([$data], $context);
-//            } else {
-//                // insert
-//                $data = [
-//                    'id' => $productId,
-//                    'productNumber' => $productNumber,
-//                    'visibilities' => $productVisibilities,
-//                    'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
-//                    'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
-//                    'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
-//                    'restockTime' => 1,
-//                    'maxPurchase' => static::WWF_PRODUCT_DEFAULT_STOCK,
-//                    'weight' => 0,
-//                    'height' => 0,
-//                    'length' => 0,
-//                    'media' => $mediaInfo,
-//                    'cover' => $mediaInfo[0],
-//                    'customFields' => [
-//                        'wwf_campaign_slug' => $charityCampaign->getSlug()
-//                    ]
-//                ];
-//                $this->productRepository->upsert([$data], $context);
-//            }
         }
         $this->entityManager->flush();
         // create thumbnails
@@ -389,51 +350,55 @@ class ProductService extends AbstractCharityProductManager
     }
 
     /**
-     * @param \exxeta\wwf\banner\model\CharityProduct $charityProduct
-     * @param InstallContext $context
+     * @param string $charityProductSlug
      * @return Article|null
      */
-    public function getShopwareProductBySlug(string $charityProductSlug, InstallContext $context): ?ProductEntity
+    public function getShopwareProductBySlug(string $charityProductSlug): ?Article
     {
-//        $productCriteria = new Criteria();
-//        $productCriteria->addFilter(new EqualsFilter('customFields.wwf_campaign_slug', $charityProductSlug));
-//        $entitySearchResult = $this->productRepository->search($productCriteria, $context);
-//        if ($entitySearchResult->getTotal() > 0) {
-//            return $entitySearchResult->first();
-//        }
+        $articleDetailsRecord = $this->articleDetailsRepository->findOneBy(['additionalText' => $charityProductSlug]);
+        if ($articleDetailsRecord instanceof Detail) {
+            $article = $articleDetailsRecord->getArticle();
+            return $article;
+        }
         return null;
     }
 
     /**
      * Method to check if a given product entity is a WWF charity product
      *
-     * @param Article|null $productEntity
+     * @param Article|null $articleEntity
      * @return bool
      */
-    static function isWWFProduct(?Article $productEntity): bool
+    static function isWWFProduct(?Article $articleEntity): bool
     {
-        if (!$productEntity || !$productEntity instanceof Article) {
+        if (!$articleEntity || !$articleEntity instanceof Article) {
             return false;
         }
-        if (0 === mb_stripos($productEntity->getProductNumber(), self::WWF_PRODUCT_NUMBER_PREFIX)) {
-            return true;
+        $articleDetailRecord = $articleEntity->getMainDetail();
+        $simpleProductManager = new SimpleCharityProductManager();
+
+        if ($articleDetailRecord instanceof Detail) {
+            if (0 === mb_stripos($articleDetailRecord->getNumber(), self::WWF_PRODUCT_NUMBER_PREFIX)
+                && in_array($articleDetailRecord->getAdditionalText(), $simpleProductManager->getAllCharityProductSlugs())) {
+                return true;
+            }
+        } else {
+            throw new WWFDonationPluginException('Could not find article detail record of shopware product');
         }
+        
         return false;
     }
 
-    public function getCharityProductEntities(): ?array
+    public function getCharityProductEntities(): array
     {
-        return null;
-//        $criteria = new Criteria();
-//        $productSlugs = $this->getAllCharityProductSlugs();
-//        $criteria->addFilter(new EqualsAnyFilter('customFields.wwf_campaign_slug', $productSlugs));
-//
-//        $entitySearchResult = $this->productRepository->search($criteria, Context::createDefaultContext());
-//        if ($entitySearchResult->getTotal() != count($productSlugs)) {
-//            // TODO log this error!
-//            return null;
-//        }
-//        return $entitySearchResult->getEntities();
+        $wwfProducts = [];
+        foreach ($this->getAllCharityProductSlugs() as $singleSlug) {
+            $articleRecord = $this->getShopwareProductBySlug($singleSlug);
+            if ($articleRecord instanceof Article) {
+                $wwfProducts[] = $articleRecord;
+            }
+        }
+        return $wwfProducts;
     }
 
     /**
@@ -442,47 +407,37 @@ class ProductService extends AbstractCharityProductManager
      * @param InstallContext $deactivateContext
      * @param bool $activeStatus
      */
-    public function setProductsActiveStatus(InstallContext $context, bool $activeStatus): void
+    public function setProductsActiveStatus(bool $activeStatus): void
     {
         $entityCollection = $this->getCharityProductEntities();
-        if (!$entityCollection) {
+        if (!$entityCollection || count($entityCollection) === 0) {
             // TODO log this case!!
             return;
         }
-        // disable products
-        $updates = [];
-//        foreach ($entityCollection->getIterator() as $entity) {
-//            /* @var ProductEntity $entity */
-//            $entity->setActive(false);
-//            $updates[] = [
-//                'id' => $entity->getId(),
-//                'active' => $activeStatus
-//            ];
-//        }
-//        $this->productRepository->update($updates, $context);
+        foreach ($entityCollection as $entity) {
+            /* @var Article $entity */
+            $articleDetailsRecord = $entity->getMainDetail();
+            if (!$articleDetailsRecord instanceof Detail) {
+                throw new WWFDonationPluginException('could not find article details record');
+            }
+            $articleDetailsRecord->setActive($activeStatus);
+            $this->entityManager->persist($articleDetailsRecord);
+        }
+        $this->entityManager->flush();
     }
 
     public function uninstall()
     {
         // TODO delete product media too!
-//        if (!$this->getCharityProductEntities()) {
-//            return;
-//        }
-//        $products = $this->getCharityProductEntities()->getIds();
-//        if (!$products) {
-//            // TODO log this case
-//            return;
-//        }
-//        $ids = [];
-//        foreach ($products as $singleProductId) {
-//            $ids[] = ['id' => $singleProductId];
-//        }
-//        $this->productRepository->delete($ids, Context::createDefaultContext());
+        if (!$this->getCharityProductEntities()) {
+            return;
+        }
+        $this->setProductsActiveStatus(false);
     }
 
     public function getCharityProductCategory()
     {
-        // this method is not used in shopware 6 context!
+        // this method is not used in shopware 5 context!
     }
 
     /**

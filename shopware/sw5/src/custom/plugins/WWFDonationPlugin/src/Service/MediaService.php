@@ -72,14 +72,6 @@ class MediaService
     }
 
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function install(): void
-    {
-    }
-
-    /**
      * @param string $internalMediaPath
      * @return bool
      */
