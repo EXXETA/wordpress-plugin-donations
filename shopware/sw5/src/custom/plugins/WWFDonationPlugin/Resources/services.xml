@@ -48,7 +48,6 @@
         </service>
 
         <service id="WWFDonationPlugin\Service\ShopwareReportHandler">
-            <argument type="service" id="WWFDonationPlugin\Service\SystemConfigService"/>
             <argument type="service" id="models"/>
         </service>
 

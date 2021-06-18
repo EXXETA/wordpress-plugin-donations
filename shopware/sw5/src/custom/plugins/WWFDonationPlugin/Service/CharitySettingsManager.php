@@ -3,22 +3,14 @@
 namespace WWFDonationPlugin\Service;
 
 use exxeta\wwf\banner\AbstractSettingsManager;
-use Shopware\Bundle\PluginInstallerBundle\Exception\ShopNotFoundException;
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Models\Shop\Shop;
-use WWFDonationPlugin\WWFDonationPlugin;
 
 /**
  * Class CharitySettingsManager
- *
- * FIXME: migrate to sw5
  *
  * @package WWFDonationPlugin\Service
  */
 class CharitySettingsManager extends AbstractSettingsManager
 {
-    const SETTING_PREFIX = 'WWFDonationPlugin.config';
-
     /**
      * @var SystemConfigService
      */
@@ -42,27 +34,14 @@ class CharitySettingsManager extends AbstractSettingsManager
 
     public static function init(): void
     {
-        $shop = Shopware()->Models()
-            ->getRepository(Shop::class)
-            ->findOneBy(['default' => true, 'active' => true]);
-        /* @var Shop $shop */
-        if (!$shop || !$shop instanceof Shop) {
-            throw new ShopNotFoundException("Could not find an active default shop!");
-        }
-        $pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
-        /* @var InstallerService $pluginManager */
-        $plugin = $pluginManager->getPluginByName(WWFDonationPlugin::PLUGIN_NAME);
-
         foreach (static::$settings as $settingKey => $defaultValue) {
-            $pluginManager->saveConfigElement($plugin, static::convertSettingKey($settingKey), $defaultValue, $shop);
+            static::$systemConfigServiceStatic->set(static::convertSettingKey($settingKey), $defaultValue);
         }
     }
 
     public static function uninstall()
     {
-        foreach (static::$settings as $settingKey => $value) {
-            static::$systemConfigServiceStatic->delete($settingKey);
-        }
+        // NOTE: the shopware 5 system will remove all the plugin configuration items
     }
 
     public static function getPluginName(): string

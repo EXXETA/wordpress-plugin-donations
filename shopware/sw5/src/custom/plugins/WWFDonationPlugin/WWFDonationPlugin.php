@@ -14,6 +14,7 @@ use Shopware\Models\Article\Detail;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use WWFDonationPlugin\Bootstrap\Database;
 use WWFDonationPlugin\Service\CharitySettingsManager;
+use WWFDonationPlugin\Service\MailingService;
 use WWFDonationPlugin\Service\MediaService;
 use WWFDonationPlugin\Service\ProductService;
 use WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler;
@@ -56,6 +57,9 @@ class WWFDonationPlugin extends Plugin
 
         $database = new Database($this->container->get('models'));
         $database->install();
+
+        $mailingService = $this->createMailingService();
+        $mailingService->install();
     }
 
     public function activate(ActivateContext $activateContext): void
@@ -107,6 +111,10 @@ class WWFDonationPlugin extends Plugin
         if ($uninstallContext->getPlugin()->getActive()) {
             $uninstallContext->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
         }
+
+        $mailingService = $this->createMailingService();
+        $mailingService->uninstall();
+
         parent::uninstall($uninstallContext);
     }
 
@@ -159,6 +167,13 @@ class WWFDonationPlugin extends Plugin
         $configWriter = $this->container->get('shopware.plugin.config_writer');
         /* @var $configWriter Plugin\ConfigWriter */
         return new SystemConfigService($configReader, $configWriter);
+    }
+
+    private function createMailingService(): MailingService
+    {
+        $entityManager = $this->container->get('models');
+        /* @var $entityManager EntityManager */
+        return new MailingService($entityManager);
     }
 
     public static function getSubscribedEvents()

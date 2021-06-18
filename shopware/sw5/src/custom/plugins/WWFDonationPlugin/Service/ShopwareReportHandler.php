@@ -8,7 +8,6 @@ use exxeta\wwf\banner\DonationPluginInterface;
 use exxeta\wwf\banner\ReportHandler;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
-use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\Entity\DonationReportEntity;
 
 /**
@@ -18,24 +17,16 @@ use WWFDonationPlugin\Entity\DonationReportEntity;
 class ShopwareReportHandler implements ReportHandler
 {
     /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
-
-    /**
      * @var ModelManager
      */
     private $entityManager;
 
     /**
      * ShopwareReportHandler constructor.
-     * @param SystemConfigService $systemConfigService
      * @param ModelManager $entityManager
      */
-    public function __construct(SystemConfigService $systemConfigService,
-                                ModelManager $entityManager)
+    public function __construct(ModelManager $entityManager)
     {
-        $this->systemConfigService = $systemConfigService;
         $this->entityManager = $entityManager;
     }
 
@@ -73,20 +64,24 @@ class ShopwareReportHandler implements ReportHandler
      */
     public function sendMail(string $recipient, string $subject, string $body, string $bodyPlain, array $headers): void
     {
-        // TODO
-        $mail = Shopware()->Container()->get('mail');
+        $mail = \Shopware()->TemplateMail()->createMail(MailingService::WWF_REPORT_MAIL_KEY, ['parameters' => []]);
         /* @var $mail \Enlight_Components_Mail */
 
-        $mail->setFromToDefaultFrom();
+        $mail->clearRecipients();
         $mail->addTo($recipient, 'E-Shop Spenden WWF');
 
+        $mail->clearBody();
         $mail->setBodyHtml($body);
         $mail->setBodyText($bodyPlain);
-        $mail->setSubject($subject);
-        VarDumper::dump($mail->getRecipients());
 
-        $mail->send();
-//        $this->mailService->send($mailParams->all(), Context::createDefaultContext());
+        $mail->clearSubject();
+        $mail->setSubject($subject);
+
+        try {
+            $mail->send();
+        } catch (\Exception $ex) {
+            echo $ex->getMessage() . "\n";
+        }
     }
 
     public function getShopName(): string
@@ -123,7 +118,7 @@ class ShopwareReportHandler implements ReportHandler
         if ($defaultShopRecord->getSecure()) {
             $urlSchema = 'https://';
         }
-        return sprintf('%s%s%s', $urlSchema, $defaultShopRecord->getHost(), $defaultShopRecord->getBasePath());
+        return sprintf('%s%s%s', $urlSchema, $defaultShopRecord->getHost(), $defaultShopRecord->getBaseUrl());
     }
 
     public function getShopSystem(): string
