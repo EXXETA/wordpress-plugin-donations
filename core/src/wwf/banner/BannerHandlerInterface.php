@@ -70,6 +70,21 @@ interface BannerHandlerInterface
     public function getCartPageId(): int;
 
     /**
+     * method to provide a form method, either GET or POST or other methods browsers are supporting
+     *
+     * @return string
+     */
+    public function getFormMethod(): string;
+
+    /**
+     * option to add additional shop-specific form attributes besides action and method, e.g. 'enctype'.
+     * Leave it blank if this is not needed.
+     *
+     * @return string
+     */
+    public function getFormAttributes(): string;
+
+    /**
      * this hook method is used to add the concrete banner content
      *
      * @param string $output
