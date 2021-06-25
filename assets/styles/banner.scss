@@ -116,6 +116,10 @@ $xlarge-up-content-block-width: 41%;
       text-align: right;
       padding: 1rem;
 
+      img {
+        display: inline;
+      }
+
       .cart-banner-title {
         font-size: 130%;
         font-weight: bold;
