@@ -85,8 +85,7 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getCartImageUrl(): string
     {
-        // FIXME this works?
-        return $this->getBaseUrl() . 'static/icon_cart.svg';
+        return $this->getBaseUrl() . '_resources/css/images/icon_cart.svg';
     }
 
     public function getProductId(CharityProduct $charityProduct): string
@@ -97,8 +96,7 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getBaseUrl(): string
     {
-        // FIXME
-        return '/bundles/wwfdonationplugin/';
+        return 'custom/plugins/WWFDonationPlugin/Resources/views/frontend/';
     }
 
     public function getCartUrl(): string

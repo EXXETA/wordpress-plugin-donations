@@ -60,6 +60,11 @@ class ProductService extends AbstractCharityProductManager
     /**
      * @var EntityRepository
      */
+    protected $articleAttributeRepository;
+
+    /**
+     * @var EntityRepository
+     */
     protected $articlePriceRepository;
 
     /**
@@ -109,6 +114,7 @@ class ProductService extends AbstractCharityProductManager
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->articleDetailsRepository = $entityManager->getRepository(Detail::class);
+        $this->articleAttributeRepository = $entityManager->getRepository(\Shopware\Models\Attribute\Article::class);
         $this->articlePriceRepository = $entityManager->getRepository(Price::class);
         $this->customerGroupRepository = $entityManager->getRepository(Group::class);
         $this->priceUnitRepository = $entityManager->getRepository(Unit::class);
@@ -179,7 +185,6 @@ class ProductService extends AbstractCharityProductManager
 
             // set article details information
             $articleDetailsRecord->setNumber($productNumber);
-            $articleDetailsRecord->setAdditionalText($charityCampaign->getSlug());
             $articleDetailsRecord->setActive(true);
             $articleDetailsRecord->setKind(1);
             $articleDetailsRecord->setInStock(static::WWF_PRODUCT_DEFAULT_STOCK);
@@ -192,6 +197,12 @@ class ProductService extends AbstractCharityProductManager
             $articleDetailsRecord->setShippingFree(true);
             $articleDetailsRecord->setArticle($articleRecord);
             $articleDetailsRecord->setUnit($priceUnitRecord);
+
+            if (!$articleAttribute = $articleDetailsRecord->getAttribute()) {
+                $articleAttribute = new \Shopware\Models\Attribute\Article();
+            }
+            $articleAttribute->setArticleDetail($articleDetailsRecord);
+            $articleAttribute->setAttr1($charityCampaign->getSlug());
 
             // set article record information
             $articleRecord->setMainDetail($articleDetailsRecord);
@@ -273,6 +284,7 @@ class ProductService extends AbstractCharityProductManager
 
             $this->entityManager->persist($articleRecord);
             $this->entityManager->persist($articleDetailsRecord);
+            $this->entityManager->persist($articleAttribute);
             $this->entityManager->persist($articlePrice);
             $this->entityManager->persist($priceUnitRecord);
         }
@@ -339,7 +351,11 @@ class ProductService extends AbstractCharityProductManager
      */
     public function getShopwareProductBySlug(string $charityProductSlug): ?Article
     {
-        $articleDetailsRecord = $this->articleDetailsRepository->findOneBy(['additionalText' => $charityProductSlug]);
+        $articleAttrib = $this->articleAttributeRepository->findOneBy(['attr1' => $charityProductSlug]);
+        if (!$articleAttrib instanceof \Shopware\Models\Attribute\Article) {
+            return null;
+        }
+        $articleDetailsRecord = $this->articleDetailsRepository->findOneBy(['id' => $articleAttrib->getArticleDetailId()]);
         if ($articleDetailsRecord instanceof Detail) {
             $article = $articleDetailsRecord->getArticle();
             return $article;
@@ -362,8 +378,7 @@ class ProductService extends AbstractCharityProductManager
         $simpleProductManager = new SimpleCharityProductManager();
 
         if ($articleDetailRecord instanceof Detail) {
-            if (0 === mb_stripos($articleDetailRecord->getNumber(), self::WWF_PRODUCT_NUMBER_PREFIX)
-                && in_array($articleDetailRecord->getAdditionalText(), $simpleProductManager->getAllCharityProductSlugs())) {
+            if (0 === mb_stripos($articleDetailRecord->getNumber(), self::WWF_PRODUCT_NUMBER_PREFIX)) {
                 return true;
             }
         } else {
@@ -459,17 +474,21 @@ class ProductService extends AbstractCharityProductManager
             Status::ORDER_STATE_CANCELLED_REJECTED,
         ];
 
+        VarDumper::dump($productId);
+
         $sum = 0;
         $orderIDs = [];
         $orderDetailQuery = Shopware()->Models()->createQueryBuilder()
             ->select(['orders', 'details'])
             ->from(Order::class, 'orders')
             ->join('orders.details', 'details')
-            ->where('details.articleId = :number AND ')
+            ->where('details.articleId = :number AND orders.orderTime >= :start AND orders.orderTime <= :end')
+            ->setParameter(':start', $startDate)
+            ->setParameter(':end', $startDate)
             ->setParameter(':number', $productId);
 
-        $all = $orderDetailQuery->getQuery()->getArrayResult();
-//        VarDumper::dump($all);
+        $all = $orderDetailQuery->getQuery()->execute();
+        VarDumper::dump($all);
 
 //        $entitySearchResult = $this->order->search($orderLineItemCriteria, $salesChannelContext);
 //        if ($entitySearchResult->getTotal() > 0) {

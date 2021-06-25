@@ -13,8 +13,10 @@ For development run `docker-compose up` and sync changes of plugin's code via SF
 
 ## TODO
 
-- Never change product number (prefix)!
+SW5: Add products/articles to a category manually after installation!
 
+- Never change product number (prefix)!
+- FIX problem with article images in sw5 frontend!
 
 - Installation process order: Media import -> Product import -> CMS block
 
