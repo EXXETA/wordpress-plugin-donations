@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
 
-namespace WWFDonationPlugin\Command;
+namespace WWFDonationPlugin\Commands;
 
 
 use exxeta\wwf\banner\DonationPluginInterface;
 use exxeta\wwf\banner\model\ReportGenerationModel;
 use exxeta\wwf\banner\ReportGenerator;
 use exxeta\wwf\banner\SettingsManagerInterface;
-use Symfony\Component\Console\Command\Command;
+use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use WWFDonationPlugin\Service\ShopwareReportHandler;
@@ -21,10 +21,8 @@ use WWFDonationPlugin\Service\ShopwareReportHandler;
  *
  * @package WWFDonationPlugin\Command
  */
-class ReportGenerationCommand extends Command
+class ReportGenerationCommand extends ShopwareCommand
 {
-    protected static $defaultName = 'wwf:report-generate';
-
     /**
      * @var DonationPluginInterface
      */
@@ -49,13 +47,19 @@ class ReportGenerationCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Manual trigger to start report generation process for ordered WWF products. For debugging only!');
+        $this
+            ->setName('wwf:report-generate')
+            ->setDescription('Manual trigger to start report generation process for ordered WWF products. For debugging only!');
         // hide/disable in prod environments
         $this->setHidden(!$this->isEnabled());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (Shopware()->Environment() !== 'dev') {
+            $output->writeln('Environment "dev" is required to run this debug command.');
+            return 1;
+        }
         // weekly and now
         $reportModel = ReportGenerator::getReportModel(SettingsManagerInterface::REPORT_INTERVAL_MODE_WEEKLY, new \DateTime());
         // pass these values to a new instance
@@ -71,6 +75,6 @@ class ReportGenerationCommand extends Command
 
     public function isEnabled(): bool
     {
-        return Shopware()->Environment() == 'dev';
+        return Shopware()->Environment() === 'dev';
     }
 }

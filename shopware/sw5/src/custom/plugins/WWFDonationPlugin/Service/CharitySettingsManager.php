@@ -11,6 +11,9 @@ use exxeta\wwf\banner\AbstractSettingsManager;
  */
 class CharitySettingsManager extends AbstractSettingsManager
 {
+    const wwfCartCampaignSettingKey = 'wwfDonationCartCampaign';
+    const wwfCartCampaignIsMiniBanner = 'isCartIntegrationAsMiniBanner';
+
     /**
      * @var SystemConfigService
      */
@@ -47,6 +50,12 @@ class CharitySettingsManager extends AbstractSettingsManager
     public static function getPluginName(): string
     {
         return 'WWFDonationPlugin';
+    }
+
+    public function isCartIntegrationEnabled(): bool
+    {
+        $setting = $this->getSetting('wwfDonationsIsCartIntegrationEnabled', false);
+        return boolval($setting);
     }
 
     public function getSetting(string $settingKey, $defaultValue)

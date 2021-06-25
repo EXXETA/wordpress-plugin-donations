@@ -54,7 +54,7 @@
         <service id="WWFDonationPlugin\Service\SimpleCharityProductManager">
         </service>
 
-        <service id="WWFDonationPlugin\Service\MediaService" public="false" shared="true" lazy="false">
+        <service id="WWFDonationPlugin\Service\MediaService" public="true" shared="true" lazy="false">
             <argument type="service" id="WWFDonationPlugin\Service\SimpleCharityProductManager"/>
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_media.media_service"/>
@@ -93,7 +93,8 @@
         <!--        </service>-->
 
         <!-- cli command for debugging report generation -->
-        <service id="WWFDonationPlugin\Command\ReportGenerationCommand">
+        <service id="WWFDonationPlugin\Commands\ReportGenerationCommand"
+                 class="WWFDonationPlugin\Commands\ReportGenerationCommand">
             <argument type="service" id="WWFDonationPlugin\Service\DonationPluginInstance"/>
             <argument type="service" id="WWFDonationPlugin\Service\ShopwareReportHandler"/>
             <tag name="console.command" command="wwf:report-generate"/>

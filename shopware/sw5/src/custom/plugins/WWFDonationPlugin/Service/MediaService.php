@@ -71,6 +71,11 @@ class MediaService
         $this->mediaRepository = $entityManager->getRepository(Media::class);
     }
 
+    public function getAbsoluteUrlByMediaRecord(Media $media): string
+    {
+        return $this->mediaService->getUrl($media->getPath());
+    }
+
     /**
      * @param string $internalMediaPath
      * @return bool
@@ -172,6 +177,43 @@ class MediaService
     }
 
     /**
+     * @return Album
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function getOrCreateMediaAlbum(): Album
+    {
+        $possibleMediaAlbumRecord = $this->mediaAlbumRepository->findOneBy([
+            'name' => self::WWF_MEDIA_ALBUM_DIRECTORY,
+        ]);
+        if (!$possibleMediaAlbumRecord instanceof Album) {
+            $albumRecord = new Album();
+            $albumRecord->setName(self::WWF_MEDIA_ALBUM_DIRECTORY);
+            $albumRecord->setPosition(10);
+            $albumRecord->setGarbageCollectable(1);
+
+            $albumSettingsRecord = new Settings();
+            $albumSettingsRecord->setAlbum($albumRecord);
+            $albumSettingsRecord->setCreateThumbnails(0);
+            $albumSettingsRecord->setIcon('sprite-globe-green');
+            $albumSettingsRecord->setThumbnailHighDpiQuality(70);
+            $albumSettingsRecord->setThumbnailHighDpi(0);
+            $albumSettingsRecord->setThumbnailQuality(95);
+            $albumSettingsRecord->setThumbnailSize('');
+
+            $albumRecord->setSettings($albumSettingsRecord);
+
+            $this->entityManager->persist($albumRecord);
+            $this->entityManager->persist($albumSettingsRecord);
+
+            $this->entityManager->flush();
+            return $albumRecord;
+        }
+        return $possibleMediaAlbumRecord;
+    }
+
+
+    /**
      * @param string $internalSwMediaPath
      * @param string $fileName
      * @param Album $mediaAlbumRecord
@@ -219,39 +261,4 @@ class MediaService
         return null;
     }
 
-    /**
-     * @return Album
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function getOrCreateMediaAlbum(): Album
-    {
-        $possibleMediaAlbumRecord = $this->mediaAlbumRepository->findOneBy([
-            'name' => self::WWF_MEDIA_ALBUM_DIRECTORY,
-        ]);
-        if (!$possibleMediaAlbumRecord instanceof Album) {
-            $albumRecord = new Album();
-            $albumRecord->setName(self::WWF_MEDIA_ALBUM_DIRECTORY);
-            $albumRecord->setPosition(10);
-            $albumRecord->setGarbageCollectable(1);
-
-            $albumSettingsRecord = new Settings();
-            $albumSettingsRecord->setAlbum($albumRecord);
-            $albumSettingsRecord->setCreateThumbnails(0);
-            $albumSettingsRecord->setIcon('sprite-globe-green');
-            $albumSettingsRecord->setThumbnailHighDpiQuality(70);
-            $albumSettingsRecord->setThumbnailHighDpi(0);
-            $albumSettingsRecord->setThumbnailQuality(95);
-            $albumSettingsRecord->setThumbnailSize('');
-
-            $albumRecord->setSettings($albumSettingsRecord);
-
-            $this->entityManager->persist($albumRecord);
-            $this->entityManager->persist($albumSettingsRecord);
-
-            $this->entityManager->flush();
-            return $albumRecord;
-        }
-        return $possibleMediaAlbumRecord;
-    }
 }

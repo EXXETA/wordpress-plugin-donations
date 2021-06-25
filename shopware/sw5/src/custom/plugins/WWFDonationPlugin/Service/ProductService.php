@@ -19,8 +19,11 @@ use Shopware\Models\Article\Supplier;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Media\Media;
+use Shopware\Models\Order\Order;
+use Shopware\Models\Order\Status;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Tax\Tax;
+use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\WWFDonationPluginException;
 
 /**
@@ -430,17 +433,17 @@ class ProductService extends AbstractCharityProductManager
      */
     public function getRevenueOfCampaignInTimeRange(string $campaignSlug, DateTime $startDate, DateTime $endDate): ReportResultModel
     {
-//        $reportResultModel = new ReportResultModel($startDate, $endDate);
-//        // TODO do for all sales channels!
-//
-//        $salesChannelContext = Context::createDefaultContext();
-//        
-//        $productEntity = $this->getShopwareProductBySlug($campaignSlug, $salesChannelContext);
-//        if (!$productEntity) {
-//            throw new \Exception(sprintf('Could not find product entity for campaign slug "%s"', $campaignSlug));
-//        }
-//        $productId = $productEntity->getId();
-//
+        $reportResultModel = new ReportResultModel($startDate, $endDate);
+        $productEntity = $this->getShopwareProductBySlug($campaignSlug);
+        if (!$productEntity instanceof Article) {
+            throw new \Exception(sprintf('Could not find product entity for campaign slug "%s"', $campaignSlug));
+        }
+        $productId = $productEntity->getId();
+        $orderDetailRepository = $this->entityManager->getRepository(\Shopware\Models\Order\Detail::class);
+        if (!$orderDetailRepository instanceof EntityRepository) {
+            throw new WWFDonationPluginException('Could not retrieve order detail repository');
+        }
+
 //        $orderLineItemCriteria = new Criteria();
 //        $orderLineItemCriteria->addFilter(new EqualsFilter('productId', $productId));
 //        $orderLineItemCriteria->addAssociation('order');
@@ -449,21 +452,26 @@ class ProductService extends AbstractCharityProductManager
 //        $orderLineItemCriteria->addFilter(new RangeFilter('order.orderDateTime', [
 //            RangeFilter::GTE => $startDate->format(Defaults::STORAGE_DATE_TIME_FORMAT),
 //        ]));
-//
-//        // some order/payment states are not considered during report, e.g. cancelled orders..
-//        $excludedOrderStates = [
-////            'failed',
-//            'cancelled',
-////            'refunded',
-//            //'refunded_partially', // ? TODO
-//            //'reminded', // ?
-//            //'paid_partially', // ?
-////            'chargeback'
-//        ];
-//
-//        $sum = 0;
-//        $orderIDs = [];
-//        $entitySearchResult = $this->orderLineItemRepository->search($orderLineItemCriteria, $salesChannelContext);
+
+        // some order/payment states are not considered during report, e.g. cancelled orders..
+        $excludedOrderStates = [
+            Status::ORDER_STATE_CANCELLED,
+            Status::ORDER_STATE_CANCELLED_REJECTED,
+        ];
+
+        $sum = 0;
+        $orderIDs = [];
+        $orderDetailQuery = Shopware()->Models()->createQueryBuilder()
+            ->select(['orders', 'details'])
+            ->from(Order::class, 'orders')
+            ->join('orders.details', 'details')
+            ->where('details.articleId = :number AND ')
+            ->setParameter(':number', $productId);
+
+        $all = $orderDetailQuery->getQuery()->getArrayResult();
+//        VarDumper::dump($all);
+
+//        $entitySearchResult = $this->order->search($orderLineItemCriteria, $salesChannelContext);
 //        if ($entitySearchResult->getTotal() > 0) {
 //            foreach ($entitySearchResult->getEntities() as $singleOrderLineItem) {
 //                /* @var $singleOrderLineItem OrderLineItemEntity */
@@ -495,8 +503,8 @@ class ProductService extends AbstractCharityProductManager
 //
 //        $reportResultModel->setAmount($sum);
 //        $reportResultModel->setOrderCountTotal(count($orderIDs));
-//
-//        return $reportResultModel;
-        return new ReportResultModel(new DateTime(), new DateTime());
+
+        return $reportResultModel;
+//        return new ReportResultModel(new DateTime(), new DateTime());
     }
 }
