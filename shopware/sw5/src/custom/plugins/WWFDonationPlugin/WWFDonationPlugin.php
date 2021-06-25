@@ -20,6 +20,7 @@ use WWFDonationPlugin\Service\ProductService;
 use WWFDonationPlugin\Service\ScheduledTask\ReportTaskHandler;
 use WWFDonationPlugin\Service\SimpleCharityProductManager;
 use WWFDonationPlugin\Service\SystemConfigService;
+use WWFDonationPlugin\Smarty\SmartyBannerPluginCompilerPass;
 
 
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
@@ -42,6 +43,8 @@ class WWFDonationPlugin extends Plugin
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
+
+        $container->addCompilerPass(new SmartyBannerPluginCompilerPass());
     }
 
     public function install(InstallContext $context): void
