@@ -12,7 +12,6 @@ use exxeta\wwf\banner\AbstractSettingsManager;
 class CharitySettingsManager extends AbstractSettingsManager
 {
     const wwfCartCampaignSettingKey = 'wwfDonationCartCampaign';
-    const wwfCartCampaignIsMiniBanner = 'isCartIntegrationAsMiniBanner';
 
     /**
      * @var SystemConfigService

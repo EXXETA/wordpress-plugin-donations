@@ -6,8 +6,10 @@ use exxeta\wwf\banner\BannerHandlerInterface;
 use exxeta\wwf\banner\model\CharityProduct;
 use Monolog\Logger;
 use Shopware\Components\CSRFTokenValidator;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
+use WWFDonationPlugin\WWFDonationPluginException;
 
 /**
  * Class ShopwareBannerHandler
@@ -25,11 +27,6 @@ class ShopwareBannerHandler implements BannerHandlerInterface
     protected $mediaService;
 
     /**
-     * @var CSRFTokenValidator
-     */
-    protected $csrfTokenManager;
-
-    /**
      * @var ProductService
      */
     protected $productService;
@@ -38,6 +35,11 @@ class ShopwareBannerHandler implements BannerHandlerInterface
      * @var Logger
      */
     protected $logger;
+
+    /**
+     * @var bool
+     */
+    protected $isAjax;
 
     /**
      * @var string|null
@@ -50,15 +52,17 @@ class ShopwareBannerHandler implements BannerHandlerInterface
      * @param CSRFTokenValidator $csrfTokenManager
      * @param ProductService $productService
      * @param string|null $targetPageId
+     * @param bool $isAjax
+     * @param Logger $logger
      */
-    public function __construct(MediaService $mediaService, CSRFTokenValidator $csrfTokenManager,
-                                ProductService $productService, ?string $targetPageId,
+    public function __construct(MediaService $mediaService, ProductService $productService,
+                                ?string $targetPageId, bool $isAjax,
                                 Logger $logger)
     {
         $this->mediaService = $mediaService;
-        $this->csrfTokenManager = $csrfTokenManager;
         $this->productService = $productService;
         $this->targetPageId = $targetPageId;
+        $this->isAjax = $isAjax;
         $this->logger = $logger;
     }
 
@@ -81,6 +85,7 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getCartImageUrl(): string
     {
+        // FIXME this works?
         return $this->getBaseUrl() . 'static/icon_cart.svg';
     }
 
@@ -92,12 +97,13 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function getBaseUrl(): string
     {
+        // FIXME
         return '/bundles/wwfdonationplugin/';
     }
 
     public function getCartUrl(): string
     {
-        return '/wwfdonation/add-donation-line-item';
+        return '/checkout/addArticle';
     }
 
     public function getMiniBannerTargetPageUrl($pageId): string
@@ -120,8 +126,9 @@ class ShopwareBannerHandler implements BannerHandlerInterface
     public function applyMiniBannerCartRowHook(string &$output, CharityProduct $charityProduct): void
     {
         $output .= '<div class="donation-cart-row">';
-        $output .= sprintf('<form class="mini-banner-add-to-cart-form" method="GET" action="%s" data-form-csrf-handler="true"
-                              data-form-validation="true">', $this->getCartUrl() . '-ajax');
+        $output .= sprintf('<form class="mini-banner-add-to-cart-form" action="%s" name="sAddToBasket" method="POST" %s>',
+            $this->getCartUrl(), $this->getFormAttributes());
+
         $this->applyCartFormHook($output, $charityProduct);
 
         $output .= sprintf('<div class="quantity-field"><input class="donation-campaign-mini-quantity-input" type="number" value="1" min="1" name="%s" /></div>', $this->getFormQuantityInputName());
@@ -131,22 +138,31 @@ class ShopwareBannerHandler implements BannerHandlerInterface
 
     public function applyCartFormHook(&$output, CharityProduct $charityProduct): void
     {
-        $output .= sprintf('<input name="donation" type="hidden" value="%s"/>', $charityProduct->getSlug());
-        $output .= sprintf('<input name="banner_csrf_token" type="hidden" value="%s"/>', $this->getCsrfToken());
+        $article = $this->productService->getShopwareProductBySlug($charityProduct->getSlug());
+        if (!$article instanceof Article) {
+            throw new WWFDonationPluginException('Could not find product record of wwf campaign product.');
+        }
+        $output .= '<input name="sActionIdentifier" type="hidden" value="" />';
+        $output .= '<input name="sAddAccessories" type="hidden" value="" />';
+
+        $output .= sprintf('<input name="sAdd" type="hidden" value="%s" />', $article->getMainDetail()->getNumber());
     }
 
     public function getFormQuantityInputName(): string
     {
-        return 'quantity';
+        return 'sQuantity';
     }
 
-    private function getCsrfToken(): string
+    public function getFormMethod(): string
     {
-        $session = Shopware()->BackendSession();
-        if (!$token = $session->offsetGet('X-CSRF-Token')) {
-            $token = \Shopware\Components\Random::getAlphanumericString(30);
-            $session->offsetSet('X-CSRF-Token', $token);
+        return 'POST';
+    }
+
+    public function getFormAttributes(): string
+    {
+        if ($this->isAjax) {
+            return 'enctype="multipart/form-data" data-add-article="true" data-eventname="submit" data-showmodal="false" data-addarticleurl="/checkout/ajaxAddArticleCart"';
         }
-        return $token;
+        return 'enctype="multipart/form-data" data-add-article="false" data-eventname="submit"';
     }
 }

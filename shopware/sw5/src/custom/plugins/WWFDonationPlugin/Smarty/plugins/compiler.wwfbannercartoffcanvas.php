@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Smarty Compiler function to get the wwf banner markup
+ * Smarty Compiler function to get the wwf mini banner markup in the offcanvas cart
  *
- * File: compiler.wwfbannercart.php
+ * File: compiler.wwfbannercartoffcanvas.php
  * Type: compiler
  * Name: wwfbanner
  * Purpose: get wwf banner markup
@@ -12,7 +12,7 @@
  * @param Smarty $smarty
  * @return string
  */
-function smarty_compiler_wwfbannercart(array $params, Smarty &$smarty)
+function smarty_compiler_wwfbannercartoffcanvas(array $params, Smarty &$smarty)
 {
     $mediaService = Shopware()->Container()->get(\WWFDonationPlugin\Service\MediaService::class);
     $productService = Shopware()->Container()->get(\WWFDonationPlugin\Service\ProductService::class);
@@ -23,10 +23,9 @@ function smarty_compiler_wwfbannercart(array $params, Smarty &$smarty)
     // get configuration options of the banner
     $charitySettingsManager = $donationPluginInstance->getSettingsManagerInstance();
     $campaign = $charitySettingsManager->getSetting(\WWFDonationPlugin\Service\CharitySettingsManager::wwfCartCampaignSettingKey, 'protect_species_coin');
-
-    $isMiniBanner = false;
-    $miniBannerTargetPage = '';
-    $isAjax = false;
+    $miniBannerTargetPage = $charitySettingsManager->getSetting(\WWFDonationPlugin\Service\CharitySettingsManager::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, '');
+    $isMiniBanner = true;
+    $isAjax = true;
 
     $bannerHandler = new \WWFDonationPlugin\Service\ShopwareBannerHandler(
         $mediaService, $productService, $miniBannerTargetPage, $isAjax, $pluginLogger

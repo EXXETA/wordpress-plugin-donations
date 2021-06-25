@@ -67,9 +67,9 @@
         </element>
 
         <element required="true" type="boolean" scope="locale">
-            <name>isCartIntegrationAsMiniBanner</name>
-            <label lang="en">Enable mini banner in cart page</label>
-            <label lang="de">Mini-Banner im Warenkorb aktivieren</label>
+            <name>wwfDonationsMiniBannerShowMiniCart</name>
+            <label lang="en">Show mini banner in offcanvas cart</label>
+            <label lang="de">Zeige Mini-Banner im aufgeklappten Offcanvas-Warenkorb</label>
             <value>false</value>
         </element>
 
@@ -116,15 +116,7 @@
                 <hidden>true</hidden>
             </options>
         </element>
-        <element required="true" type="boolean" scope="locale">
-            <name>wwfDonationsMiniBannerShowMiniCart</name>
-            <label lang="en">Show mini cart after donation mini banner was used</label>
-            <label lang="de">Zeige aufgeklappten Warenkorb bei der Verwendung des Mini-Spendenbanners</label>
-            <value>false</value>
-            <options>
-                <hidden>true</hidden>
-            </options>
-        </element>
+
         <element required="false" type="number" scope="locale">
             <name>wwfDonationsReportingLiveDaysInPast</name>
             <label lang="en">Days in past of live report</label>
