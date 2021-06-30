@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace WWFDonationPlugin\Service;
 
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepositoryInterface;
 use exxeta\wwf\banner\AbstractCharityProductManager;
 use exxeta\wwf\banner\model\CharityCampaign;
 use exxeta\wwf\banner\model\ReportResultModel;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article;
@@ -23,7 +24,6 @@ use Shopware\Models\Order\Order;
 use Shopware\Models\Order\Status;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Tax\Tax;
-use Symfony\Component\VarDumper\VarDumper;
 use WWFDonationPlugin\WWFDonationPluginException;
 
 /**
@@ -38,7 +38,7 @@ class ProductService extends AbstractCharityProductManager
     const WWF_PRODUCT_DEFAULT_STOCK = 5000;
 
     /**
-     * @var EntityManager
+     * @var ModelManager
      */
     protected $entityManager;
 
@@ -73,7 +73,7 @@ class ProductService extends AbstractCharityProductManager
     protected $customerGroupRepository;
 
     /**
-     * @var Price
+     * @var EntityRepository
      */
     protected $priceUnitRepository;
 
@@ -100,7 +100,7 @@ class ProductService extends AbstractCharityProductManager
     /**
      * ProductService constructor.
      *
-     * @param EntityManager $entityManager
+     * @param ModelManager $entityManager
      * @param EntityRepository $taxRepository
      * @param EntityRepository $productRepository
      * @param EntityRepository $currencyRepository
@@ -109,7 +109,7 @@ class ProductService extends AbstractCharityProductManager
      * @param EntityRepository $orderLineItemRepository
      * @param MediaService $mediaService
      */
-    public function __construct(EntityManager $entityManager, MediaService $mediaService)
+    public function __construct(ModelManager $entityManager, MediaService $mediaService)
     {
         parent::__construct();
         $this->entityManager = $entityManager;
@@ -209,7 +209,7 @@ class ProductService extends AbstractCharityProductManager
             $articleRecord->setTax($taxRecord);
             $articleRecord->setSupplier($productSupplierRecord);
             $articleRecord->setDescription($charityCampaign->getDescription());
-            $articleRecord->setDescriptionLong($charityCampaign->getDescription());
+            $articleRecord->setDescriptionLong($charityCampaign->getFullText());
             $articleRecord->setActive(true);
             $articleRecord->setName('WWF-Spende: ' . $charityCampaign->getName());
 
@@ -375,7 +375,6 @@ class ProductService extends AbstractCharityProductManager
             return false;
         }
         $articleDetailRecord = $articleEntity->getMainDetail();
-        $simpleProductManager = new SimpleCharityProductManager();
 
         if ($articleDetailRecord instanceof Detail) {
             if (0 === mb_stripos($articleDetailRecord->getNumber(), self::WWF_PRODUCT_NUMBER_PREFIX)) {
@@ -453,20 +452,11 @@ class ProductService extends AbstractCharityProductManager
         if (!$productEntity instanceof Article) {
             throw new \Exception(sprintf('Could not find product entity for campaign slug "%s"', $campaignSlug));
         }
-        $productId = $productEntity->getId();
+        $wwfProductId = $productEntity->getId();
         $orderDetailRepository = $this->entityManager->getRepository(\Shopware\Models\Order\Detail::class);
         if (!$orderDetailRepository instanceof EntityRepository) {
             throw new WWFDonationPluginException('Could not retrieve order detail repository');
         }
-
-//        $orderLineItemCriteria = new Criteria();
-//        $orderLineItemCriteria->addFilter(new EqualsFilter('productId', $productId));
-//        $orderLineItemCriteria->addAssociation('order');
-//        // unfortunately atm there is not programmatic way to use a "between"-sql condition...
-//        // therefore we need to check the orders to be in range of given start and end date
-//        $orderLineItemCriteria->addFilter(new RangeFilter('order.orderDateTime', [
-//            RangeFilter::GTE => $startDate->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-//        ]));
 
         // some order/payment states are not considered during report, e.g. cancelled orders..
         $excludedOrderStates = [
@@ -474,56 +464,45 @@ class ProductService extends AbstractCharityProductManager
             Status::ORDER_STATE_CANCELLED_REJECTED,
         ];
 
-        VarDumper::dump($productId);
-
-        $sum = 0;
         $orderIDs = [];
         $orderDetailQuery = Shopware()->Models()->createQueryBuilder()
-            ->select(['orders', 'details'])
+            ->select('orders.id')
+            ->distinct()
             ->from(Order::class, 'orders')
-            ->join('orders.details', 'details')
-            ->where('details.articleId = :number AND orders.orderTime >= :start AND orders.orderTime <= :end')
+            ->leftJoin('orders.details', 'details')
+            ->where('details.articleId = :number AND orders.orderTime >= :start AND orders.orderTime <= :end AND orders.status NOT IN(:ignoredstates)')
             ->setParameter(':start', $startDate)
-            ->setParameter(':end', $startDate)
-            ->setParameter(':number', $productId);
+            ->setParameter(':end', $endDate)
+            ->setParameter(':number', $wwfProductId)
+            ->setParameter(':ignoredstates', $excludedOrderStates);
+        // collect order ids with wwf products
+        foreach ($orderDetailQuery->getQuery()->execute() as $affectedOrderId) {
+            if (!empty($affectedOrderId)) {
+                $orderIDs[] = $affectedOrderId['id'];
+            }
+        }
+        // .. just to be sure
+        $orderIDs = array_unique($orderIDs);
 
-        $all = $orderDetailQuery->getQuery()->execute();
-        VarDumper::dump($all);
+        $sum = 0;
+        foreach ($orderIDs as $singleOrderId) {
+            $singleOrderItemsQuery = Shopware()->Models()->createQueryBuilder()
+                ->select(['details'])
+                ->from(\Shopware\Models\Order\Detail::class, 'details')
+                ->where('details.articleId = :number and details.orderId = :orderid')
+                ->setParameter(':number', $wwfProductId)
+                ->setParameter(':orderid', $singleOrderId);
+            $orderItems = $singleOrderItemsQuery->getQuery()->execute();
+            foreach ($orderItems as $singleOrderItem) {
+                if ($singleOrderItem instanceof \Shopware\Models\Order\Detail) {
+                    $sum += intval($singleOrderItem->getQuantity()) * floatval($singleOrderItem->getPrice());
+                }
+            }
+        }
 
-//        $entitySearchResult = $this->order->search($orderLineItemCriteria, $salesChannelContext);
-//        if ($entitySearchResult->getTotal() > 0) {
-//            foreach ($entitySearchResult->getEntities() as $singleOrderLineItem) {
-//                /* @var $singleOrderLineItem OrderLineItemEntity */
-//                $orderEntity = $singleOrderLineItem->getOrder();
-//                if (!$orderEntity) {
-//                    // this should never happen!
-//                    // TODO log!
-//                    continue;
-//                }
-//                // the db dal query criteria above ensures the iterated orders are >= startDate
-//                if ($orderEntity->getOrderDateTime() <= $endDate) {
-//                    // .. so we need to filter out the orders which are out of the range interval [on the right/end side]
-//                    continue;
-//                }
-//                $stateMachineState = $orderEntity->getStateMachineState();
-//                if (!$stateMachineState) {
-//                    // TODO log error
-//                    continue;
-//                }
-//                if (in_array($stateMachineState->getTechnicalName(), $excludedOrderStates)) {
-//                    // skip excluded line items by current order transaction state
-//                    continue;
-//                }
-//                $sum += $singleOrderLineItem->getTotalPrice();
-//                $orderIDs[] = $singleOrderLineItem->getOrderId();
-//            }
-//        }
-//        $orderIDs = array_unique($orderIDs);
-//
-//        $reportResultModel->setAmount($sum);
-//        $reportResultModel->setOrderCountTotal(count($orderIDs));
+        $reportResultModel->setAmount($sum);
+        $reportResultModel->setOrderCountTotal(count($orderIDs));
 
         return $reportResultModel;
-//        return new ReportResultModel(new DateTime(), new DateTime());
     }
 }

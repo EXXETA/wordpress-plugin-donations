@@ -7,7 +7,6 @@ namespace WWFDonationPlugin\Commands;
 use exxeta\wwf\banner\DonationPluginInterface;
 use exxeta\wwf\banner\model\ReportGenerationModel;
 use exxeta\wwf\banner\ReportGenerator;
-use exxeta\wwf\banner\SettingsManagerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,8 +46,7 @@ class ReportGenerationCommand extends ShopwareCommand
 
     protected function configure(): void
     {
-        $this
-            ->setName('wwf:report-generate')
+        $this->setName('wwf:report-generate')
             ->setDescription('Manual trigger to start report generation process for ordered WWF products. For debugging only!');
         // hide/disable in prod environments
         $this->setHidden(!$this->isEnabled());
@@ -60,8 +58,9 @@ class ReportGenerationCommand extends ShopwareCommand
             $output->writeln('Environment "dev" is required to run this debug command.');
             return 1;
         }
+
         // weekly and now
-        $reportModel = ReportGenerator::getReportModel(SettingsManagerInterface::REPORT_INTERVAL_MODE_WEEKLY, new \DateTime());
+        $reportModel = ReportGenerator::getReportModel($this->pluginInstance->getSettingsManagerInstance()->getCurrentReportingInterval(), new \DateTime());
         // pass these values to a new instance
         $newReportModel = new ReportGenerationModel($reportModel->getStartDate(), $reportModel->getEndDate(), $reportModel->getIntervalMode(), false, true);
 

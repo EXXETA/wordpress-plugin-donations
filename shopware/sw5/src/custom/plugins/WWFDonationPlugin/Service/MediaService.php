@@ -194,12 +194,12 @@ class MediaService
 
             $albumSettingsRecord = new Settings();
             $albumSettingsRecord->setAlbum($albumRecord);
-            $albumSettingsRecord->setCreateThumbnails(0);
+            $albumSettingsRecord->setCreateThumbnails(1);
             $albumSettingsRecord->setIcon('sprite-globe-green');
             $albumSettingsRecord->setThumbnailHighDpiQuality(70);
-            $albumSettingsRecord->setThumbnailHighDpi(0);
+            $albumSettingsRecord->setThumbnailHighDpi(1);
             $albumSettingsRecord->setThumbnailQuality(95);
-            $albumSettingsRecord->setThumbnailSize('');
+            $albumSettingsRecord->setThumbnailSize('120x120;200x200;400x400');
 
             $albumRecord->setSettings($albumSettingsRecord);
 
