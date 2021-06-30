@@ -23,7 +23,7 @@ use Shopware\Core\Framework\Uuid\Uuid;
 class MediaService
 {
     const WWF_MEDIA_FOLDER_NAME = 'WWF Media';
-    const ASSET_PATH_PREFIX = __DIR__ . '/../Resources/public/static/';
+    const ASSET_PATH_PREFIX = __DIR__ . '/../Resources/app/administration/static/';
 
     /**
      * @var AbstractCharityProductManager
