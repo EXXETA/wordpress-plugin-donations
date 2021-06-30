@@ -31,8 +31,10 @@ npm run clean
 npm run build
 php ../../../../../../composer.phar install --no-dev
 
-cd "$dir/sw6"
+cd "$dir/sw6/custom/plugins/WWFDonationPlugin"
+bash assemble.sh
 
+cd "$dir/sw6"
 bash ./sync_release.sh
 
 cd "$dir"
