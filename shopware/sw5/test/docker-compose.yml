@@ -12,7 +12,6 @@ services:
       - web
     environment:
       - XDEBUG_ENABLED=0
-      - SW_CURRENCY=EUR
       - PHP_VERSION=7.4
 
 networks:

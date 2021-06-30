@@ -5,9 +5,8 @@ set -eu
 dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 cd "$dir"
 
-cd sw6
+cd sw6/test
 
-cd test
 # just to be sure its down
 docker-compose down || true
 cd ..
@@ -18,8 +17,8 @@ docker-compose up -d
 
 sleep 10 # give the container some time to startup (the db etc.)
 
-rm -rf ../../release/sw6 || true
-mkdir -p ../../release/sw6
+rm -rf ../release/sw6 || true
+mkdir -p ../release/sw6
 
 cd src/custom/plugins/WWFDonationPlugin/
 rm -rf node_modules || true

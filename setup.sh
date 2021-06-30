@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # script to set up a development environment for all shop plugins contained in this project
+echo "setting up development environment"
 
 # check for required available commands of this script
 which npm &>/dev/null
