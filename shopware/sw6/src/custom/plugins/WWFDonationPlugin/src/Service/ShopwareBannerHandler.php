@@ -129,6 +129,16 @@ class ShopwareBannerHandler implements BannerHandlerInterface
         $output .= sprintf('<input name="banner_csrf_token" type="hidden" value="%s"/>', $this->csrfTokenManager->getToken(WWFDonationPlugin::CSRF_TOKEN_ID));
     }
 
+    public function getFormMethod(): string
+    {
+        return 'GET';
+    }
+
+    public function getFormAttributes(): string
+    {
+        return '';
+    }
+
     public function getFormQuantityInputName(): string
     {
         return 'quantity';

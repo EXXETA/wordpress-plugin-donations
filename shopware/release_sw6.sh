@@ -17,10 +17,12 @@ docker-compose up -d
 
 sleep 10 # give the container some time to startup (the db etc.)
 
+cd "$dir"
+
 rm -rf ../release/sw6 || true
 mkdir -p ../release/sw6
 
-cd src/custom/plugins/WWFDonationPlugin/
+cd ./sw6/src/custom/plugins/WWFDonationPlugin/
 rm -rf node_modules || true
 rm -rf vendor || true
 
