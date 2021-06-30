@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\File;
 class MediaService
 {
     const MEDIA_PREFIX = 'media/image/';
-    const ASSET_PATH_PREFIX = __DIR__ . '/../Resources/public/static/';
+    const ASSET_PATH_PREFIX = __DIR__ . '/../Resources/views/frontend/_resources/css/images/';
     const WWF_MEDIA_ALBUM_DIRECTORY = 'WWF-Media';
 
     /**
