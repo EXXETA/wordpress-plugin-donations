@@ -60,8 +60,14 @@ cp ../../../LICENSE .
 
 cd ..
 
-zip -r sw6-wwf-donations-plugin.zip WWFDonationPlugin
-du -d0 -h sw6-wwf-donations-plugin.zip
+if [ -x "$(command -v zip)" ]; then
+  zip -r sw6-wwf-donations-plugin.zip WWFDonationPlugin
+fi
+if [ -x "$(command -v du)" ]; then
+  du -d0 -h sw6-wwf-donations-plugin.zip
+fi
 
 cd "$dir/sw6"
 docker-compose down || true
+
+echo "SW6 OK."

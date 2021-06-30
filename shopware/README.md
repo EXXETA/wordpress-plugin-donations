@@ -24,13 +24,13 @@ SW5: Add products/articles to a category manually after installation!
 
 - Wrong CSRF usage if CSRF of shopware is in ajax mode, e.g. if shop is running behind a (page) cache proxy
 
-- You should not change the name of the supplier (SW5) or the manufacturer (SW6)
-- The plugin will create a 0 % tax record - if it does not already exist
-
 ## General Notes
 
 - The Shopware plugins are developed and tested with the default themes only. Therefore, it may be necessary to adjust
   styles and themes for your customized Shopware setup.
+- You MUST NOT change the name of the supplier (SW5) or the manufacturer (SW6)
+- You MUST NOT change the article number (prefixed with "WWF-DE-") in SW5
+- The plugin will create a 0 % tax record - if it does not already exist
 
 ## Shopware 5 Setup
 
