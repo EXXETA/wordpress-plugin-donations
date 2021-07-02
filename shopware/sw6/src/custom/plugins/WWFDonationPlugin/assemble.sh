@@ -7,7 +7,7 @@ cd "$dir"
 cd "../../../../../../assets"
 npm run assemble
 
-cd "../shopware/sw6/src/custom/plugins/WWFDonationPlugin"
+cd "$dir"
 
 # create directories
 node_modules/.bin/shx mkdir -p "./src/Resources/app/administration/static"

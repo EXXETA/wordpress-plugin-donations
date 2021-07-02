@@ -89,8 +89,25 @@ if [ -x "$(command -v tar)" ]; then
 fi
 
 echo "Wordpress release finished"
-echo "Starting Shopware release process."
+cd "$dir"
 
+echo "Starting Shopware release process."
 bash ./shopware/release.sh
 
-echo "Release OK."
+echo "Release OK. Generating release archive hashes..."
+
+if [ -f "$dir/release/wp/wp-wwf-donations-plugin.zip" ]; then
+  if [ -x "$(command -v sha256sum)" ]; then
+    sha256sum --tag "$dir/release/wp/wp-wwf-donations-plugin.zip"
+  fi
+fi
+if [ -f "$dir/release/sw5/sw5-wwf-donations-plugin.zip" ]; then
+  if [ -x "$(command -v sha256sum)" ]; then
+    sha256sum --tag "$dir/release/sw5/sw5-wwf-donations-plugin.zip"
+  fi
+fi
+if [ -f "$dir/release/sw6/sw6-wwf-donations-plugin.zip" ]; then
+  if [ -x "$(command -v sha256sum)" ]; then
+    sha256sum --tag "$dir/release/sw6/sw6-wwf-donations-plugin.zip"
+  fi
+fi

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fd9cdd890b67c1985bc3972e7217ab3",
+    "content-hash": "490bb1f3877faeeb2bb8e033ff01f949",
     "packages": [
         {
             "name": "exxeta/wwf-donations-shop-banner-core",
@@ -1939,16 +1939,16 @@
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.42.1",
+            "version": "v1.42.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "26a471ec72ee98ae146316054b25a88de8693b11"
+                "reference": "f3fff3ca4af92c87eb824e5c98aaf003523204a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/26a471ec72ee98ae146316054b25a88de8693b11",
-                "reference": "26a471ec72ee98ae146316054b25a88de8693b11",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/f3fff3ca4af92c87eb824e5c98aaf003523204a2",
+                "reference": "f3fff3ca4af92c87eb824e5c98aaf003523204a2",
                 "shasum": ""
             },
             "require": {
@@ -1996,7 +1996,7 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2021-06-09T22:04:14+00:00"
+            "time": "2021-06-30T16:21:40+00:00"
         },
         {
             "name": "google/cloud-storage",

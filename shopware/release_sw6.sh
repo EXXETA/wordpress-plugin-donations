@@ -50,14 +50,12 @@ cd ../release/sw6/WWFDonationPlugin
 rm -rf src/Resources/app/administration/static
 rm .gitignore
 rm assemble.sh
-rm makefile
 rm phpstan.neon
 rm phpunit.xml
 rm -rf node_modules
 rm -rf tests
 rm package.json
 rm package-lock.json
-rm README.md
 
 # Copy over LICENSE file
 cp ../../../LICENSE .
