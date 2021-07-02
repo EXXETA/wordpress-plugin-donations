@@ -50,7 +50,7 @@ php wp-cli.phar --info
 mkdir -p wp
 cd wp
 php ../wp-cli.phar core download || true
-cd -
+cd "$dir/wp"
 
 # setup development environment
 cd ./wwf-donations-plugin
@@ -59,6 +59,8 @@ php ../../composer.phar install || php ../../composer.phar dump-autoload || true
 npm i
 npm run build-js
 npm run build:clean
-cd -
+
+cd "$dir"
+bash ./shopware/setup.sh
 
 echo "Setup OK."
