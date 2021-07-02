@@ -12,8 +12,8 @@ Ext.define('Shopware.apps.WWFDonationReports', {
         'list.Window',
     ],
 
-    models: ['Product'],
-    stores: ['Product'],
+    models: ['Report'],
+    stores: ['Report'],
 
     launch: function () {
         return this.getController('Main').mainWindow;

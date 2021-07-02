@@ -1,22 +1,23 @@
 //{block name="backend/marketing/wwf_donation_reports"}
-Ext.define('Shopware.apps.WWFDonationReports.model.Product', {
+Ext.define('Shopware.apps.WWFDonationReports.model.Report', {
     extend: 'Shopware.data.Model',
 
     configure: function () {
         return {
-            controller: 'WWFDonationReports'
+            controller: 'wwf_donation_reports',
         };
     },
 
     fields: [
         //{block name="backend/wwf_donation_reports/model/reports/fields"}{/block}
         'id',
+        'startDate',
+        'endDate',
         'name',
-        'order_counter',
-        'interval_mode',
-        'total_amount',
-        'start_date',
-        'end_date'
+        'orderCounter',
+        'intervalMode',
+        'totalAmount',
+        'campaignDetails'
     ]
 });
 //{/block}

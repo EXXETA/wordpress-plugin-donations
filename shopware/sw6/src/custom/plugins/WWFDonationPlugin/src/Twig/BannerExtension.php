@@ -44,7 +44,7 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      */
     private $logger;
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('wwfBanner', [$this, 'wwfBannerMarkup'])
@@ -59,7 +59,7 @@ class BannerExtension extends \Twig\Extension\AbstractExtension
      * @param string|null $miniBannerTargetPage
      * @return string
      */
-    public function wwfBannerMarkup(string $campaign, bool $isMiniBanner, ?string $miniBannerTargetPage)
+    public function wwfBannerMarkup(string $campaign, bool $isMiniBanner, ?string $miniBannerTargetPage): string
     {
         $bannerHandler = new ShopwareBannerHandler(
             $this->mediaService, $this->csrfTokenManager,

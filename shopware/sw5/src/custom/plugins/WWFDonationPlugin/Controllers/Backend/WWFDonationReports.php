@@ -7,7 +7,7 @@
  */
 class Shopware_Controllers_Backend_WWFDonationReports extends \Shopware_Controllers_Backend_Application
 {
-    protected $model = \WWFDonationPlugin\Entity\DonationReportEntity::class;
+    protected $model = \WWFDonationPlugin\Models\DonationReportEntity::class;
     protected $alias = 'wwf_donation_reports';
 
     public function indexAction()

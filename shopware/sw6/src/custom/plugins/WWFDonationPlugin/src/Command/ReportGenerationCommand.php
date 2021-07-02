@@ -69,8 +69,8 @@ class ReportGenerationCommand extends Command
         return 0;
     }
 
-    public function isEnabled()
+    public function isEnabled(): bool
     {
-        return boolval(getenv('APP_ENV') == 'dev');
+        return getenv('APP_ENV') == 'dev';
     }
 }

@@ -77,7 +77,7 @@ class WWFProductStockUpdater extends StockUpdater
      *
      * We need to register at least the events of the default sw StockUpdater
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             CheckoutOrderPlacedEvent::class => 'orderPlaced',
@@ -118,8 +118,8 @@ class WWFProductStockUpdater extends StockUpdater
         // identify changes to reset the stock of the wwf products
         foreach ($affectedProducts as $singleProduct) {
             /* @var ProductEntity $singleProduct */
-            if (ProductService::isWWFProduct($singleProduct) &&
-                ($singleProduct->getStock() != ProductService::WWF_PRODUCT_DEFAULT_STOCK
+            if (ProductService::isWWFProduct($singleProduct)
+                && ($singleProduct->getStock() != ProductService::WWF_PRODUCT_DEFAULT_STOCK
                     || $singleProduct->getAvailableStock() != ProductService::WWF_PRODUCT_DEFAULT_STOCK)) {
                 $this->logger->debug('this is a wwf product! re-adjust stock! ' . $singleProduct->getId());
                 $updateQuery->execute([

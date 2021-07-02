@@ -37,9 +37,9 @@ class WWFDonationPlugin extends Plugin
         parent::build($container);
     }
 
-    public function postInstall(InstallContext $context): void
+    public function postInstall(InstallContext $installContext): void
     {
-        parent::postInstall($context);
+        parent::postInstall($installContext);
 
         $systemConfigService = $this->container->get(SystemConfigService::class);
         // we need to initialize and inject services here manually
@@ -47,7 +47,7 @@ class WWFDonationPlugin extends Plugin
         $mediaService = $this->createMediaService();
         $mediaService->install();
         $productService = $this->createProductServiceInstance($mediaService);
-        $productService->install($context->getContext());
+        $productService->install($installContext->getContext());
         // NOTE: after this step all products of this plugin should be created and disabled
         // enabling/disabling is done in plugin de-/activation steps below
 
@@ -116,13 +116,12 @@ class WWFDonationPlugin extends Plugin
         $orderLineItemRepository = $this->container->get('order_line_item.repository');
 
         // handle product generation second
-        $productService = new ProductService(
+        return new ProductService(
             $taxRepository,
             $productRepository, $productCategoryRepository,
             $manufacturerRepository, $salesChannelRepository,
             $orderLineItemRepository, $mediaService
         );
-        return $productService;
     }
 
     /**
@@ -137,13 +136,12 @@ class WWFDonationPlugin extends Plugin
         $productMediaRepository = $this->container->get('product_media.repository');
         $fileSaver = $this->container->get(FileSaver::class);
 
-        $mediaService = new MediaService(
+        return new MediaService(
             new SimpleCharityProductManager(),
             $mediaRepository,
             $mediaFolderRepository,
             $productMediaRepository,
             $fileSaver
         );
-        return $mediaService;
     }
 }

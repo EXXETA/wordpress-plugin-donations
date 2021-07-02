@@ -4,7 +4,7 @@ namespace WWFDonationPlugin\Bootstrap;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
-use WWFDonationPlugin\Entity\DonationReportEntity;
+use WWFDonationPlugin\Models\DonationReportEntity;
 
 class Database
 {

@@ -85,6 +85,7 @@ class ProductService extends AbstractCharityProductManager
                                 EntityRepositoryInterface $orderLineItemRepository,
                                 MediaService $mediaService)
     {
+        parent::__construct();
         $this->taxRepository = $taxRepository;
         $this->productRepository = $productRepository;
         $this->productCategoryRepository = $productCategoryRepository;
@@ -361,7 +362,7 @@ class ProductService extends AbstractCharityProductManager
         // TODO do for all sales channels!
 
         $salesChannelContext = Context::createDefaultContext();
-        
+
 
         $productEntity = $this->getShopwareProductBySlug($campaignSlug, $salesChannelContext);
         if (!$productEntity) {

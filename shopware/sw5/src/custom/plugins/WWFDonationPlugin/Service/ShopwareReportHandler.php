@@ -8,7 +8,7 @@ use exxeta\wwf\banner\DonationPluginInterface;
 use exxeta\wwf\banner\ReportHandler;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
-use WWFDonationPlugin\Entity\DonationReportEntity;
+use WWFDonationPlugin\Models\DonationReportEntity;
 
 /**
  * Class ShopwareReportHandler

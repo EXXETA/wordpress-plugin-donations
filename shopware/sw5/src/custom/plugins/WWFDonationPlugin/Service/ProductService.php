@@ -101,12 +101,6 @@ class ProductService extends AbstractCharityProductManager
      * ProductService constructor.
      *
      * @param ModelManager $entityManager
-     * @param EntityRepository $taxRepository
-     * @param EntityRepository $productRepository
-     * @param EntityRepository $currencyRepository
-     * @param EntityRepository $productCategoryRepository
-     * @param EntityRepository $manufacturerRepository
-     * @param EntityRepository $orderLineItemRepository
      * @param MediaService $mediaService
      */
     public function __construct(ModelManager $entityManager, MediaService $mediaService)

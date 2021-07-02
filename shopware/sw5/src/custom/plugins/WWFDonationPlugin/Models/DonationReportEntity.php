@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 
-namespace WWFDonationPlugin\Entity;
+namespace WWFDonationPlugin\Models;
 
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +21,7 @@ class DonationReportEntity extends ModelEntity
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\ID
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;

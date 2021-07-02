@@ -135,9 +135,6 @@ class WWFCartController extends StorefrontController
         if ($this->isProductQuantityValid($maxQuantity, $quantity)) {
             // ok, all data seems valid -> add product to cart
             $this->logger->debug('OK, all inputs to add charity products to the cart seem valid. Start of adding line items.');
-            if (!$salesChannelContext) {
-                $salesChannelContext = SalesChannelContext::createFrom(\Shopware\Core\Framework\Context::createDefaultContext());
-            }
             try {
                 $cartToken = $salesChannelContext->getToken();
             } catch (\TypeError $typeError) {

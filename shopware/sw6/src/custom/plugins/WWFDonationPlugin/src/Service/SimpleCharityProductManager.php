@@ -29,5 +29,6 @@ class SimpleCharityProductManager extends AbstractCharityProductManager
     public function getRevenueOfCampaignInTimeRange(string $campaignSlug, DateTime $startDate, DateTime $endDate): ReportResultModel
     {
         // NOTE: this is not implemented here. Look at ProductService!
+        return new ReportResultModel(new DateTime(), new DateTime());
     }
 }

@@ -42,13 +42,25 @@ the Dockware docs.
 - You MUST NOT change the article number (prefixed with "WWF-DE-") in SW5.
 - You MUST NOT change the value of the "Freitextfeld 1" of the created articles in SW5 context.
 - Both plugins will create a 0 % tax record - if it does not already exist in the shop.
+- Due to the default product stock management logic of Shopware 5 and 6 both plugins contain own logic to handle the
+  five created WWF products as "virtual" products. Basically the stock of the WWF products created by the plugin is
+  always
+  (reset to) **5000**. This should not interfere with other products in your shop.
+- Your shop MUST be able to send emails.
 
-## Shopware 5 Plugin Installation
+## Shopware 5 Plugin
+
+### Features
+
+- Have a look at the [general feature list here](./../README.md)
+- For Shopware 5 there is no "live preview" of the donation reports.
+
+### Installation
 
 1. Install and activate the plugin in a Shopware 5 shop instance.
 2. There are 5 new products. You MUST add them to an active article category of your shop.
 3. View the plugin's configuration options. There you can enable the cart integration of the WWF banner.
-    1. Or insert this code into your Smarty templates:
+    1. Or insert this code snippet into your Smarty templates:
 
 ```phpt
 <!-- include banner styles -->
@@ -61,15 +73,33 @@ the Dockware docs.
 [Here is an example](./sw5/src/custom/plugins/WWFDonationPlugin/Resources/views/frontend/exampledetail) to add the
 banner to each product detail page in a SW5 shop.
 
+Valid values for the *campaign* argument are:
+
+- protect_species_coin
+- protect_ocean_coin
+- protect_forest_coin
+- protect_climate_coin
+- protect_diversity_coin
+
+The argument *miniBannerTargetPage* can and should be an absolute or a relative URL.
+
 Note: To test mail delivery with the Shopware 5 Dockware system, you need to edit the sendmail configuration of
 the `php.ini`:
 
 - `sudo vim /etc/php/7.4/cli/php.ini`
     - Ensure `mail.force_extra_parameters = -t` is present
 
+To access the backend use [http://localhost/backend](http://localhost/backend) with the credentials `demo:demo`.
+
 ## Shopware 6 Plugin Installation
 
+### Features
+
+### Installation
+
 TODO
+
+To access the backend use [http://localhost/admin](http://localhost/admin) with the credentials `admin:shopware`.
 
 ### Possible problems with the Shopware 6 plugin
 
