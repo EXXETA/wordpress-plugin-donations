@@ -81,12 +81,6 @@ if [ -x "$(command -v zip)" ]; then
     du -d0 -h wp-wwf-donations-plugin.zip
   fi
 fi
-if [ -x "$(command -v tar)" ]; then
-  tar -cvf wp-wwf-donations-plugin.tar wwf-donations-plugin
-  if [ -x "$(command -v gzip)" ]; then
-    gzip wp-wwf-donations-plugin.tar
-  fi
-fi
 
 echo "Wordpress release finished"
 cd "$dir"
@@ -98,16 +92,16 @@ echo "Release OK. Generating release archive hashes..."
 
 if [ -f "$dir/release/wp/wp-wwf-donations-plugin.zip" ]; then
   if [ -x "$(command -v sha256sum)" ]; then
-    sha256sum --tag "$dir/release/wp/wp-wwf-donations-plugin.zip"
+    sha256sum "$dir/release/wp/wp-wwf-donations-plugin.zip"
   fi
 fi
 if [ -f "$dir/release/sw5/sw5-wwf-donations-plugin.zip" ]; then
   if [ -x "$(command -v sha256sum)" ]; then
-    sha256sum --tag "$dir/release/sw5/sw5-wwf-donations-plugin.zip"
+    sha256sum "$dir/release/sw5/sw5-wwf-donations-plugin.zip"
   fi
 fi
 if [ -f "$dir/release/sw6/sw6-wwf-donations-plugin.zip" ]; then
   if [ -x "$(command -v sha256sum)" ]; then
-    sha256sum --tag "$dir/release/sw6/sw6-wwf-donations-plugin.zip"
+    sha256sum "$dir/release/sw6/sw6-wwf-donations-plugin.zip"
   fi
 fi
