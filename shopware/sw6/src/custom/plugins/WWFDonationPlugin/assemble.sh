@@ -9,6 +9,10 @@ npm run assemble
 
 cd "../shopware/sw6/src/custom/plugins/WWFDonationPlugin"
 
+# create directories
+node_modules/.bin/shx mkdir -p "./src/Resources/app/administration/static"
+node_modules/.bin/shx mkdir -p "./src/Resources/public/static"
+
 # copy over sample images
 node_modules/.bin/shx cp -fr "../../../../../../assets/dist/images/*" "./src/Resources/app/administration/static"
 node_modules/.bin/shx cp -fr "../../../../../../assets/dist/images/*" "./src/Resources/public/static"
