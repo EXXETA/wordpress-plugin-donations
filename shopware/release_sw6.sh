@@ -66,9 +66,9 @@ cd ..
 
 if [ -x "$(command -v zip)" ]; then
   zip -r sw6-wwf-donations-plugin.zip WWFDonationPlugin
-fi
-if [ -x "$(command -v du)" ]; then
-  du -d0 -h sw6-wwf-donations-plugin.zip
+  if [ -x "$(command -v du)" ]; then
+    du -d0 -h sw6-wwf-donations-plugin.zip
+  fi
 fi
 
 cd "$dir/sw6"

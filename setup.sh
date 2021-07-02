@@ -15,6 +15,9 @@ which curl &>/dev/null
 
 set -eu
 
+dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+cd "$dir"
+
 # download composer
 if [ ! -f composer.phar ]; then
   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

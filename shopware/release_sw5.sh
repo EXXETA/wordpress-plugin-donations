@@ -28,10 +28,9 @@ cd ..
 
 if [ -x "$(command -v zip)" ]; then
   zip -r sw5-wwf-donations-plugin.zip WWFDonationPlugin
-fi
-
-if [ -x "$(command -v du)" ]; then
-  du -d0 -h sw5-wwf-donations-plugin.zip
+  if [ -x "$(command -v du)" ]; then
+    du -d0 -h sw5-wwf-donations-plugin.zip
+  fi
 fi
 
 echo "SW5 OK."
