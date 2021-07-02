@@ -114,4 +114,14 @@ class WooBannerHandler implements BannerHandlerInterface
         );
         $output .= '</div>'; //.donation-cart-row
     }
+
+    public function getFormMethod(): string
+    {
+        return 'GET';
+    }
+
+    public function getFormAttributes(): string
+    {
+        return '';
+    }
 }

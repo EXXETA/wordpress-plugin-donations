@@ -59,7 +59,7 @@ function terminate() {
   echo "Exiting now."
   exit 0
 }
-echo "Running forever (press Ctrl-C to leave) ..."
+echo "Running forever (press Ctrl-C to stop the container) ..."
 while(true); do
   sleep 5
 done

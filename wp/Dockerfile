@@ -1,4 +1,4 @@
-FROM wordpress:latest
+FROM wordpress:5.7.2-apache
 
 # installing wp-cli and mysql client
 RUN apt-get update; apt-get install --no-install-recommends -y libcap2-bin mariadb-client-10.3 less bash dos2unix vim; rm -rf /var/lib/apt/lists/*; \

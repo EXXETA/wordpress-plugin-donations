@@ -3,8 +3,8 @@ Contributors: Exxeta AG
 Donate link: https://github.com/EXXETA/wordpress-plugin-donations
 Tags: woocommerce, donation, charity, wwf
 Requires at least: 5.3
-Stable tag: 5.4
-Tested up to: 5.4
+Stable tag: 5.7
+Tested up to: 5.7
 Requires PHP: 7.3
 License: GNU General Public License version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html

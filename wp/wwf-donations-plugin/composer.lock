@@ -4,18 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dcc3c29afebb9a6de84df0d6c4ceb644",
+    "content-hash": "fc54bb8a1779831b8834d237777ec490",
     "packages": [
         {
             "name": "exxeta/wwf-donations-shop-banner-core",
-            "version": "1.0.2",
+            "version": "1.0.5",
             "dist": {
                 "type": "path",
                 "url": "../../core",
-                "reference": "9ab41e8a7fce7e87d169223b12f244a001075186"
+                "reference": "f6e2038b6a3f9213eb32649cf0a58b8b42180791"
             },
             "require": {
                 "ext-date": "*",
+                "ext-json": "*",
                 "php": ">=7.1.0"
             },
             "require-dev": {
@@ -469,16 +470,16 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v5.2.7",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "59a684f5ac454f066ecbe6daecce6719aed283fb"
+                "reference": "fcd0b29a7a0b1bb5bfbedc6231583d77fea04814"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/59a684f5ac454f066ecbe6daecce6719aed283fb",
-                "reference": "59a684f5ac454f066ecbe6daecce6719aed283fb",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/fcd0b29a7a0b1bb5bfbedc6231583d77fea04814",
+                "reference": "fcd0b29a7a0b1bb5bfbedc6231583d77fea04814",
                 "shasum": ""
             },
             "require": {
@@ -527,7 +528,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-07T16:07:52+00:00"
+            "time": "2021-05-26T17:40:38+00:00"
         },
         {
             "name": "woocommerce/action-scheduler",
