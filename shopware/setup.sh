@@ -5,6 +5,9 @@ set -eu
 dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 cd "$dir"
 cd ./sw5/src/
+mkdir -p engine/Shopware
+mkdir -p engine/Library
+mkdir -p engine/Library/Smarty
 php ./../../../composer1.phar install --no-scripts
 
 # shopware 5 stuff
@@ -16,6 +19,7 @@ bash assemble.sh
 cd "$dir"
 # shopware 6 stuff
 cd ./sw6/src/
+mkdir custom/static-plugins
 php ./../../../composer.phar clearcache
 php ./../../../composer.phar install --no-scripts
 
