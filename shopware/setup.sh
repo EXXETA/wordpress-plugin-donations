@@ -19,14 +19,15 @@ bash assemble.sh
 cd "$dir"
 # shopware 6 stuff
 cd ./sw6/src/
-mkdir custom/static-plugins
+mkdir -p custom/static-plugins
 php ./../../../composer.phar clearcache
 php ./../../../composer.phar install --no-scripts
 
 cd "$dir"
 cd ./sw6/src/custom/plugins/WWFDonationPlugin
 php ./../../../../../../composer.phar clearcache
-php ./../../../../../../composer.phar install
+php ./../../../../../../composer.phar install --no-dev
 npm i
 bash assemble.sh
 
+echo "Shopware 5 + 6 setup finished."

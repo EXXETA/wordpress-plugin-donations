@@ -6,7 +6,7 @@ namespace WWFDonationPlugin\Service;
 
 use exxeta\wwf\banner\DonationPluginInterface;
 use exxeta\wwf\banner\ReportHandler;
-use Shopware\Core\Content\MailTemplate\Service\MailServiceInterface;
+use Shopware\Core\Content\Mail\Service\MailService;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class ShopwareReportHandler implements ReportHandler
 {
     /**
-     * @var MailServiceInterface
+     * @var MailService
      */
     private $mailService;
 

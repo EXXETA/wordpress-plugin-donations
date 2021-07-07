@@ -2,7 +2,7 @@
 
 namespace WWFDonationPlugin\Subscriber\Storefront;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Event\StorefrontRenderEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -17,16 +17,16 @@ class Subscriber implements EventSubscriberInterface
     private $systemConfigService;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
      * Subscriber constructor.
      * @param SystemConfigService $systemConfigService
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      */
-    public function __construct(SystemConfigService $systemConfigService, Logger $logger)
+    public function __construct(SystemConfigService $systemConfigService, LoggerInterface $logger)
     {
         $this->systemConfigService = $systemConfigService;
         $this->logger = $logger;
@@ -49,7 +49,7 @@ class Subscriber implements EventSubscriberInterface
     {
         $config = $this->systemConfigService->get('WWFDonationPlugin.config');
         if (!is_array($config)) {
-            $this->logger->addWarning('Invalid plugin configuration detected. Expected configuration array.');
+            $this->logger->warning('Invalid plugin configuration detected. Expected configuration array.');
             return;
         }
 
@@ -57,7 +57,7 @@ class Subscriber implements EventSubscriberInterface
         $isCartMiniBannerEnabled = $this->getConfigurationValueBool($config, 'wwfDonationsMiniBannerShowMiniCart');
         $cartCampaignKey = $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerCampaign');
         if (!$cartCampaignKey) {
-            $this->logger->addWarning('Invalid empty wwf banner campaign selected in plugin configuration. Fallback to protect_species_coin.');
+            $this->logger->warning('Invalid empty wwf banner campaign selected in plugin configuration. Fallback to protect_species_coin.');
             $cartCampaignKey = SimpleCharityProductManager::$PROTECT_SPECIES_COIN; // default fallback value
         }
         $cartMiniBannerPageTargetEntity = $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerCampaignTargetPage');
@@ -67,7 +67,7 @@ class Subscriber implements EventSubscriberInterface
 
         // validation/hint step
         if ($isCartIntegrationActive && $isCartMiniBannerEnabled && empty($cartMiniBannerPageTargetEntity)) {
-            $this->logger->addWarning('No target category(=page) entity configured for mini banner. This leads to an empty link of the mini banner. Please setup the plugin correctly.');
+            $this->logger->warning('No target category(=page) entity configured for mini banner. This leads to an empty link of the mini banner. Please setup the plugin correctly.');
         }
 
         // pass config data to the templates

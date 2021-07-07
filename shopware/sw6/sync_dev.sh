@@ -31,7 +31,7 @@ docker exec shopware bash -c 'rm -rf /var/www/html/custom/plugins/DockwareSample
 docker cp ./src/custom/plugins shopware:/var/www/html/custom
 # Set proper permissions
 docker exec shopware bash -c 'sudo chown -R www-data:www-data /var/www/html'
-docker exec shopware bash -c 'cd /var/www/html; bin/console plugin:refresh; bin/console plugin:install --activate WWFDonationPlugin'
+docker exec shopware bash -c 'cd /var/www/html; bin/console cache:clear; bin/console plugin:refresh; bin/console plugin:install --activate WWFDonationPlugin; bin/console cache:clear'
 
 # build everything
 echo "Starting shopware 6 build process..."

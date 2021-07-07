@@ -6,22 +6,17 @@ namespace WWFDonationPlugin\Subscriber;
 
 use Doctrine\DBAL\Connection;
 use Monolog\Logger;
-use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
-use Shopware\Core\Checkout\Order\OrderEvents;
 use Shopware\Core\Content\Product\DataAbstractionLayer\StockUpdater;
-use Shopware\Core\Content\Product\ProductDefinition;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Defaults;
-use Shopware\Core\Framework\Adapter\Cache\CacheClearer;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\StateMachine\Event\StateMachineTransitionEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use WWFDonationPlugin\Service\ProductService;
 
 /**
@@ -51,41 +46,21 @@ class WWFProductStockUpdater extends StockUpdater
      * WWFProductStockUpdater constructor.
      *
      * @param Connection $connection
-     * @param ProductDefinition $definition
-     * @param CacheClearer $cache
-     * @param EntityCacheKeyGenerator $cacheKeyGenerator
+     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      * @param Logger $logger
      * @param EntityRepository $productRepository
      */
     public function __construct(
         Connection $connection,
-        ProductDefinition $definition,
-        CacheClearer $cache,
-        EntityCacheKeyGenerator $cacheKeyGenerator,
+        EventDispatcherInterface $dispatcher,
         Logger $logger,
         EntityRepository $productRepository
     )
     {
-        parent::__construct($connection, $definition, $cache, $cacheKeyGenerator);
+        parent::__construct($connection, $dispatcher);
         $this->dbConnection = $connection;
         $this->logger = $logger;
         $this->productRepository = $productRepository;
-    }
-
-    /**
-     * Returns a list of custom business events to listen where the product maybe changed
-     *
-     * We need to register at least the events of the default sw StockUpdater
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            CheckoutOrderPlacedEvent::class => 'orderPlaced',
-            StateMachineTransitionEvent::class => 'stateChanged',
-            PreWriteValidationEvent::class => 'triggerChangeSet',
-            OrderEvents::ORDER_LINE_ITEM_WRITTEN_EVENT => 'lineItemWritten',
-            OrderEvents::ORDER_LINE_ITEM_DELETED_EVENT => 'lineItemWritten',
-        ];
     }
 
     /**
@@ -138,9 +113,7 @@ class WWFProductStockUpdater extends StockUpdater
      */
     public function update(array $ids, Context $context): void
     {
-        $this->logger->debug('update');
         $products = $this->productRepository->search(new Criteria($ids), $context);
-        $this->logger->debug('products:!');
 
         $cleanedIds = [];
         foreach ($ids as $singleId) {
@@ -155,16 +128,6 @@ class WWFProductStockUpdater extends StockUpdater
             return;
         }
         parent::update($cleanedIds, $context);
-    }
-
-    /**
-     * simple delegation
-     *
-     * @param CheckoutOrderPlacedEvent $event
-     */
-    public function orderPlaced(CheckoutOrderPlacedEvent $event): void
-    {
-        parent::orderPlaced($event);
     }
 
     private function getProductsOfOrder(string $orderId): array
