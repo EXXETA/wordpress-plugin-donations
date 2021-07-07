@@ -106,3 +106,7 @@ To access the backend use [http://localhost/admin](http://localhost/admin) with 
 ### Possible problems with the Shopware 6 plugin
 
 - Wrong CSRF usage if CSRF of shopware is in ajax mode, e.g. if shop is running behind a (page) cache proxy
+
+
+- STyle offcanvas mini banner
+- Fix backend section sorting of donation reports

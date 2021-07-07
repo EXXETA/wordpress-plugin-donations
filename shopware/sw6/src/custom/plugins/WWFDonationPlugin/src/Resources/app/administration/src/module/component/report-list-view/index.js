@@ -81,14 +81,9 @@ Component.register('wwf-banner-donation-reports-list-view', {
 
         donationReportCriteria() {
             const criteria = new Criteria();
-            const params = this.getListingParams();
-
-            // Default sorting
-            params.sortBy = params.sortBy || 'name';
-            params.sortDirection = params.sortDirection || 'ASC';
 
             criteria.setTerm(this.term);
-            criteria.addSorting(Criteria.sort(params.sortBy, params.sortDirection));
+            criteria.addSorting(Criteria.sort(this.sortBy || 'name', this.sortDirection || 'DESC'));
 
             return criteria;
         }

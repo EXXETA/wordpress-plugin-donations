@@ -29,13 +29,6 @@
             </options>
         </input-field>
 
-        <input-field type="int">
-            <name>wwfDonationsReportingLiveDaysInPast</name>
-            <label>Live-Reporting - Days in past</label>
-            <label lang="de-DE">Live-Berichte - Tage in die Vergangenheit</label>
-            <defaultValue>30</defaultValue>
-        </input-field>
-
         <input-field type="text">
             <name>wwfDonationsReportingRecipient</name>
             <label>Mail-Recipient of donation reports</label>
