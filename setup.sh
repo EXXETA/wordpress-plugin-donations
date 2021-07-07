@@ -24,6 +24,8 @@ if [ ! -f composer.phar ]; then
   php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
   # atm only composer 1 is supported
   php composer-setup.php --1
+  mv composer.phar composer1.phar
+  php composer-setup.php --2
   php -r "unlink('composer-setup.php');"
 fi
 
@@ -54,7 +56,7 @@ cd "$dir/wp"
 
 # setup development environment
 cd ./wwf-donations-plugin
-php ../../composer.phar install || php ../../composer.phar dump-autoload || true
+php ../../composer1.phar install || php ../../composer1.phar dump-autoload || true
 
 npm i
 npm run build-js

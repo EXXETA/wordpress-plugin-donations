@@ -1,5 +1,6 @@
 .idea
 
+composer1.phar
 composer.phar
 
 wp/wp-cli.phar

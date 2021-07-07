@@ -9,15 +9,16 @@ the [main README](./../README.md) and the [README of the banner core library](./
 
 ## First time (development) setup
 
+For development purposes run `docker-compose up` and sync changes of plugin's code via SFTP into the container as
+described in the Dockware docs you should follow.
+
+- Execute `<app_root>/shopware/setup.sh` script. This is already done in case you executed `<app_root>/setup.sh` before
 - Navigate to the [sw5](./sw5) or [sw6](./sw6) subdirectory
 - Run the Dockware development container with `docker-compose up`
 - Run `./sync_dev.sh` which will copy the local plugin files into the container and the plugin will be enabled and
   activated.
 
 Run: `composer install` both in `./shopware/sw6/src` and in `./shopware/sw6/src/custom/plugins/WWFDonationPlugin`.
-
-For development run `docker-compose up` and sync changes of plugin's code via SFTP into the container as described in
-the Dockware docs.
 
 ## File system structure
 
@@ -47,6 +48,7 @@ the Dockware docs.
   always
   (reset to) **5000**. This should not interfere with other products in your shop.
 - Your shop MUST be able to send emails.
+- You need the PHP extension `ext-sodium` enabled.
 
 ## Shopware 5 Plugin
 
