@@ -26,6 +26,8 @@ use WWFDonationPlugin\WWFDonationPlugin;
  * The main banner of this plugin will fire a GET request to this controller submitting the campaign slug
  * and the quantity.
  *
+ * @RouteScope(scopes={"storefront"})
+ *
  * @package WWFDonationPlugin\Controller
  */
 class WWFCartController extends StorefrontController

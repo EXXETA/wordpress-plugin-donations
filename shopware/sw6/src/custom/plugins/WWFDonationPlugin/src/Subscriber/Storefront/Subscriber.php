@@ -76,6 +76,9 @@ class Subscriber implements EventSubscriberInterface
             'wwfDonationsMiniBannerShowMiniCart' => $isCartMiniBannerEnabled,
             'wwfDonationsMiniBannerCampaignTargetPage' => $cartMiniBannerPageTargetEntity,
             'wwfDonationsMiniBannerCampaign' => $cartCampaignKey,
+            'wwfDonationsMiniBannerOffcanvasShowMiniCart' => $this->getConfigurationValueBool($config, 'wwfDonationsMiniBannerOffcanvasShowMiniCart'),
+            'wwfDonationsMiniBannerOffcanvasCampaign' => $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerOffcanvasCampaign'),
+            'wwfDonationsMiniBannerOffcanvasCampaignTargetPage' => $this->getConfigurationValueStr($config, 'wwfDonationsMiniBannerOffcanvasCampaignTargetPage'),
         ];
         $event->setParameter('wwf_donation_plugin', $data);
     }

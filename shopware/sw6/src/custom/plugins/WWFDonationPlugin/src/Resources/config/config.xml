@@ -114,6 +114,64 @@
     </card>
 
     <card>
+        <title>Offcanvas-Cart Integration</title>
+        <title lang="de-DE">Offcanvas-Warenkorb-Integration</title>
+
+        <input-field type="bool">
+            <name>wwfDonationsMiniBannerOffcanvasShowMiniCart</name>
+            <label>Show mini banner in Offcanvas-Cart</label>
+            <label lang="de-DE">Mini-Banner im Offcanvas-Warenkorb</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>wwfDonationsMiniBannerOffcanvasCampaign</name>
+            <label>Banner campaign</label>
+            <label lang="de-DE">Bannerkampagne</label>
+            <defaultValue>protect_species_coin</defaultValue>
+            <required>true</required>
+            <placeholder>Please select a campaign you want to support</placeholder>
+            <placeholder lang="de-DE">Bitte Spendenkampagne auswählen</placeholder>
+            <options>
+                <option>
+                    <id>protect_species_coin</id>
+                    <name>Protection of species</name>
+                    <name lang="de-DE">Artenschutz</name>
+                </option>
+                <option>
+                    <id>protect_ocean_coin</id>
+                    <name>Ocean protection</name>
+                    <name lang="de-DE">Meeresschutz</name>
+                </option>
+                <option>
+                    <id>protect_forest_coin</id>
+                    <name>Forest protection</name>
+                    <name lang="de-DE">Waldschutz</name>
+                </option>
+                <option>
+                    <id>protect_climate_coin</id>
+                    <name>Climate protection</name>
+                    <name lang="de-DE">Klimaschutz</name>
+                </option>
+                <option>
+                    <id>protect_diversity_coin</id>
+                    <name>Protection of biodiversity</name>
+                    <name lang="de-DE">Biodiversität</name>
+                </option>
+            </options>
+        </input-field>
+
+        <component name="wwf-banner-page-selector">
+            <name>wwfDonationsMiniBannerOffcanvasCampaignTargetPage</name>
+            <entity>category</entity>
+            <required>true</required>
+            <label>Category target page of the 'more information' reference</label>
+            <label lang="de-DE">Zielseite (Kategorie) des 'Weitere Informationen'-Links</label>
+        </component>
+
+    </card>
+
+    <card>
         <title>Reporting information</title>
         <title lang="de-DE">Berichtsinformationen</title>
 

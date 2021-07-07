@@ -13,12 +13,17 @@ export default class MiniBannerPlugin extends Plugin {
             PageLoadingIndicatorUtil.create();
 
             const bannerEl = this.el.closest('.sw-cms-block-commerce-wwf-banner')
-            if (!bannerEl || !ev.path || !ev.path[0] || !ev.target.action) {
+            if (!bannerEl || ((ev && ev.hasOwnProperty('path') && !ev.path && !ev.path[0]) && !ev.srcElement) || !ev.target.action) {
                 console.error('could not find wwf banner element and/or form content!');
                 setTimeout(PageLoadingIndicatorUtil.remove(), 250);
                 return;
             }
-            const form = ev.path[0];
+            let form;
+            if (!ev.path) {
+                form = ev.srcElement;
+            } else {
+                form = ev.path[0];
+            }
             const search = new URLSearchParams(new FormData(form));
 
             const targetUrl = encodeURI(ev.target.action + '?' + search.toString());

@@ -115,6 +115,10 @@
             <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>
             <argument type="service" id="WWFDonationPlugin\Service\ProductService"/>
             <argument type="service" id="WWFDonationPlugin\Service\Logger"/>
+
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <!-- registering custom admin component of this plugin -->

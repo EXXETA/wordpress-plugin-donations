@@ -1,0 +1,12 @@
+{% sw_extends '@Storefront/storefront/component/checkout/offcanvas-cart.html.twig' %}
+
+{% block component_offcanvas_cart %}
+
+    {% if wwf_donation_plugin.wwfDonationsMiniBannerOffcanvasShowMiniCart %}
+        <div class="col sw-cms-block-commerce-wwf-banner" data-open-offcanvas="true">
+            {{ wwfBanner(wwf_donation_plugin.wwfDonationsMiniBannerOffcanvasCampaign, true, seoUrlNullable('frontend.navigation.page', { navigationId: wwf_donation_plugin.wwfDonationsMiniBannerOffcanvasCampaignTargetPage })) | raw }}
+        </div>
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
