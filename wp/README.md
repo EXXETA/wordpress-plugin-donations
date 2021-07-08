@@ -147,9 +147,9 @@ integration is enabled.
 
 ![](../screenshots/campaign_banners.png)
 
-![](../screenshots/gutenberg_editor_view.png)
+![](../screenshots/wp_gutenberg_editor_view.png)
 
-![](../screenshots/live_report_view.PNG)
+![](../screenshots/wp_live_report_view.png)
 
 # Development
 

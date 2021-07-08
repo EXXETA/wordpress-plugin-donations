@@ -21,7 +21,7 @@ bug? [-> Create issues!](https://github.com/EXXETA/wwf-plugin-donations/issues)
 
 ## General Requirements and Assumptions
 
-- PHP 7.3+
+- PHP 7.4+
 - MySQL/MariaDB 5.7+/10.3+
 - Currency: Euro
 - **General tested minimum screen width:** `320px`
@@ -45,7 +45,9 @@ This plugin supports five different donation campaigns:
 
 ![](./screenshots/campaign_banners.png)
 
-### Reports
+[Have a look at the screenshots](./screenshots).
+
+### Donation Reports
 
 In general, you can configure three different report interval modes: `weekly`, `monthly`, `quarterly`.
 
@@ -83,14 +85,15 @@ storage one time. E.g. by doing the following (in Chromium Browser):
 ### Shop-Plugins
 
 - [WordPress + WooCommerce plugin](./wp/README.md)
+- [Shopware 5 + 6 plugin](./shopware/README.md)
 
 ## Setup - Installation - Release
 
-There is a [`setup.sh`](./setup.sh) to create a development environment initially.
+There is a [`setup.sh`](./setup.sh) to create a development environment for all plugins initially.
 
-In addition, there is a `release.sh` to build the plugins.
+In addition, there is a `release.sh` to build the plugin's release archives.
 
-Execute `release.sh` in this repository to get a production-ready distributable .zip-archive of this plugin.
+Execute `release.sh` in this repository to get a production-ready distributable .zip-archive of the plugins.
 
 To increase the plugin version, you have to change the version number in the following files:
 
@@ -102,16 +105,14 @@ To increase the plugin version, you have to change the version number in the fol
 
 ## Requirements for development
 
-- PHP Language Level 7.3+
+- PHP Language Level 7.4+
 - MySQL/MariaDB 5.7+/10.3+
 - `docker` + `docker-compose`
 - Composer for PHP
 - `npm`
 
-# Plugin Development
-
 # License & Copyright
 
 All images in `wp/wwf-donations-plugin/images/` are explicitly excluded of the licensing policy mentioned below.
 
-This plugin is licensed under [GPL v3.0](./LICENSE).
+This repository is licensed under [GPL v3.0 or later](./LICENSE).

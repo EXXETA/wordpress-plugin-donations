@@ -59,7 +59,7 @@ echo "Preparing release directory..."
 # adjust composer path to the core lib as it is one additional level distant
 sed -i 's/..\/..\/core/..\/..\/..\/core/g' composer.json
 
-php ../../../composer.phar update --no-dev
+php ../../../composer1.phar update --no-dev
 rm package.json
 rm package-lock.json
 rm composer.lock
