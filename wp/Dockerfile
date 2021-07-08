@@ -10,7 +10,8 @@ RUN apt-get update; apt-get install --no-install-recommends -y libcap2-bin maria
 
 # allow apache2 web server to bind to privileged port as non-root user
 # and set proper permissions for wordpress directory for file system changes
-RUN setcap 'cap_net_bind_service=+ep' /usr/sbin/apache2; chown -R wordpresser:www-data /usr/src/wordpress
+RUN setcap 'cap_net_bind_service=+ep' /usr/sbin/apache2; chown -R wordpresser:www-data /usr/src/wordpress; \
+    echo "php_value upload_max_filesize 20M">>/var/www/html/.htaccess
 COPY wp-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wp-entrypoint.sh; chown wordpresser:www-data /usr/local/bin/wp-entrypoint.sh; \
     dos2unix /usr/local/bin/wp-entrypoint.sh; mkdir -p /var/www/wwf-donations-plugin;

@@ -1,12 +1,15 @@
 # WWF Donation Plugins
 
 **Online shop plugins to collect donations for the non-profit organization [WWF Germany](https://www.wwf.de/). Display
-banners and sending mail reports.**
+banners and sending mail reports. At this moment there are three plugins for WooCommerce, Shopware version 5 and 6.**
 
 **NOTE:** Currently all these plugins are in German language available only.
 
 Do you have questions, want to request a feature or did you find a
 bug? [-> Create issues!](https://github.com/EXXETA/wwf-plugin-donations/issues)
+
+This README will give you some high-level ideas of the shop plugins, for shop-specific information have a look at the
+subdirectories *wp* and *shopware*.
 
 ### General Features
 
@@ -74,6 +77,8 @@ This plugin enables you to modify certain aspects of the donations campaign inte
 storage one time. E.g. by doing the following (in Chromium Browser):
 `Dev Tools -> Application -> Local Storage -> Delete the entry which is prefixed by 'wc_cart_hash...' and reload the page`
 .
+
+![](./core/docs/shop_plugin_overview.png)
 
 # Development
 
