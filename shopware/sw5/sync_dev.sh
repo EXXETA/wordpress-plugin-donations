@@ -31,9 +31,5 @@ docker cp ./src/custom/plugins shopware5:/var/www/html/custom
 docker exec shopware5 bash -c 'sudo chown -R www-data:www-data /var/www/html'
 docker exec shopware5 bash -c 'cd /var/www/html; bin/console sw:plugin:refresh; bin/console sw:plugin:install -v --activate WWFDonationPlugin'
 
-# build everything
-echo "Starting shopware 5 build process..."
-#docker exec shopware bash -c "bash /var/www/html/bin/build.sh"
-
 date +%c
 echo "OK."

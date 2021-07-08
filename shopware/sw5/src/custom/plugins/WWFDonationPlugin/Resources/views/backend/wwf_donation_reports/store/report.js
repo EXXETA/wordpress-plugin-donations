@@ -1,5 +1,5 @@
-//{block name="backend/marketing/wwf_donation_reports"}
-Ext.define('Shopware.apps.WWFDonationReports.store.Report', {
+//{block name="backend/wwf_donation_reports/application"}
+Ext.define('Shopware.apps.WwfDonationReports.store.Report', {
     extend: 'Shopware.store.Listing',
     pageSize: 9999,
     remoteSort: false,
@@ -10,6 +10,6 @@ Ext.define('Shopware.apps.WWFDonationReports.store.Report', {
             controller: 'wwf_donation_reports'
         };
     },
-    model: 'Shopware.apps.WWFDonationReports.model.Report'
+    model: 'Shopware.apps.WwfDonationReports.model.Report'
 });
 //{/block}

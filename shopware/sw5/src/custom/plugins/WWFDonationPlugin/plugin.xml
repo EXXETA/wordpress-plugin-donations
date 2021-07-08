@@ -12,11 +12,6 @@
     <compatibility minVersion="5.4.0"/>
 
     <changelog version="1.0.0">
-        <changes lang="de">Farbe geändert; Schriftgröße geändert;</changes>
-        <changes lang="en">changed color; changed font-size;</changes>
-    </changelog>
-
-    <changelog version="1.0.0">
         <changes lang="de">Erstveröffentlichung</changes>
         <changes lang="en">First release</changes>
     </changelog>

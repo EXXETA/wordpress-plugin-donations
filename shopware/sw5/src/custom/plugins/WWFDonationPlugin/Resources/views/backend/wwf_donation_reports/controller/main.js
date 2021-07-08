@@ -1,5 +1,5 @@
-//{block name="backend/marketing/wwf_donation_reports"}
-Ext.define('Shopware.apps.WWFDonationReports.controller.Main', {
+//{block name="backend/wwf_donation_reports/application"}
+Ext.define('Shopware.apps.WwfDonationReports.controller.Main', {
     extend: 'Enlight.app.Controller',
 
     init: function () {

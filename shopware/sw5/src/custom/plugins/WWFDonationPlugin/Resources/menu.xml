@@ -6,7 +6,7 @@
             <name>WWFDonationReport</name>
             <label lang="en">WWF Donation Reports</label>
             <label lang="de">WWF Spendenberichte</label>
-            <controller>WWFDonationReports</controller>
+            <controller>WwfDonationReports</controller>
             <action>index</action>
             <class>sprite-chart</class>
             <parent identifiedBy="controller">Marketing</parent>

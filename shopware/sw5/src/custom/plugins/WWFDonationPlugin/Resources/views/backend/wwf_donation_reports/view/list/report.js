@@ -1,5 +1,5 @@
-//{block name="backend/marketing/wwf_donation_reports"}
-Ext.define('Shopware.apps.WWFDonationReports.view.list.Report', {
+//{block name="backend/wwf_donation_reports/application"}
+Ext.define('Shopware.apps.WwfDonationReports.view.list.Report', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.report-listing-grid',
     region: 'center',

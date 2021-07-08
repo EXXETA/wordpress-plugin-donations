@@ -1,5 +1,5 @@
-//{block name="backend/marketing/wwf_donation_reports"}
-Ext.define('Shopware.apps.WWFDonationReports.model.Report', {
+//{block name="backend/wwf_donation_reports/application"}
+Ext.define('Shopware.apps.WwfDonationReports.model.Report', {
     extend: 'Shopware.data.Model',
 
     configure: function () {

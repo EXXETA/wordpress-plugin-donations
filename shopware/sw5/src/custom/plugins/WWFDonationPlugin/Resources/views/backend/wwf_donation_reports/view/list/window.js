@@ -1,5 +1,5 @@
-//{block name="backend/marketing/wwf_donation_reports"}
-Ext.define('Shopware.apps.WWFDonationReports.view.list.Window', {
+//{block name="backend/wwf_donation_reports/application"}
+Ext.define('Shopware.apps.WwfDonationReports.view.list.Window', {
     extend: 'Shopware.window.Listing',
     alias: 'widget.report-list-window',
     height: 450,
@@ -8,8 +8,8 @@ Ext.define('Shopware.apps.WWFDonationReports.view.list.Window', {
 
     configure: function () {
         return {
-            listingGrid: 'Shopware.apps.WWFDonationReports.view.list.Report',
-            listingStore: 'Shopware.apps.WWFDonationReports.store.Report'
+            listingGrid: 'Shopware.apps.WwfDonationReports.view.list.Report',
+            listingStore: 'Shopware.apps.WwfDonationReports.store.Report'
         };
     }
 });
