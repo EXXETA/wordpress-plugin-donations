@@ -4,12 +4,13 @@
   "description": "WWF Germany Donation Plugin Shopware 5",
   "license": "GPL-3.0-or-later",
   "version": "v1.0.0",
+  "homepage": "https://github.com/exxeta/wwf-plugin-donations",
   "extra": {
     "installer-name": "WWFDonationPlugin"
   },
   "authors": [
     {
-      "name": "Exxeta AG",
+      "name": "EXXETA AG",
       "role": "Manufacturer"
     },
     {

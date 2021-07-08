@@ -1,12 +1,12 @@
 # WWF Donation Plugins
 
-**Online shop plugins to collect donations for the non-profit organization [WWF Germany](https://www.wwf.de/).
-Display banners and sending mail reports.**
+**Online shop plugins to collect donations for the non-profit organization [WWF Germany](https://www.wwf.de/). Display
+banners and sending mail reports.**
 
 **NOTE:** Currently all these plugins are in German language available only.
 
 Do you have questions, want to request a feature or did you find a
-bug? [-> Create issues!](https://github.com/EXXETA/wordpress-plugin-donations/issues)
+bug? [-> Create issues!](https://github.com/EXXETA/wwf-plugin-donations/issues)
 
 ### General Features
 
@@ -90,7 +90,7 @@ There is a [`setup.sh`](./setup.sh) to create a development environment initiall
 
 In addition, there is a `release.sh` to build the plugins.
 
-Execute `release.sh` in this repository to get a production-ready distributable .zip-archive of this plugin. 
+Execute `release.sh` in this repository to get a production-ready distributable .zip-archive of this plugin.
 
 To increase the plugin version, you have to change the version number in the following files:
 

@@ -4,11 +4,17 @@
   "type": "library",
   "version": "1.0.5",
   "prefer-stable": true,
-  "license": "GPLv3",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/exxeta/wwf-plugin-donations",
   "authors": [
     {
-      "name": "Exxeta AG",
-      "email": "info@exxeta.com"
+      "name": "EXXETA AG",
+      "email": "info@exxeta.com",
+      "role": "Manufacturer"
+    },
+    {
+      "name": "Marius Schuppert",
+      "role": "Manufacturer"
     }
   ],
   "minimum-stability": "stable",

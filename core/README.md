@@ -91,7 +91,7 @@ markup. Afterwards you can write custom style rules for it and customize the loo
 Yes, but you have to study the implementation of the `render()`-methods of the `(Mini-)Banner` classes to get this
 information. The top CSS classes are `.cart-donation-banner` (for the default banner) and `.cart-donation-mini-banner` (
 for the smaller one). You may also want to look at the SCSS of the WordPress
-plugin [here](https://github.com/EXXETA/wordpress-plugin-donations/blob/master/assets/styles/banner.scss)
+plugin [here](https://github.com/EXXETA/wwf-plugin-donations/blob/master/assets/styles/banner.scss)
 which simply can be re-used.
 
 #### Is there a (visual) style guide?

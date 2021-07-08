@@ -4,9 +4,10 @@
   "type": "shopware-platform-plugin",
   "version": "v1.0.0",
   "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/exxeta/wwf-plugin-donations",
   "authors": [
     {
-      "name": "Exxeta AG",
+      "name": "EXXETA AG",
       "role": "Manufacturer"
     },
     {
@@ -28,12 +29,12 @@
       "en-GB": "This plugin provides features to collect donations for the WWF Germany"
     },
     "manufacturerLink": {
-      "de-DE": "https://github.com/EXXETA/wordpress-plugin-donations",
-      "en-GB": "https://github.com/EXXETA/wordpress-plugin-donations"
+      "de-DE": "https://github.com/EXXETA/wwf-plugin-donations",
+      "en-GB": "https://github.com/EXXETA/wwf-plugin-donations"
     },
     "supportLink": {
-      "de-DE": "https://github.com/EXXETA/wordpress-plugin-donations",
-      "en-GB": "https://github.com/EXXETA/wordpress-plugin-donations"
+      "de-DE": "https://github.com/EXXETA/wwf-plugin-donations",
+      "en-GB": "https://github.com/EXXETA/wwf-plugin-donations"
     }
   },
   "require": {

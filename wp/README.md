@@ -6,9 +6,9 @@ organization [WWF](https://www.wwf.de/). Automatically sending mail reports.**
 **NOTE:** Currently this plugin is in German language available only.
 
 Do you have questions, want to request a feature or did you find a
-bug? [-> Create issues!](https://github.com/EXXETA/wordpress-plugin-donations/issues)
+bug? [-> Create issues!](https://github.com/EXXETA/wwf-plugin-donations/issues)
 
-For a full list of features visit the [main project's README](https://github.com/EXXETA/wordpress-plugin-donations).
+For a full list of features visit the [main project's README](https://github.com/EXXETA/wwf-plugin-donations).
 
 ## Server and WordPress requirements
 
@@ -34,7 +34,7 @@ For a full list of features visit the [main project's README](https://github.com
 6. Read this documentation carefully to understand how this plugin is supposed to work.
 7. You'll receive regular donation reports. You *must* transfer the donated money to
    the [WWF Germany](https://www.wwf.de/). More information (including bank account) is given in the plugin's dashboard.
-   
+
 **NOTE:** After the first plugin installation there will be generated a first (probably empty) report.
 
 # Plugin's functionality
