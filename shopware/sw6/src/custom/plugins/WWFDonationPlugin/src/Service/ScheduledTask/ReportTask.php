@@ -23,6 +23,6 @@ class ReportTask extends ScheduledTask
 
     public static function getDefaultInterval(): int
     {
-        return 24 * 60 * 60;
+        return 24 * 60 * 60; // daily
     }
 }

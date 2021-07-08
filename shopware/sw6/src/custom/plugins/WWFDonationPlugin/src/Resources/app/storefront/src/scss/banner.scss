@@ -488,3 +488,14 @@ $urlPrefix: '/bundles/wwfdonationplugin/static/';
 //@media (min-width: $breakpoint_xlarge) and (max-width: $breakpoint_xlarge + 50px) {
 //  @include hide_cart_text;
 //}
+
+// this rule is shopware 6 specific
+.wwf-banner-off-canvas-cart {
+  .cart-donation-mini-banner {
+    .coin-area {
+      img {
+        max-height: 5.7rem;
+      }
+    }
+  }
+}

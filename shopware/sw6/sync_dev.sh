@@ -35,7 +35,8 @@ docker exec shopware bash -c 'cd /var/www/html; bin/console cache:clear; bin/con
 
 # build everything
 echo "Starting shopware 6 build process..."
-docker exec shopware bash -c "bash /var/www/html/bin/build.sh"
+docker exec shopware bash -c "bash /var/www/html/bin/build-administration.sh"
+docker exec shopware bash -c "bash /var/www/html/bin/build-storefront.sh"
 
 date +%c
 echo "OK."

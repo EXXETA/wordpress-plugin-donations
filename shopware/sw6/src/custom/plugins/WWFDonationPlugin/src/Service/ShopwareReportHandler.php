@@ -47,12 +47,12 @@ class ShopwareReportHandler implements ReportHandler
      * @param SystemConfigService $systemConfigService
      * @param EntityRepositoryInterface $donationReportRepository
      * @param EntityRepositoryInterface $salesChannelRepository
-     * @param MailServiceInterface $mailService
+     * @param MailService $mailService
      */
     public function __construct(SystemConfigService $systemConfigService,
                                 EntityRepositoryInterface $donationReportRepository,
                                 EntityRepositoryInterface $salesChannelRepository,
-                                MailServiceInterface $mailService)
+                                MailService $mailService)
     {
         $this->systemConfigService = $systemConfigService;
         $this->donationReportRepository = $donationReportRepository;
