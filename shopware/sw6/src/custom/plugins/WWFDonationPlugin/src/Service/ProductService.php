@@ -158,7 +158,7 @@ class ProductService extends AbstractCharityProductManager
                 // update
                 $data = [
                     'id' => $productId,
-                    'description' => $charityCampaign->getDescription(),
+                    'description' => $charityCampaign->getFullText(),
                     'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
                     'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 1.00, 'net' => 1.00, 'linked' => false]],
