@@ -1,13 +1,19 @@
 # WWFDonationPlugin for Shopware 5 + 6
 
-This directory contains the development files for Shopware 5 and 6 WWF Germany shop plugins. In both
-cases [Dockware](https://dockware.io/) is being used. You should make yourself familiar with Dockware before starting a
-development process. You should also set up your IDE according to the Dockware documentation.
+This directory contains the development files for Shopware 5 and 6 (SW5, SW6) WWF Germany shop plugins. In both
+cases [Dockware](https://dockware.io/) is being used for development and testing. You should make yourself familiar with
+Dockware before starting development. You should also set up your IDE according to the Dockware documentation. If you
+are a tester, you won't need an IDE.
 
 Before you continue, you should also run the `setup.sh` script in the repository root and you should have read
-the [main README](./../README.md) and the [README of the banner core library](./../core/README.md).
+the [main README](./../README.md) and the [README of the banner core library](./../core/README.md) to get a basic
+understanding of the technical aspects of this project.
+
+Please keep in mind to report bugs and file issues if something is not working as expected.
 
 ## First time (development) setup
+
+*If you are a plugin user, this section is NOT relevant for you.*
 
 For development purposes run `docker-compose up` and sync changes of plugin's code via SFTP into the container as
 described in the Dockware docs you should follow.
@@ -18,11 +24,20 @@ described in the Dockware docs you should follow.
 - Run `./sync_dev.sh` which will copy the local plugin files into the container and the plugin will be enabled and
   activated.
 
-Run: `composer install` both in `./shopware/sw6/src` and in `./shopware/sw6/src/custom/plugins/WWFDonationPlugin`.
+## (Release) Testing
 
-## Testing
+*If you are a plugin user, this section is NOT relevant for you.*
+
+- Ensure you're following the first time setup steps in the last section.
+- Execute the script `<repo_root>/shopware/release.sh` to build both SW5 and SW6 plugins
+  in `<repo_root>/release/sw[5|6]`
+  directory. Alternatively you can execute `<repo_root>/shopware/release_sw[5|6].sh` to build a single plugin only.
+- Navigate to `<repo_root>/shopware/sw[5|6]/test` and execute the script `release_test.sh` which will start a Shopware
+  instance in a Dockware container with the plugin installed and activated already.
 
 ## File system structure
+
+*If you are a plugin user, this section is NOT relevant for you.*
 
 - `./sw[5|6]` Shopware-specific Dockware development setup
     - `docker-compose.yml`: Start the development shop with `docker-compose up -d`
@@ -37,6 +52,8 @@ Run: `composer install` both in `./shopware/sw6/src` and in `./shopware/sw6/src/
       instance. Release scripts MUST be executed before.
 
 ## General Notes
+
+*If you are a plugin user or a plugin developer, this section IS relevant for you.*
 
 - The Shopware plugins are developed and tested with the default themes only. Therefore, it may be necessary to adjust
   styles and themes for your customized Shopware setup. If you think your changes are relevant for others, feel free to
@@ -149,6 +166,26 @@ To access the backend use [http://localhost/backend](http://localhost/backend) w
    banner and select a campaign.
 4. You can create a new Layout and you can add the WWF Banner CMS element (block category: `Commerce`) and configure it.
    Afterwards you can assign this layout to a (product) category.
+
+If you are a theme developer or if you want to integrate the banner in a Twig template, you can use the `wwfBanner(...)`
+Twig extension like this (see `\WWFDonationPlugin\Twig\BannerExtension` for details):
+
+```phpt
+<div class="sw-cms-block-commerce-wwf-banner" data-open-offcanvas="<is_offcanvas_opened_on_cart_add>">
+    {{ wwfBanner(<campaign_slug>, <is_mini_banner>, <mini_banner_target_url>) | raw }}
+</div>
+```
+
+Valid values for the *<campaign_slug>* argument are:
+
+- protect_species_coin
+- protect_ocean_coin
+- protect_forest_coin
+- protect_climate_coin
+- protect_diversity_coin
+
+*<is_offcanvas_opened_on_cart_add>* and *<is_mini_banner>* are boolean values. *<mini_banner_target_url>* is expected to
+be a string.
 
 To access the backend use [http://localhost/admin](http://localhost/admin) with the credentials `admin:shopware`.
 

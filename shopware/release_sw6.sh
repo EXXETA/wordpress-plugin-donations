@@ -59,6 +59,7 @@ rm package-lock.json
 
 # Copy over LICENSE file
 cp ../../../LICENSE .
+cp ../../../shopware/README.md .
 
 cd ..
 
