@@ -1,0 +1,31 @@
+{% block sw_cms_element_config_wwf_banner %}
+    <div class="sw-cms-el-config-wwf-banner">
+        <sw-single-select class="wwf-banner-field" size="medium"
+                          :options="allModes"
+                          v-model="campaignMode.value"
+                          :label="$tc('sw-cms.elements.wwfBanner.campaignMode.label')"
+                          @element-update="onElementUpdate">
+        </sw-single-select>
+        <br/>
+        <sw-checkbox-field :label="$tc('sw-cms.elements.wwfBanner.isMiniBannerEnabled.label')"
+                           v-model="isMiniBannerEnabled">
+        </sw-checkbox-field>
+
+        <div v-if="isMiniBannerEnabled">
+            <sw-entity-single-select entity="category"
+                                     size="medium"
+                                     :required="isMiniBannerEnabled"
+                                     v-model="miniBannerTargetCategory"
+                                     :criteria="pageCategoryCriteria"
+                                     :label="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.label')"
+                                     :placeholder="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.placeholder')">
+
+            </sw-entity-single-select>
+            <br/>
+        </div>
+        <sw-checkbox-field
+                :label="$tc('sw-cms.elements.wwfBanner.isOffCanvasDisplayed.label')"
+                v-model="isOffCanvasDisplayed">
+        </sw-checkbox-field>
+    </div>
+{% endblock %}

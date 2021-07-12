@@ -1,0 +1,6 @@
+vendor
+
+src/Resources/public/administration
+src/Resources/app/administration/static
+src/Resources/app/storefront/dist
+src/Resources/public/static/

@@ -1,0 +1,17 @@
+@startuml
+
+title Component Diagram
+
+[Core library] as Core
+interface coreComp
+
+[Shop System] as ShopSys
+[Shop Plugin] as ShopPlugin
+ShopPlug - [ShopPlugin]
+ShopPlug - [ShopSys]
+ShopPlug - [Core]
+
+
+
+
+@enduml

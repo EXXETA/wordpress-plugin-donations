@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  shopware:
+    image: dockware/play:6.4.1.2
+    container_name: shopware6prod
+    ports:
+      - "80:80"
+      - "3306:3306"
+    networks:
+      - web
+    environment:
+      - XDEBUG_ENABLED=0
+      - SW_CURRENCY=EUR
+      - APP_ENV=prod
+
+networks:
+  web:
+    external: false

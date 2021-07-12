@@ -1,0 +1,12 @@
+{% block wwf_banner_page_selector %}
+    <div class="wwf-banner-page-selector">
+        <sw-entity-single-select entity="category"
+                                 size="medium"
+                                 :criteria="pageCategoryCriteria"
+                                 :copyAble="false"
+                                 :label="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.label')"
+                                 :placeholder="$tc('sw-cms.elements.wwfBanner.miniBannerTargetCategory.placeholder')">
+
+        </sw-entity-single-select>
+    </div>
+{% endblock %}

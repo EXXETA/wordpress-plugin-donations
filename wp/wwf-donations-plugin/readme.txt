@@ -1,10 +1,10 @@
 === Wordpress Donations Plugin For WooCommerce ===
-Contributors: Exxeta AG
-Donate link: https://github.com/EXXETA/wordpress-plugin-donations
+Contributors: EXXETA AG, Marius Schuppert
+Donate link: https://github.com/EXXETA/wwf-plugin-donations
 Tags: woocommerce, donation, charity, wwf
 Requires at least: 5.3
-Stable tag: 5.4
-Tested up to: 5.4
+Stable tag: 5.7
+Tested up to: 5.7
 Requires PHP: 7.3
 License: GNU General Public License version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -64,15 +64,15 @@ More information (including bank account) is given in the plugin's dashboard.
 
 = I want to have more information about this plugin =
 
-[Read docs here](https://github.com/EXXETA/wordpress-plugin-donations).
+[Read docs here](https://github.com/EXXETA/wwf-plugin-donations).
 
 = I found a bug or I have a question =
 
-[Create an issue here](https://github.com/EXXETA/wordpress-plugin-donations/issues).
+[Create an issue here](https://github.com/EXXETA/wwf-plugin-donations/issues).
 
 == Screenshots ==
 
-Have a look [here](https://github.com/EXXETA/wordpress-plugin-donations/tree/master/screenshots).
+Have a look [here](https://github.com/EXXETA/wwf-plugin-donations/tree/master/screenshots).
 
 == Changelog ==
 

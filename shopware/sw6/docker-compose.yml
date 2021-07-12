@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  shopware:
+    image: dockware/dev:6.4.1.2
+    container_name: shopware
+    ports:
+      - "80:80"
+      - "3306:3306"
+      - "22:22"
+      - "8888:8888"
+      - "9998:9998"
+      - "9999:9999"
+    networks:
+      - web
+    environment:
+      - XDEBUG_ENABLED=1
+      - SW_CURRENCY=EUR
+      - VAR_DUMPER_SERVER=0.0.0.0:9912
+
+networks:
+  web:
+    external: false

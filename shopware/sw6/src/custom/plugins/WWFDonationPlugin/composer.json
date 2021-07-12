@@ -1,0 +1,70 @@
+{
+  "name": "exxeta/shopware-6-wwf-germany-donation-plugin",
+  "description": "WWF Germany Donation Plugin Shopware 6",
+  "type": "shopware-platform-plugin",
+  "version": "v1.0.0",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/exxeta/wwf-plugin-donations",
+  "authors": [
+    {
+      "name": "EXXETA AG",
+      "role": "Manufacturer"
+    },
+    {
+      "name": "Marius Schuppert",
+      "role": "Manufacturer"
+    }
+  ],
+  "extra": {
+    "shopware-plugin-class": "WWFDonationPlugin\\WWFDonationPlugin",
+    "plugin-icon": "src/Resources/config/plugin.png",
+    "copyright": "by WWF Germany",
+    "author": "EXXETA AG",
+    "label": {
+      "de-DE": "WWF Germany Donation Plugin",
+      "en-GB": "WWF Germany Donation Plugin"
+    },
+    "description": {
+      "de-DE": "Dieses Plugin ermöglicht das Sammeln von Spenden für den WWF Deutschland mit verschiedenen Kampagnen",
+      "en-GB": "This plugin provides features to collect donations for the WWF Germany"
+    },
+    "manufacturerLink": {
+      "de-DE": "https://github.com/EXXETA/wwf-plugin-donations",
+      "en-GB": "https://github.com/EXXETA/wwf-plugin-donations"
+    },
+    "supportLink": {
+      "de-DE": "https://github.com/EXXETA/wwf-plugin-donations",
+      "en-GB": "https://github.com/EXXETA/wwf-plugin-donations"
+    }
+  },
+  "require": {
+    "php": ">= 7.2",
+    "ext-pdo": "*",
+    "exxeta/wwf-donations-shop-banner-core": "1.0.5"
+  },
+  "require-dev": {
+    "shopware/core": "~6.3 || ~6.4",
+    "shopware/administration": "~6.3 || ~6.4",
+    "phpunit/phpunit": "~8.5.8",
+    "phpstan/phpstan": "^0.12.18"
+  },
+  "autoload": {
+    "psr-4": {
+      "WWFDonationPlugin\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WWFDonationPlugin\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../../../../../core",
+      "options": {
+        "symlink": false
+      }
+    }
+  ]
+}

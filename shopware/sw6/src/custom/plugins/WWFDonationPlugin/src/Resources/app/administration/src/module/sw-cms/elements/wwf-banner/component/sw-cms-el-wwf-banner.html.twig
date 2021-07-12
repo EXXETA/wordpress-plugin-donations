@@ -1,0 +1,21 @@
+{% block sw_cms_element_wwf_banner %}
+    <div class="sw-cms-el-wwf-banner">
+        <p v-if="campaignMode && campaignMode.value && isMiniBannerEnabled">
+            [
+            <strong>{{ $tc('sw-cms.elements.wwfBanner.campaignMode.label') }}
+                :</strong> {{ $tc("wwf-campaign-labels." + campaignMode.value) }} |
+            <strong>{{ $tc('sw-cms.elements.wwfBanner.isMiniBannerEnabled.label') }}:</strong>
+            {{ $tc("sw-cms.elements.wwfBanner.isMiniBannerEnabled." + isMiniBannerEnabled.value) }}
+            ]
+        </p>
+        <div class="sw-cms-el-wwf-banner__image">
+            <img v-if="!isMiniBannerEnabled || !isMiniBannerEnabled.value"
+                 :src="'/wwfdonationplugin/static/banner_sample_image_' + campaignMode.value + '-l.png' | asset"
+                 alt="WWF Germany campaign banner preview"/>
+            <img v-else
+                 class="mini-banner-preview"
+                 :src="'/wwfdonationplugin/static/banner_sample_image_mini_' + campaignMode.value + '-l.png' | asset"
+                 alt="WWF Germany campaign mini banner preview"/>
+        </div>
+    </div>
+{% endblock %}

@@ -43,6 +43,13 @@ interface DonationPluginInterface
     public function includeReportTemplate(array $args): void;
 
     /**
+     * render plain mail content
+     *
+     * @param array $args
+     */
+    public function includePlainTemplate(array $args): void;
+
+    /**
      * method to get the plugin's name, e.g. for error log messages
      *
      * @return string

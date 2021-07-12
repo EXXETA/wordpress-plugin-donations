@@ -102,7 +102,9 @@ class Banner
         );
 
         // form starts here
-        $output .= sprintf('<div class="donation-campaign-order"><form method="GET" action="%s">',
+        $output .= sprintf('<div class="donation-campaign-order"><form method="%s" %s action="%s">',
+            $this->getBannerHandler()->getFormMethod(),
+            $this->getBannerHandler()->getFormAttributes(),
             $this->getBannerHandler()->getCartUrl());
 
         // do not add a line break here!

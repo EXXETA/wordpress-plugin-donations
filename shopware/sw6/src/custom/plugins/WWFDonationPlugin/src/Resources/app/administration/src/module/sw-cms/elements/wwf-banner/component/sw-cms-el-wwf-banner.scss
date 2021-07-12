@@ -1,0 +1,18 @@
+.sw-cms-el-wwf-banner {
+  text-align: center;
+
+  .sw-cms-el-wwf-banner__image {
+    margin-top: 0.5rem;
+
+    img {
+      height: auto;
+      width: 100%;
+
+      &.mini-banner-preview {
+        max-height: 250px;
+        max-width: 50%;
+        width: auto;
+      }
+    }
+  }
+}

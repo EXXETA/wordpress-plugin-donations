@@ -32,9 +32,10 @@ interface ReportHandler
      * @param string $recipient
      * @param string $subject
      * @param string $body
+     * @param string $bodyPlain no markup
      * @param array $headers
      */
-    public function sendMail(string $recipient, string $subject, string $body, array $headers): void;
+    public function sendMail(string $recipient, string $subject, string $body, string $bodyPlain, array $headers): void;
 
     /**
      * method to get the shop name

@@ -1,0 +1,10 @@
+web
+var
+themes
+files
+engine
+bin
+
+autoload.php
+
+custom/plugins/WWFDonationPlugin/Resources/views/frontend/_resources/css/images

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label lang="de">WWF Germany Donation Plugin</label>
+    <label lang="en">WWF Deutschland Spendenplugin</label>
+
+    <version>1.0.0</version>
+    <copyright>(c) by EXXETA AG/WWF Germany</copyright>
+    <license>GPL-3.0-or-later</license>
+    <link>https://github.com/EXXETA/wwf-plugin-donations</link>
+    <author>EXXETA AG</author>
+    <compatibility minVersion="5.4.0"/>
+
+    <changelog version="1.0.0">
+        <changes lang="de">Erstveröffentlichung</changes>
+        <changes lang="en">First release</changes>
+    </changelog>
+</plugin>

@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 # check for required available commands of this script
-# which zip &>/dev/null
-# [ $? -eq 0 ] || echo "zip command not found."
 which npm &>/dev/null
 [ $? -eq 0 ] || echo "npm command not found."
 which php &>/dev/null
@@ -22,8 +20,10 @@ which gzip &>/dev/null
 
 set -eu
 
-# execute unit tests of core lib
-echo "Run unit tests"
+dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+cd "$dir"
+
+echo "Run unit tests of the core library"
 
 cd core
 ./vendor/phpunit/phpunit/phpunit test
@@ -59,7 +59,7 @@ echo "Preparing release directory..."
 # adjust composer path to the core lib as it is one additional level distant
 sed -i 's/..\/..\/core/..\/..\/..\/core/g' composer.json
 
-php ../../../composer.phar update --no-dev
+php ../../../composer1.phar update --no-dev
 rm package.json
 rm package-lock.json
 rm composer.lock
@@ -74,10 +74,34 @@ cp ../../../wp/README.md README_dev.md
 # build archives
 cd ..
 
-# Uncomment the following lines to generate archives of the release
+# generate release archives
+if [ -x "$(command -v zip)" ]; then
+  zip -r wp-wwf-donations-plugin.zip wwf-donations-plugin
+  if [ -x "$(command -v du)" ]; then
+    du -d0 -h wp-wwf-donations-plugin.zip
+  fi
+fi
 
-#zip -r wp-wwf-donations-plugin.zip wwf-donations-plugin
-#tar -cvf wp-wwf-donations-plugin.tar wwf-donations-plugin
-#gzip wp-wwf-donations-plugin.tar
+echo "Wordpress release finished"
+cd "$dir"
 
-echo "Release OK."
+echo "Starting Shopware release process."
+bash ./shopware/release.sh
+
+echo "Release OK. Generating release archive hashes..."
+
+if [ -f "$dir/release/wp/wp-wwf-donations-plugin.zip" ]; then
+  if [ -x "$(command -v sha256sum)" ]; then
+    sha256sum "$dir/release/wp/wp-wwf-donations-plugin.zip"
+  fi
+fi
+if [ -f "$dir/release/sw5/sw5-wwf-donations-plugin.zip" ]; then
+  if [ -x "$(command -v sha256sum)" ]; then
+    sha256sum "$dir/release/sw5/sw5-wwf-donations-plugin.zip"
+  fi
+fi
+if [ -f "$dir/release/sw6/sw6-wwf-donations-plugin.zip" ]; then
+  if [ -x "$(command -v sha256sum)" ]; then
+    sha256sum "$dir/release/sw6/sw6-wwf-donations-plugin.zip"
+  fi
+fi

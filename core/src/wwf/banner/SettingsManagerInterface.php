@@ -104,6 +104,13 @@ interface SettingsManagerInterface
     public function getReportCounterIncremented(): int;
 
     /**
+     * get current value of the report counter setting
+     *
+     * @return int
+     */
+    public function getReportCounter(): int;
+
+    /**
      * update date time of last check if a report should be generated to now.
      */
     public function setReportLastCheck(): void;

@@ -1,0 +1,64 @@
+{
+  "sw-cms": {
+    "blocks": {
+      "wwfBanner": {
+        "label": "WWF Banner"
+      }
+    },
+    "elements": {
+      "wwfBanner": {
+        "campaignMode": {
+          "label": "Banner Campaign Selection",
+          "placeHolder": "Select a campaign"
+        },
+        "isMiniBannerEnabled": {
+          "label": "Show small banner version",
+          "true": "Enabled",
+          "false": "Disabled"
+        },
+        "isOffCanvasDisplayed": {
+          "label": "Open cart sidebar (offcanvas) after adding products to the cart"
+        },
+        "miniBannerTargetCategory": {
+          "label": "Category target page of the 'more information' reference",
+          "placeholder": "Choose a category"
+        }
+      }
+    }
+  },
+  "wwf-campaign-labels": {
+    "protect_species_coin": "Protection of species",
+    "protect_ocean_coin": "Ocean protection",
+    "protect_forest_coin": "Forest protection",
+    "protect_climate_coin": "Climate protection",
+    "protect_diversity_coin": "Protection of biodiversity"
+  },
+  "wwfPluginAdminIntegration": {
+    "donationReports": {
+      "full": "WWF Donation Report",
+      "label": "Donation Reports",
+      "name": "Report Title"
+    },
+    "intervalModes": {
+      "label": "Report Interval",
+      "quarterly": "Quarterly",
+      "monthly": "Monthly",
+      "weekly": "Weekly"
+    },
+    "orderCount": {
+      "label": "Order Count"
+    },
+    "totalAmount": {
+      "label": "Donated Total"
+    },
+    "startDate": {
+      "label": "Report Interval Start"
+    },
+    "endDate": {
+      "label": "Report Interval End"
+    },
+    "createdAt": {
+      "label": "Created At"
+    }
+  }
+}

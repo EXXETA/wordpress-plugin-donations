@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element required="true" type="select" scope="locale">
+            <name>wwfDonationsReportingInterval</name>
+            <label lang="en">Reporting interval</label>
+            <label lang="de">Berichtsintervall</label>
+            <value>monthly</value>
+            <store>
+                <option>
+                    <value>weekly</value>
+                    <label lang="en">Weekly</label>
+                    <label lang="de">Wöchentlich</label>
+                </option>
+                <option>
+                    <value>monthly</value>
+                    <label lang="en">Monthly</label>
+                    <label lang="de">Monatlich</label>
+                </option>
+                <option>
+                    <value>quarterly</value>
+                    <label lang="en">Quarterly</label>
+                    <label lang="de">Quartalsweise</label>
+                </option>
+            </store>
+        </element>
+
+        <element required="true" type="boolean" scope="locale">
+            <name>wwfDonationsIsCartIntegrationEnabled</name>
+            <label lang="en">Enable cart integration</label>
+            <label lang="de">Warenkorb-Integration aktivieren</label>
+        </element>
+
+        <element required="true" type="select" scope="locale">
+            <name>wwfDonationCartCampaign</name>
+            <label lang="en">Cart campaign</label>
+            <label lang="de">Kampagne im Warenkorb</label>
+            <value>protect_species_coin</value>
+            <store>
+                <option>
+                    <value>protect_species_coin</value>
+                    <label lang="en">Protection of species</label>
+                    <label lang="de">Artenschutz</label>
+                </option>
+                <option>
+                    <value>protect_ocean_coin</value>
+                    <label lang="en">Ocean protection</label>
+                    <label lang="de">Meeresschutz</label>
+                </option>
+                <option>
+                    <value>protect_forest_coin</value>
+                    <label lang="en">Forest protection</label>
+                    <label lang="de">Waldschutz</label>
+                </option>
+                <option>
+                    <value>protect_climate_coin</value>
+                    <label lang="en">Climate protection</label>
+                    <label lang="de">Klimaschutz</label>
+                </option>
+                <option>
+                    <value>protect_diversity_coin</value>
+                    <label lang="en">Protection of biodiversity</label>
+                    <label lang="de">Biologische Artenvielfalt</label>
+                </option>
+            </store>
+        </element>
+
+        <element required="true" type="boolean" scope="locale">
+            <name>wwfDonationsMiniBannerShowMiniCart</name>
+            <label lang="en">Show mini banner in offcanvas cart</label>
+            <label lang="de">Zeige Mini-Banner im aufgeklappten Offcanvas-Warenkorb</label>
+            <value>false</value>
+        </element>
+
+        <element required="false" type="text" scope="locale">
+            <name>wwfDonationsMiniBannerCampaignTargetPage</name>
+            <label lang="en">Choose mini banner campaign target page link</label>
+            <label lang="de">Kampagneninformationsseite des Mini-Spendenbanners</label>
+        </element>
+
+        <!-- readonly/hidden stuff -->
+        <element required="true" type="select" scope="locale">
+            <name>wwfDonationsMiniBannerCampaign</name>
+            <label lang="en">Choose mini banner campaign</label>
+            <label lang="de">Spendenkampagne des Mini-Spendenbanners</label>
+            <value>protect_species_coin</value>
+            <store>
+                <option>
+                    <value>protect_species_coin</value>
+                    <label lang="en">Protection of species</label>
+                    <label lang="de">Artenschutz</label>
+                </option>
+                <option>
+                    <value>protect_ocean_coin</value>
+                    <label lang="en">Ocean protection</label>
+                    <label lang="de">Meeresschutz</label>
+                </option>
+                <option>
+                    <value>protect_forest_coin</value>
+                    <label lang="en">Forest protection</label>
+                    <label lang="de">Waldschutz</label>
+                </option>
+                <option>
+                    <value>protect_climate_coin</value>
+                    <label lang="en">Climate protection</label>
+                    <label lang="de">Klimaschutz</label>
+                </option>
+                <option>
+                    <value>protect_diversity_coin</value>
+                    <label lang="en">Protection of biodiversity</label>
+                    <label lang="de">Biologische Artenvielfalt</label>
+                </option>
+            </store>
+            <options>
+                <hidden>true</hidden>
+            </options>
+        </element>
+
+        <element required="false" type="number" scope="locale">
+            <name>wwfDonationsReportingLiveDaysInPast</name>
+            <label lang="en">Days in past of live report</label>
+            <label lang="de">Tage in die Vergangenheit des Live-Berichtszeitraums</label>
+            <value>30</value>
+            <options>
+                <hidden>true</hidden>
+            </options>
+        </element>
+        <element required="false" type="text" scope="locale">
+            <name>wwfDonationsReportingRecipient</name>
+            <label lang="en">Donation report recipient</label>
+            <label lang="de">Spendenberichtsempfangsadresse</label>
+            <options>
+                <hidden>true</hidden>
+                <readOnly>true</readOnly>
+            </options>
+        </element>
+        <element required="false" type="text" scope="locale">
+            <name>wwfDonationsReportingLastGenerationDate</name>
+            <label lang="en">Last report generated at</label>
+            <label lang="de">Letzter Bericht erstellt am</label>
+            <options>
+                <hidden>true</hidden>
+                <readOnly>true</readOnly>
+            </options>
+        </element>
+        <element required="false" type="text" scope="locale">
+            <name>wwfDonationsReportingLastCheckDate</name>
+            <label lang="en">Last time for report generation checked at</label>
+            <label lang="de">Letzter Überprüfungszeitpunkt für die Berichtserzeugung</label>
+            <options>
+                <hidden>true</hidden>
+            </options>
+        </element>
+        <element required="false" type="number" scope="locale">
+            <name>wwfDonationsReportingCounter</name>
+            <label lang="en">Report counter</label>
+            <label lang="de">Berichtszähler</label>
+            <options>
+                <minValue>0</minValue>
+                <hidden>true</hidden>
+            </options>
+        </element>
+    </elements>
+</config>

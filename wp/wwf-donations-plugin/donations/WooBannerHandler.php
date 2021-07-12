@@ -39,7 +39,7 @@ class WooBannerHandler implements BannerHandlerInterface
         return wp_get_attachment_image_url($attachmentId);
     }
 
-    public function getProductId(CharityProduct $charityProduct): int
+    public function getProductId(CharityProduct $charityProduct): string
     {
         return intval(get_option($charityProduct->getProductIdSettingKey()));
     }
@@ -77,7 +77,7 @@ class WooBannerHandler implements BannerHandlerInterface
         }
 
         // NOTE: input names are very important to create a valid form action for WooCommerce cart
-        $output .= sprintf('<input type="hidden" value="%d" name="add-to-cart" />', $this->getProductId($charityProduct));
+        $output .= sprintf('<input type="hidden" value="%s" name="add-to-cart" />', $this->getProductId($charityProduct));
     }
 
     public function getFormQuantityInputName(): string
@@ -113,5 +113,15 @@ class WooBannerHandler implements BannerHandlerInterface
             esc_attr($wcProduct->get_id())
         );
         $output .= '</div>'; //.donation-cart-row
+    }
+
+    public function getFormMethod(): string
+    {
+        return 'GET';
+    }
+
+    public function getFormAttributes(): string
+    {
+        return '';
     }
 }

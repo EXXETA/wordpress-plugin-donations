@@ -1,5 +1,6 @@
 .idea
 
+composer1.phar
 composer.phar
 
 wp/wp-cli.phar
@@ -16,3 +17,21 @@ wp/wp
 release
 
 assets/dist
+
+# sw specific stuff
+# remove all except the plugin
+shopware/sw6/src/*
+!shopware/sw6/src/custom/
+!shopware/sw6/src/composer.json
+
+shopware/sw6/src/bin
+shopware/sw6/src/config
+shopware/sw6/src/files
+shopware/sw6/src/public
+shopware/sw6/src/src
+shopware/sw6/src/var
+
+# images are copied from assets package in this repo and should not be stored twice
+#shopware/sw6/src/custom/plugins/WWFDonationPlugin/images
+
+.phpunit.result.cache

@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/page/checkout/cart/index.html.twig' %}
+
+{% block page_checkout_cart_header %}
+    {{ parent() }}
+
+    {% if wwf_donation_plugin.isCartIntegrationActive %}
+        <div class="cart-wwf-banner cart-integration sw-cms-block-commerce-wwf-banner" data-open-offcanvas="false">
+            {{ wwfBanner(wwf_donation_plugin.wwfDonationsMiniBannerCampaign, wwf_donation_plugin.wwfDonationsMiniBannerShowMiniCart,
+                seoUrlNullable('frontend.navigation.page', { navigationId: wwf_donation_plugin.wwfDonationsMiniBannerCampaignTargetPage
+                })) | raw }}
+        </div>
+    {% endif %}
+{% endblock %}
