@@ -1,0 +1,51 @@
+header:
+  license:
+    spdx-id: GPL-3.0-or-later
+    copyright-owner: EXXETA AG, Marius Schuppert
+    content: |
+      Copyright 2020-2021 EXXETA AG, Marius Schuppert
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+  paths:
+    - 'core/src/**'
+    - 'wp/wwf-donations-plugin/donations/**'
+    - 'wp/wwf-donations-plugin/scripts/**'
+    - 'wp/wwf-donations-plugin/src/**'
+    - 'wp/wwf-donations-plugin/build/**'
+    - 'wp/wwf-donations-plugin/**.php'
+    - 'wp/wp-entrypoint.sh'
+    - 'wp/Dockerfile'
+    - 'shopware/sw5/src/custom/plugins/WWFDonationPlugin/**'
+    - 'shopware/sw6/src/custom/plugins/WWFDonationPlugin/src/**'
+
+  paths-ignore:
+    - 'dist'
+    - 'vendor'
+    - '**/vendor/**'
+    - '**/node_modules/**'
+    - 'wp/wwf-donations-plugin/wp-content/**'
+    - 'wp/wwf-donations-plugin/wwf-donations-plugin.php'
+    - 'images'
+    - 'node_modules'
+    - 'licenses'
+    - '**/*.md'
+    - '**/*.json'
+    - '**/*.neon'
+    - '**/*.svg'
+    - '**/*.lock'
+    - 'LICENSE'
+    - 'NOTICE'
+
+  comment: on-failure
