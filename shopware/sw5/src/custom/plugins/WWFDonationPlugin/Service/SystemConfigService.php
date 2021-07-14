@@ -23,8 +23,6 @@ namespace WWFDonationPlugin\Service;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopNotFoundException;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Plugin;
-use Shopware\Components\Plugin\ConfigReader;
-use Shopware\Components\Plugin\ConfigWriter;
 use Shopware\Models\Shop\Shop;
 use WWFDonationPlugin\WWFDonationPlugin;
 
@@ -32,12 +30,12 @@ class SystemConfigService
 {
 
     /**
-     * @var ConfigReader
+     * @var Plugin\Configuration\ReaderInterface
      */
     private $configReader;
 
     /**
-     * @var ConfigWriter
+     * @var Plugin\Configuration\WriterInterface
      */
     private $configWriter;
 
@@ -53,10 +51,11 @@ class SystemConfigService
 
     /**
      * SystemConfigService constructor.
-     * @param ConfigReader $configReader
-     * @param ConfigWriter $configWriter
+     * @param Plugin\Configuration\ReaderInterface $configReader
+     * @param Plugin\Configuration\WriterInterface $configWriter
+     * @throws \Exception
      */
-    public function __construct(ConfigReader $configReader, ConfigWriter $configWriter)
+    public function __construct(Plugin\Configuration\ReaderInterface $configReader, Plugin\Configuration\WriterInterface $configWriter)
     {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
@@ -88,17 +87,17 @@ class SystemConfigService
     }
 
     /**
-     * @return ConfigReader
+     * @return Plugin\Configuration\ReaderInterface
      */
-    public function getConfigReader(): ConfigReader
+    public function getConfigReader(): Plugin\Configuration\ReaderInterface
     {
         return $this->configReader;
     }
 
     /**
-     * @return ConfigWriter
+     * @return Plugin\Configuration\WriterInterface
      */
-    public function getConfigWriter(): ConfigWriter
+    public function getConfigWriter(): Plugin\Configuration\WriterInterface
     {
         return $this->configWriter;
     }

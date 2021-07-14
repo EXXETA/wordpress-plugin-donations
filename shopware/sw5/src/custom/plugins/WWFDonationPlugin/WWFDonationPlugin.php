@@ -108,15 +108,11 @@ class WWFDonationPlugin extends Plugin
 
     public function uninstall(UninstallContext $uninstallContext): void
     {
-        $database = new Database(
-            $this->container->get('models')
-        );
-
         if ($uninstallContext->keepUserData()) {
             // TODO do something different when the user want to keep the plugin's data
             return;
         }
-
+        $database = new Database($this->container->get('models'));
         $database->uninstall();
 
         $mediaService = $this->createMediaService();
@@ -137,8 +133,6 @@ class WWFDonationPlugin extends Plugin
         parent::uninstall($uninstallContext);
     }
 
-    // TODO activation event: activate products! already done?
-    // TODO deactivation event: deactivate products! already done?
     /**
      * @param MediaService $mediaService
      * @return ProductService
@@ -181,10 +175,10 @@ class WWFDonationPlugin extends Plugin
 
     private function createSystemConfigService(): SystemConfigService
     {
-        $configReader = $this->container->get('shopware.plugin.config_reader');
-        /* @var $configReader Plugin\ConfigReader */
-        $configWriter = $this->container->get('shopware.plugin.config_writer');
-        /* @var $configWriter Plugin\ConfigWriter */
+        $configReader = $this->container->get('Shopware\Components\Plugin\Configuration\ReaderInterface');
+        /* @var $configReader Plugin\Configuration\ReaderInterface */
+        $configWriter = $this->container->get('Shopware\Components\Plugin\Configuration\WriterInterface');
+        /* @var $configWriter Plugin\Configuration\WriterInterface */
         return new SystemConfigService($configReader, $configWriter);
     }
 
