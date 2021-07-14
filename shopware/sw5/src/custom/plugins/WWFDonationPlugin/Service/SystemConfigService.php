@@ -1,4 +1,20 @@
 <?php
+/*
+ * Copyright 2020-2021 EXXETA AG, Marius Schuppert
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 
 
 namespace WWFDonationPlugin\Service;
@@ -7,8 +23,6 @@ namespace WWFDonationPlugin\Service;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopNotFoundException;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Plugin;
-use Shopware\Components\Plugin\ConfigReader;
-use Shopware\Components\Plugin\ConfigWriter;
 use Shopware\Models\Shop\Shop;
 use WWFDonationPlugin\WWFDonationPlugin;
 
@@ -16,12 +30,12 @@ class SystemConfigService
 {
 
     /**
-     * @var ConfigReader
+     * @var Plugin\Configuration\ReaderInterface
      */
     private $configReader;
 
     /**
-     * @var ConfigWriter
+     * @var Plugin\Configuration\WriterInterface
      */
     private $configWriter;
 
@@ -37,10 +51,11 @@ class SystemConfigService
 
     /**
      * SystemConfigService constructor.
-     * @param ConfigReader $configReader
-     * @param ConfigWriter $configWriter
+     * @param Plugin\Configuration\ReaderInterface $configReader
+     * @param Plugin\Configuration\WriterInterface $configWriter
+     * @throws \Exception
      */
-    public function __construct(ConfigReader $configReader, ConfigWriter $configWriter)
+    public function __construct(Plugin\Configuration\ReaderInterface $configReader, Plugin\Configuration\WriterInterface $configWriter)
     {
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
@@ -72,17 +87,17 @@ class SystemConfigService
     }
 
     /**
-     * @return ConfigReader
+     * @return Plugin\Configuration\ReaderInterface
      */
-    public function getConfigReader(): ConfigReader
+    public function getConfigReader(): Plugin\Configuration\ReaderInterface
     {
         return $this->configReader;
     }
 
     /**
-     * @return ConfigWriter
+     * @return Plugin\Configuration\WriterInterface
      */
-    public function getConfigWriter(): ConfigWriter
+    public function getConfigWriter(): Plugin\Configuration\WriterInterface
     {
         return $this->configWriter;
     }

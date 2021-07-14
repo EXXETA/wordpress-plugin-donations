@@ -1,4 +1,20 @@
 <?php
+/*
+ * Copyright 2020-2021 EXXETA AG, Marius Schuppert
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 
 
 namespace WWFDonationPlugin;
@@ -92,15 +108,11 @@ class WWFDonationPlugin extends Plugin
 
     public function uninstall(UninstallContext $uninstallContext): void
     {
-        $database = new Database(
-            $this->container->get('models')
-        );
-
         if ($uninstallContext->keepUserData()) {
             // TODO do something different when the user want to keep the plugin's data
             return;
         }
-
+        $database = new Database($this->container->get('models'));
         $database->uninstall();
 
         $mediaService = $this->createMediaService();
@@ -121,8 +133,6 @@ class WWFDonationPlugin extends Plugin
         parent::uninstall($uninstallContext);
     }
 
-    // TODO activation event: activate products! already done?
-    // TODO deactivation event: deactivate products! already done?
     /**
      * @param MediaService $mediaService
      * @return ProductService
@@ -165,10 +175,10 @@ class WWFDonationPlugin extends Plugin
 
     private function createSystemConfigService(): SystemConfigService
     {
-        $configReader = $this->container->get('shopware.plugin.config_reader');
-        /* @var $configReader Plugin\ConfigReader */
-        $configWriter = $this->container->get('shopware.plugin.config_writer');
-        /* @var $configWriter Plugin\ConfigWriter */
+        $configReader = $this->container->get('Shopware\Components\Plugin\Configuration\ReaderInterface');
+        /* @var $configReader Plugin\Configuration\ReaderInterface */
+        $configWriter = $this->container->get('Shopware\Components\Plugin\Configuration\WriterInterface');
+        /* @var $configWriter Plugin\Configuration\WriterInterface */
         return new SystemConfigService($configReader, $configWriter);
     }
 
