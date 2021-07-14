@@ -132,9 +132,6 @@ class ProductService extends AbstractCharityProductManager
             $productVisibilities[] = ['salesChannelId' => $salesChannelId, 'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL];
         }
 
-        // TODO add category
-        // TODO add parent + children products?
-
         $productNumberCounter = 0;
         foreach ($charityCampaigns as $charityCampaign) {
             /* @var CharityCampaign $charityCampaign */
@@ -193,7 +190,7 @@ class ProductService extends AbstractCharityProductManager
                 $data = [
                     'id' => $productId,
                     'productNumber' => $productNumber,
-                    'description' => $charityCampaign->getDescription(),
+                    'description' => $charityCampaign->getFullText(),
                     'visibilities' => $productVisibilities,
                     'stock' => static::WWF_PRODUCT_DEFAULT_STOCK,
                     'name' => 'WWF-Spende: ' . $charityCampaign->getName(),
@@ -379,7 +376,6 @@ class ProductService extends AbstractCharityProductManager
 
         $salesChannelContext = Context::createDefaultContext();
 
-
         $productEntity = $this->getShopwareProductBySlug($campaignSlug, $salesChannelContext);
         if (!$productEntity) {
             throw new \Exception(sprintf('Could not find product entity for campaign slug "%s"', $campaignSlug));
@@ -397,7 +393,7 @@ class ProductService extends AbstractCharityProductManager
 
         // some order/payment states are not considered during report, e.g. cancelled orders..
         $excludedOrderStates = [
-//            'failed',
+            'failed',
             'cancelled',
 //            'refunded',
             //'refunded_partially', // ? TODO

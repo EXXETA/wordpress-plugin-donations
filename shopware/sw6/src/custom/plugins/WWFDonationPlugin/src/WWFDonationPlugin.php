@@ -115,9 +115,7 @@ class WWFDonationPlugin extends Plugin
         // TODO delete wwf products
         // TODO delete all added media + top level media folder
     }
-
-    // TODO activation event: activate products! already done?
-    // TODO deactivation event: deactivate products! already done?
+    
     /**
      * @param MediaService $mediaService
      * @return ProductService

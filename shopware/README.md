@@ -7,6 +7,8 @@ expected or of there is information missing.
 
 The following sections assume you are using a Bash-like shell to execute `.sh`-scripts.
 
+Last officially tested Shopware versions: `5.7.1 | 6.4.1.2`
+
 ## First Time (Development) Setup
 
 *If you are a plugin user, this section is NOT relevant for you.*
@@ -86,6 +88,7 @@ described in the Dockware docs you should follow.
         - `Status::ORDER_STATE_CANCELLED_REJECTED`
     - .. and in the SW 6 plugin:
         - `cancelled`
+        - `failed`
 - All generated reports are stored in the database in a new table called `s_wwf_donation_reports` (SW5)
   or `wwf_donation_report` (SW6).
 - The setup and release scripts expect the `docker` command to be runnable as non-root user. Otherwise, use `sudo` or
@@ -200,5 +203,6 @@ To access the backend use [http://localhost/admin](http://localhost/admin) with 
 
 ## Plugin's TODO (SW5 + SW6)
 
-- SW6: Allow (absolute) URLs for mini banner target page configuration values, not only (shop) categories
+- SW6: Allow (absolute) URLs for mini banner target page configuration values, not only (shop) categories. Workaround:
+  Use custom theme integration with `wwfBanner` Twig extension.
 - SW6: Fix backend section sorting of donation reports
