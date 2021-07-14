@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "npm configuration to assemble assets for the plugin",
   "scripts": {
-    "clean": "node_modules/.bin/rimraf \"./src/Resources/public/static/\" && node_modules/.bin/rimraf \"./src/Resources/app/administration/static\"",
+    "clean": "rimraf \"./src/Resources/public/static/\" && rimraf \"./src/Resources/app/administration/static\"",
     "build": "shx mkdir -p src/Resources/public/static && shx mkdir -p src/Resources/app/administration/static && bash ./assemble.sh"
   },
   "author": "EXXETA AG",
