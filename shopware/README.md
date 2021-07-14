@@ -1,5 +1,16 @@
 # WWFDonationPlugin for Shopware 5 + 6
 
+This document covers the documentation of a Donation Plugin for WWF Germany for shop systems running Shopware 5 or 6.
+You should read it carefully before plugin's installation and usage. Please keep in mind
+to [report bugs and file issues](https://github.com/EXXETA/wwf-plugin-donations/issues) if something is not working as
+expected or of there is information missing.
+
+The following sections assume you are using a Bash-like shell to execute `.sh`-scripts.
+
+## First Time (Development) Setup
+
+*If you are a plugin user, this section is NOT relevant for you.*
+
 This directory contains the development files for Shopware 5 and 6 (SW5, SW6) WWF Germany shop plugins. In both
 cases [Dockware](https://dockware.io/) is being used for development and testing. You should make yourself familiar with
 Dockware before starting development. You should also set up your IDE according to the Dockware documentation. If you
@@ -8,12 +19,6 @@ are a tester, you won't need an IDE.
 Before you continue, you should also run the `setup.sh` script in the repository root and you should have read
 the [main README](./../README.md) and the [README of the banner core library](./../core/README.md) to get a basic
 understanding of the technical aspects of this project.
-
-Please keep in mind to report bugs and file issues if something is not working as expected.
-
-## First time (development) setup
-
-*If you are a plugin user, this section is NOT relevant for you.*
 
 For development purposes run `docker-compose up` and sync changes of plugin's code via SFTP into the container as
 described in the Dockware docs you should follow.
@@ -35,7 +40,7 @@ described in the Dockware docs you should follow.
 - Navigate to `<repo_root>/shopware/sw[5|6]/test` and execute the script `release_test.sh` which will start a Shopware
   instance in a Dockware container with the plugin installed and activated already.
 
-## File system structure
+## File System Repository Structure
 
 *If you are a plugin user, this section is NOT relevant for you.*
 
@@ -51,9 +56,9 @@ described in the Dockware docs you should follow.
     - `release_test.sh`: A script which deploys the release files in `<repo-root>/release/...` to the test shop
       instance. Release scripts MUST be executed before.
 
-## General Notes
+## General Notes and Requirements
 
-*If you are a plugin user or a plugin developer, this section IS relevant for you.*
+*If you are a plugin user OR a plugin developer, this section IS relevant for you.*
 
 - The Shopware plugins are developed and tested with the default themes only. Therefore, it may be necessary to adjust
   styles and themes for your customized Shopware setup. If you think your changes are relevant for others, feel free to

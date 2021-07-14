@@ -1,7 +1,8 @@
 # WWF Donation Plugins
 
-**Online shop plugins to collect donations for the non-profit organization [WWF Germany](https://www.wwf.de/). Display
-banners and sending mail reports. At this moment there are three plugins for WooCommerce, Shopware version 5 and 6.**
+**This repository contains Online shop plugins to collect donations for the non-profit
+organization [WWF Germany](https://www.wwf.de/). Display banners and sending mail reports. At this moment there are
+three plugins for WooCommerce, Shopware version 5 and 6.**
 
 **NOTE:** Currently all these plugins are in German language available only.
 
@@ -120,4 +121,4 @@ To increase the plugin version, you have to change the version number in the fol
 
 All images in `wp/wwf-donations-plugin/images/` are explicitly excluded of the licensing policy mentioned below.
 
-This repository is licensed under [GPL v3.0 or later](./LICENSE).
+This repository is licensed with [GPL v3.0 or later](./LICENSE).
