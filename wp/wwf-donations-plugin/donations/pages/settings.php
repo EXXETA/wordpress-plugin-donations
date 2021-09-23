@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-?><div class="wrap">
+?>
+<div class="wrap">
     <h2>Spenden-Einstellungen</h2>
 
     <?php
@@ -31,6 +32,7 @@
     $isBannerShownInMiniCart = $settingsManager->getMiniBannerIsShownInMiniCart();
     $currentMiniBannerCampaign = $settingsManager->getMiniBannerCampaign();
     $currentMiniBannerInfoTargetPage = $settingsManager->getMiniBannerCampaignTargetPageId();
+    $isCssInclusionForced = $settingsManager->isCssInclusionForced();
 
     if (isset($_GET['settings-updated'])) {
         ?>
@@ -138,6 +140,26 @@
                         ]); ?>
                         <br/>
                         <br/>
+                    </fieldset>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">Technische Einstellungen</th>
+                <td>
+                    <fieldset>
+                        <legend class="screen-reader-text">
+                            <span>Technische Einstellungen</span>
+                        </legend>
+
+                        <label for="wwf_donations_force_css_inclusion_field">
+                            CSS immer einbinden (Die kann bei Eigenentwicklungen oder bei der Verwendung von anderen
+                            Plugins notwendig sein).
+                        </label>
+                        <input id="wwf_donations_force_css_inclusion_field" type="checkbox"
+                               value="1"
+                            <?php checked(true, $isCssInclusionForced, true) ?>
+                               name="wwf_donations_force_css_inclusion"/>
                     </fieldset>
                 </td>
             </tr>
