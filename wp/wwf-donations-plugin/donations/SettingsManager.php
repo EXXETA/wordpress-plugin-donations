@@ -30,6 +30,9 @@ use exxeta\wwf\banner\AbstractSettingsManager;
  */
 class SettingsManager extends AbstractSettingsManager
 {
+    // custom wp setting keys
+    const WWF_DONATIONS_FORCE_CSS_INCLUSION = 'wwf_donations_force_css_inclusion';
+
     /**
      * is called during 'admin_init' hook
      */
@@ -67,6 +70,7 @@ class SettingsManager extends AbstractSettingsManager
             self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN, 'esc_attr');
         register_setting(Plugin::$pluginSlug,
             self::WWF_DONATIONS_MINI_BANNER_CAMPAIGN_TARGET_PAGE, 'esc_attr');
+        register_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_FORCE_CSS_INCLUSION, 'esc_attr');
     }
 
     /**
@@ -77,6 +81,7 @@ class SettingsManager extends AbstractSettingsManager
         unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_REPORTING_INTERVAL);
         unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_REPORTING_LIVE_DAYS_IN_PAST);
         unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_REPORTING_RECIPIENT);
+        unregister_setting(Plugin::$pluginSlug, self::WWF_DONATIONS_FORCE_CSS_INCLUSION);
         foreach (self::$settings as $key => $defaultValue) {
             // default value = monthly
             if (in_array($key, [
@@ -104,6 +109,11 @@ class SettingsManager extends AbstractSettingsManager
     public function getSetting(string $settingKey, $defaultValue)
     {
         return get_option($settingKey, $defaultValue);
+    }
+
+    public function isCssInclusionForced(): bool
+    {
+        return boolval(get_option(self::WWF_DONATIONS_FORCE_CSS_INCLUSION, false));
     }
 
     public function updateSetting(string $settingKey, $value): void

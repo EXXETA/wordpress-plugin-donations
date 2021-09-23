@@ -4,8 +4,8 @@ Donate link: https://github.com/EXXETA/wwf-plugin-donations
 Tags: woocommerce, donation, charity, wwf
 Requires at least: 5.3
 Stable tag: 5.7
-Tested up to: 5.7
-Requires PHP: 7.3
+Tested up to: 5.8
+Requires PHP: 7.4
 License: GNU General Public License version 3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -36,7 +36,7 @@ for the non-profit organization [WWF](https://www.wwf.de/). Automatically sendin
 == Installation ==
 
 ## Server and WordPress requirements
-- PHP 7.3+
+- PHP 7.4+
 - MySQL/MariaDB 5.7+/10.3+
 - Required active WordPress plugins:
     - `woocommerce`

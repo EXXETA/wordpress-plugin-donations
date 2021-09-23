@@ -410,7 +410,12 @@ class Plugin
         $post = get_post();
         $isStyleAndScriptIncluded = false;
 
-        if (static::getDonationPlugin()->getSettingsManagerInstance()->getMiniBannerIsShownInMiniCart()) {
+        $settingsManager = static::getDonationPlugin()->getSettingsManagerInstance();
+        // consider "force"-setting
+        if ($settingsManager instanceof SettingsManager && $settingsManager->isCssInclusionForced()) {
+            $isStyleAndScriptIncluded = true;
+        }
+        if (!$isStyleAndScriptIncluded && $settingsManager->getMiniBannerIsShownInMiniCart()) {
             $isStyleAndScriptIncluded = true;
         }
         if (!$isStyleAndScriptIncluded && $post !== null) {
@@ -593,7 +598,7 @@ class Plugin
      * @throws \Exception
      */
     static function do_report_generate(\DateTime $timeRangeStart = null, \DateTime $timeRangeEnd = null,
-                                       $isRegular = false): void
+                                                 $isRegular = false): void
     {
         $mode = static::getDonationPlugin()->getSettingsManagerInstance()->getCurrentReportingInterval();
         ReportGenerator::generateReport(new ReportGenerationModel($timeRangeStart, $timeRangeEnd, $mode,

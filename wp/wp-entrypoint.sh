@@ -57,6 +57,8 @@ wp plugin install --activate debug-bar-cron
 wp plugin install --activate wp-mail-logging
 wp plugin install --activate wp-crontrol
 
+echo "php_value upload_max_filesize 20M">>/var/www/html/.htaccess
+
 # link donations plugin to wp-content/plugins
 if [ ! -L /var/www/html/wp-content/plugins/wwf-donations-plugin ]; then
   echo "creating symlink dir for plugin development"

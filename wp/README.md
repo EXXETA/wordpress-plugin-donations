@@ -155,7 +155,7 @@ integration is enabled.
 
 ## Requirements for development
 
-- PHP Language Level 7.3+
+- PHP Language Level 7.4+
 - MySQL/MariaDB 5.7+/10.3+
 - `docker` + `docker-compose`
 - Composer for PHP
