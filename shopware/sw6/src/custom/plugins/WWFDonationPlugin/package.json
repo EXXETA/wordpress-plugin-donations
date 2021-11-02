@@ -1,6 +1,6 @@
 {
   "name": "wwf-donations-plugin-sw6",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "npm configuration to assemble assets for the plugin",
   "scripts": {
     "clean": "rimraf \"./src/Resources/public/static/\" && rimraf \"./src/Resources/app/administration/static\"",

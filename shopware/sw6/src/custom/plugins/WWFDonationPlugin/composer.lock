@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bf24e9420d24194ab34dd29b274ed8c",
+    "content-hash": "05acb157e84d010d0f10bb15fee1c18f",
     "packages": [
         {
             "name": "exxeta/wwf-donations-shop-banner-core",

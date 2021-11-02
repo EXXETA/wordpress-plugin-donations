@@ -1,14 +1,14 @@
 <?php
 /**
  * entry point bootstrap file for this wordpress plugin
- * @license GPL-3.0
+ * @license GPL-3.0-or-later
  *
  * @wordpress-plugin
  * Plugin Name: WWF-Donations-Plugin
  * Plugin URI: https://github.com/EXXETA/wwf-plugin-donations
  * Description: Plugin providing WWF donation products for a WooCommerce shop with a banner ready for integration into a wordpress system via shortcode and/or block.
  * Author: Marius Schuppert, EXXETA AG
- * Version: 1.1.3
+ * Version: 1.1.4
  * License: GNU General Public License version 3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
  * Requires PHP: 7.4

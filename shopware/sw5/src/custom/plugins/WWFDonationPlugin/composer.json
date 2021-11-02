@@ -3,7 +3,7 @@
   "type": "shopware-plugin",
   "description": "WWF Germany Donation Plugin Shopware 5",
   "license": "GPL-3.0-or-later",
-  "version": "v1.0.0",
+  "version": "v1.0.1",
   "homepage": "https://github.com/exxeta/wwf-plugin-donations",
   "extra": {
     "installer-name": "WWFDonationPlugin"
@@ -21,7 +21,7 @@
   "require": {
     "php": ">= 7.3",
     "ext-pdo": "*",
-    "exxeta/wwf-donations-shop-banner-core": "1.0.5"
+    "exxeta/wwf-donations-shop-banner-core": "1.0.6"
   },
   "require-dev": {
     "symfony/var-dumper": "^4.3"
