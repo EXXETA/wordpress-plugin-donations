@@ -153,8 +153,9 @@
                         </legend>
 
                         <label for="wwf_donations_force_css_inclusion_field">
-                            CSS immer einbinden (Die kann bei Eigenentwicklungen oder bei der Verwendung von anderen
-                            Plugins notwendig sein).
+                            Banner-CSS und -JS immer einbinden (Dies kann bei Eigenentwicklungen oder bei der Verwendung
+                            von anderen
+                            Plugins notwendig sein)
                         </label>
                         <input id="wwf_donations_force_css_inclusion_field" type="checkbox"
                                value="1"

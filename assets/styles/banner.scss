@@ -457,6 +457,7 @@ $xlarge-up-content-block-width: 41%;
   .cart-donation-banner .cart-donation-banner-background .cart-banner-content {
     flex-basis: $xlarge-up-content-block-width;
     text-align: left;
+    min-width: 425px;
 
     .donation-campaign-description a {
       text-decoration: none;
