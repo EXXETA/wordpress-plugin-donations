@@ -38,9 +38,9 @@
     }
   },
   "require": {
-    "php": ">= 7.2",
+    "php": ">= 7.3",
     "ext-pdo": "*",
-    "exxeta/wwf-donations-shop-banner-core": "1.0.5"
+    "exxeta/wwf-donations-shop-banner-core": "1.0.6"
   },
   "require-dev": {
     "shopware/core": "~6.3 || ~6.4",

@@ -84,6 +84,16 @@ class CharitySettingsManager extends AbstractSettingsManager
     }
 
     /**
+     * The inline js of the core banner library is replaced by custom storefront plugin: wwf-banner-plugin.js
+     *
+     * @return bool
+     */
+    public function isInlineJsEnabled(): bool
+    {
+        return false;
+    }
+
+    /**
      * we need to convert the setting keys here from snake_case to lowerCamelCase.
      * Only the latter is supported by shopware 6.
      *
