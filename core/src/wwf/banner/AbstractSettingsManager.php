@@ -222,6 +222,11 @@ abstract class AbstractSettingsManager implements SettingsManagerInterface
         return static::$reportingIntervalOptions;
     }
 
+    public function isInlineJsEnabled(): bool
+    {
+        return true;
+    }
+
     /**
      * method for static access to the available reporting intervals
      *
