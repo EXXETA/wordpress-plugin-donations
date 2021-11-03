@@ -59,7 +59,7 @@ class Banner
      * @param string $bannerType
      */
     public function __construct(BannerHandlerInterface $bannerHandler, DonationPluginInterface $donationPlugin,
-                                string $bannerType)
+                                string                 $bannerType)
     {
         $this->bannerHandler = $bannerHandler;
         $this->donationPlugin = $donationPlugin;
@@ -113,7 +113,7 @@ class Banner
         $output .= sprintf('<p class="cart-banner-title">%s</p>', $campaign->getHeadline());
         $output .= sprintf('<p class="donation-campaign-description">%s. ', $campaign->getDescription());
 
-        $output .= sprintf('Klicke <a id="%s" href="#" title="Mehr Informationen über die Spende">hier</a> für weitere Informationen</p>',
+        $output .= sprintf('Klicke <a id="%s" href="#" class="more-campaign-info" title="Mehr Informationen über die Spende">hier</a> für weitere Informationen</p>',
             $moreInfoId,
         );
 
@@ -152,7 +152,8 @@ class Banner
         $output .= '</div>'; // .donation-campaign-collapsible
 
         // this js needs to be plain js to support a wide variety of themes/browsers etc.
-        $output .= <<<SCRIPT
+        if ($this->donationPlugin->getSettingsManagerInstance()->isInlineJsEnabled()) {
+            $output .= <<<SCRIPT
 <script lang="js">
 (function() {
     const moreInfoButton = document.getElementById("$moreInfoId");
@@ -169,6 +170,7 @@ class Banner
 })();
 </script>
 SCRIPT;
+        }
 
         $output .= '</div>'; // .cart-donation-banner
 

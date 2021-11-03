@@ -15,7 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 import MiniBannerPlugin from "./mini-banner/mini-banner.plugin";
+import WwfBannerPlugin from "./wwf-banner/wwf-banner.plugin";
 
 const PluginManager = window.PluginManager;
 // bind to mini-banner existence DOM element
 PluginManager.register('MiniBanner', MiniBannerPlugin, '.mini-banner-add-to-cart-form');
+PluginManager.register('WwfBanner', WwfBannerPlugin, '.cart-donation-banner');

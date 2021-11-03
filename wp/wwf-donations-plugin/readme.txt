@@ -76,6 +76,12 @@ Have a look [here](https://github.com/EXXETA/wwf-plugin-donations/tree/master/sc
 
 == Changelog ==
 
+= 1.1.4 =
+* Update dependencies.
+
+= 1.1.3 =
+* add option to force style inclusion instead of detecting it dynamically.
+
 = 1.1.0 =
 * Mini Banner Version + Shortcode + Settings added
 

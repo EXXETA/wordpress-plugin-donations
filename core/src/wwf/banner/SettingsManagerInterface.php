@@ -173,4 +173,11 @@ interface SettingsManagerInterface
      * @return string
      */
     public function getCurrentReportingInterval(): string;
+
+    /**
+     * Method to get inline js setting of this library.
+     *
+     * @return bool
+     */
+    public function isInlineJsEnabled(): bool;
 }

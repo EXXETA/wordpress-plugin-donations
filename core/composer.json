@@ -2,7 +2,7 @@
   "name": "exxeta/wwf-donations-shop-banner-core",
   "description": "Core files of banner generation independent of a shop system",
   "type": "library",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "prefer-stable": true,
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/exxeta/wwf-plugin-donations",
@@ -20,7 +20,7 @@
   "minimum-stability": "stable",
   "require": {
     "ext-date": "*",
-    "php": ">=7.1.0",
+    "php": ">=7.3.0",
     "ext-json": "*"
   },
   "require-dev": {
