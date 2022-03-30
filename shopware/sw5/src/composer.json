@@ -70,7 +70,7 @@
         "setasign/fpdf": "1.8.2",
         "ocramius/proxy-manager": "2.2.3",
         "mpdf/mpdf": "8.0.7",
-        "guzzlehttp/psr7": "1.6.1",
+        "guzzlehttp/psr7": "1.8.4",
         "php-http/message": "1.8.0",
         "fig/link-util": "1.1.1",
         "league/flysystem": "~1.1.4",
