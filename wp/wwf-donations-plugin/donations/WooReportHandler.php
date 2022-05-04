@@ -39,7 +39,7 @@ class WooReportHandler implements ReportHandler
         ]);
     }
 
-    public function sendMail(string $recipient, string $subject, string $body, array $headers): void
+    public function sendMail(string $recipient, string $subject, string $body, string $bodyPlain, array $headers): void
     {
         wp_mail($recipient, esc_html($subject), $body, $headers);
     }
