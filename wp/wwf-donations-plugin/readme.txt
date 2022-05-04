@@ -1,5 +1,5 @@
 === Wordpress Donations Plugin For WooCommerce ===
-Contributors: EXXETA AG, Marius Schuppert
+Contributors: Exxeta AG, Marius Schuppert
 Donate link: https://github.com/EXXETA/wwf-plugin-donations
 Tags: woocommerce, donation, charity, wwf
 Requires at least: 5.3
@@ -75,6 +75,11 @@ More information (including bank account) is given in the plugin's dashboard.
 Have a look [here](https://github.com/EXXETA/wwf-plugin-donations/tree/master/screenshots).
 
 == Changelog ==
+
+= 1.1.5 =
+* Fix critical bug because of wrong method signature.
+* Remove jQuery dependency and inline scripts (not yet in admin theme)
+* Update dependencies.
 
 = 1.1.4 =
 * Update dependencies.

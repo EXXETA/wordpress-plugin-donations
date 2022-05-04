@@ -8,12 +8,8 @@
   "homepage": "https://github.com/exxeta/wwf-plugin-donations",
   "authors": [
     {
-      "name": "EXXETA AG",
+      "name": "Exxeta AG",
       "email": "info@exxeta.com",
-      "role": "Manufacturer"
-    },
-    {
-      "name": "Marius Schuppert",
       "role": "Manufacturer"
     }
   ],

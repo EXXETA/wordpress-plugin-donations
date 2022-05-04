@@ -2,12 +2,12 @@
   "name": "exxeta/shopware-6-wwf-germany-donation-plugin",
   "description": "WWF Germany Donation Plugin Shopware 6",
   "type": "shopware-platform-plugin",
-  "version": "v1.0.1",
+  "version": "v1.0.2",
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/exxeta/wwf-plugin-donations",
   "authors": [
     {
-      "name": "EXXETA AG",
+      "name": "Exxeta AG",
       "role": "Manufacturer"
     },
     {

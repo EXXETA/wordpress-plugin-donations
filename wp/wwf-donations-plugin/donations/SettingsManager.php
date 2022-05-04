@@ -121,6 +121,10 @@ class SettingsManager extends AbstractSettingsManager
         update_option($settingKey, $value);
     }
 
+    public function isInlineJsEnabled(): bool {
+        return false;
+    }
+
     public static function getPluginName(): string
     {
         return Plugin::getPluginFile();

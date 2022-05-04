@@ -38,7 +38,7 @@ define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 PHP
 
-wp core install --path="$WP_PATH" --url="http://127.0.0.1" --title="WWF Plugin" --admin_user=admin --admin_password=password --admin_email="test@test.local"
+wp core install --path="$WP_PATH" --url="http://127.0.0.1:8080" --title="WWF Plugin" --admin_user=admin --admin_password=password --admin_email="test@test.local"
 wp option update timezone_string "Europe/Berlin"
 
 wp config set DISABLE_WP_CRON true || true
@@ -51,7 +51,7 @@ wp plugin delete --quiet akismet hello || true
 wp maintenance-mode deactivate || true
 
 # install and activate woocommerce plugin
-wp plugin install --activate woocommerce
+wp plugin install woocommerce --version=5.9.1
 wp plugin install --activate debug-bar
 wp plugin install --activate debug-bar-cron
 wp plugin install --activate wp-mail-logging

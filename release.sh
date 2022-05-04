@@ -23,6 +23,12 @@ set -eu
 dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 cd "$dir"
 
+echo "Generating sw6 thumbnail images"
+cd assets
+bash convert.sh
+npm run clean
+cd -
+
 echo "Run unit tests of the core library"
 
 cd core

@@ -12,10 +12,10 @@ For a full list of features visit the [main project's README](https://github.com
 
 ## Server and WordPress requirements
 
-- PHP 7.3+
+- PHP 7.4+
 - MySQL/MariaDB 5.7+/10.3+
 - Required active WordPress plugins:
-    - `woocommerce`
+    - `woocommerce` (up to version 5)
 - WordPress crons (= scheduled events) are set up and are running at least once a day.
 - **Important:** WordPress should be able to send mails via `wp_mail`. If you are not sure about this, e.g.
   check [this article](https://wphelp.de/wordpress-email) and test successful mail delivery.

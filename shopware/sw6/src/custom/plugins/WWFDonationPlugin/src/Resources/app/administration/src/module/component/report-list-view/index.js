@@ -125,13 +125,7 @@ Component.register('wwf-banner-donation-reports-list-view', {
                                 searchResultElement.totalAmount += ' ' + this.systemCurrency.symbol;
                                 // format interval mode
                                 searchResultElement.intervalMode = this.$tc('wwfPluginAdminIntegration.intervalModes.' + searchResultElement.intervalMode);
-                                searchResultElement.createdAt = Utils.format.date(searchResultElement.createdAt, {
-                                    dateStyle: 'short',
-                                    timeStyle: 'short',
-                                    year: undefined,
-                                    month: undefined,
-                                    day: undefined,
-                                });
+                                searchResultElement.createdAt = Utils.format.date(searchResultElement.createdAt);
                                 searchResultElement.startDate = Utils.format.date(searchResultElement.startDate);
                                 searchResultElement.endDate = Utils.format.date(searchResultElement.endDate);
                             }

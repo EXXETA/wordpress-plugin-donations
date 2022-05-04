@@ -6,13 +6,13 @@ $collapsible-text-background-color: transparent;
 $collapsible-link-color: #333333;
 
 /* different custom breakpoints used by media queries below */
-$breakpoint_small: 400px;
+$breakpoint_small: 425px;
 $breakpoint_medium: 550px;
 $breakpoint_large: 1024px;
 $breakpoint_xlarge: 1200px;
 $text-shadow-color: #000000;
 $fade-out-link-color: #999999;
-$xlarge-up-content-block-width: 41%;
+$xlarge-up-content-block-width: 47%;
 
 /* hide cart button text with this mixin */
 @mixin hide_cart_text() {
@@ -139,7 +139,8 @@ $xlarge-up-content-block-width: 41%;
         text-shadow: 0 0 0.75rem $text-shadow-color;
         float: right;
         width: 100%;
-        text-align: left;
+        text-align: right;
+        max-width: 550px;
       }
 
       .donation-campaign-order {
@@ -180,13 +181,13 @@ $xlarge-up-content-block-width: 41%;
       }
 
       button.donation-campaign-submit {
-        padding: 0 0.75rem;
+        padding: 0 0.5rem;
         height: 3rem;
         line-height: 3rem;
         display: inline;
         background-color: $submit-button-color;
         color: $white-color;
-        margin-left: 0.75rem;
+        margin-left: 0.5rem;
         margin-bottom: 0;
         font-weight: bold;
         font-size: 115%;
@@ -449,7 +450,7 @@ $xlarge-up-content-block-width: 41%;
 
 @media (min-width: $breakpoint_large) {
   .cart-donation-banner .cart-donation-banner-background .cart-banner-content {
-    flex-basis: 50%;
+    flex-basis: 55%;
   }
 }
 
@@ -464,11 +465,7 @@ $xlarge-up-content-block-width: 41%;
     }
 
     .donation-campaign-quantity-input {
-      width: 2.75rem;
+      min-width: 2.4rem;
     }
   }
-}
-
-@media (min-width: $breakpoint_xlarge) and (max-width: $breakpoint_xlarge + 50px) {
-  @include hide_cart_text;
 }

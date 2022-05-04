@@ -20,13 +20,16 @@
     <label lang="de">WWF Germany Donation Plugin</label>
     <label lang="en">WWF Deutschland Spendenplugin</label>
 
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <copyright>(c) by EXXETA AG/WWF Germany</copyright>
     <license>GPL-3.0-or-later</license>
     <link>https://github.com/EXXETA/wwf-plugin-donations</link>
     <author>EXXETA AG</author>
     <compatibility minVersion="5.4.0"/>
 
+    <changelog version="1.0.2">
+        <changes lang="de">Abhängigkeiten aktualisieren, Stylesheet-Änderungen</changes>
+    </changelog>
     <changelog version="1.0.1">
         <changes lang="de">Abhängigkeiten aktualisieren</changes>
         <changes lang="en">Dependency update</changes>

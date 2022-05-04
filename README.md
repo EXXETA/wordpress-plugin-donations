@@ -115,7 +115,7 @@ To increase the plugin version, you have to change the version number in the fol
 - MySQL/MariaDB 5.7+/10.3+
 - `docker` + `docker-compose`
 - Composer for PHP
-- `npm`
+- `npm` 16+
 
 # License & Copyright
 

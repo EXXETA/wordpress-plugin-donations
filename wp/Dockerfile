@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-FROM wordpress:5-php7.4-apache
+FROM wordpress:5-php8.0-apache
 
 # installing wp-cli and mysql client
 RUN apt-get update; apt-get install --no-install-recommends -y libcap2-bin mariadb-client-10.5 less bash dos2unix vim; rm -rf /var/lib/apt/lists/*; \
