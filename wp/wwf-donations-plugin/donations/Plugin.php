@@ -87,7 +87,7 @@ class Plugin
         $file = plugin_dir_path(self::$pluginFile) . 'images/' . $singleProduct->getImagePath();
         $filename = basename($file);
 
-        $upload_file = wp_upload_bits($filename, null, file_get_contents($file));
+        $upload_file = @wp_upload_bits($filename, null, file_get_contents($file));
         if (!$upload_file['error']) {
             $wp_filetype = wp_check_filetype($filename, null);
             $attachment = array(
@@ -147,7 +147,7 @@ class Plugin
 
     public function registerPluginHooks(): void
     {
-        // plugin lifecycle hooksactiva
+        // plugin lifecycle hooks
         register_activation_hook(self::getPluginFile(), [Plugin::class, 'activate']);
         register_deactivation_hook(self::getPluginFile(), [Plugin::class, 'deactivate']);
         register_uninstall_hook(self::getPluginFile(), [Plugin::class, 'uninstall']);
@@ -268,16 +268,18 @@ class Plugin
 
                 $productId = $product->get_id();
                 update_option($singleProduct->getProductIdSettingKey(), $productId);
-            }
-            // check if product image exists or it should be created newly
-            $product = wc_get_product($productId);
-            if ($product instanceof \WC_Product) {
-                // this should always be the case here!
-                $imageId = $product->get_image_id();
-                // check if attachment exists
-                if (!wp_attachment_is('image', $imageId)) {
-                    // create it otherwise
-                    self::createAndHandleProductImage($singleProduct, $product);
+            } else {
+                // check if product image exists or it should be created newly
+                $product = wc_get_product($productId);
+                if ($product instanceof \WC_Product) {
+                    // this should always be the case here!
+                    $imageId = $product->get_image_id();
+                    $attachmentMedia = wp_get_attachment_image($imageId);
+                    // check if attachment exists
+                    if (empty($attachmentMedia) || !wp_attachment_is_image($imageId)) {
+                        // create it otherwise
+                        self::createAndHandleProductImage($singleProduct, $product);
+                    }
                 }
             }
         }
@@ -437,7 +439,7 @@ class Plugin
         }
         if ($isStyleAndScriptIncluded) {
             wp_enqueue_style('wwf-donations-plugin-styles', plugin_dir_url(self::getPluginFile()) . 'banner.css');
-            wp_enqueue_script('wwf-donations-mini-banner', plugin_dir_url(self::getPluginFile()) . 'scripts/mini-banner.js', ['jquery'], false, true);
+            wp_enqueue_script('wwf-donations-mini-banner', plugin_dir_url(self::getPluginFile()) . 'scripts/banner.js', [], false, true);
         }
     }
 
@@ -532,11 +534,11 @@ class Plugin
                          #misc-publishing-actions .edit-post-status { display: none; }
                     </style>
                     <script lang="js">
-                    jQuery(document).ready(() => {
-                        jQuery("#post").submit((e) => {
-                            e.preventDefault();
-                        })    
-                    });
+                    (function() {
+                        document.getElementById("#post").addEventListener("submit", e => {
+                           e.preventDefault();
+                        }) 
+                    })();
                     </script>';
         }
     }

@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     ports:
-      - "80:80"
+      - "8080:80"
     restart: always
     volumes:
       - ./wwf-donations-plugin/:/var/www/wwf-donations-plugin/:rw

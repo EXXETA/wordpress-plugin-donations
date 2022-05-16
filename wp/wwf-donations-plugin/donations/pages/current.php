@@ -45,19 +45,19 @@ $charityProductManager = \donations\Plugin::getDonationPlugin()->getCharityProdu
 <div class="wrap">
     <h2>Live-Spendenbericht</h2>
     <?php if ($reportTriggered): ?>
-        <div class="notice notice-success">
+        <div class="notice notice-success is-dismissible">
             <p>
                 Es wurde ein Bericht generiert vom <?php echo $startDate->format('Y-m-d'); ?> bis heute.
             </p>
         </div>
     <?php endif ?>
-    <div class="notice notice-info">
+    <div class="notice notice-info is-dismissible">
         <p>
-            Hier können Sie die aktuelle Auswertung der Spendeneinnahmen über einen bestimmten Zeitraum betrachten.<br/>
+            Hier können Sie die aktuelle Auswertung der Spendeneinnahmen über einen bestimmten Zeitraum betrachten.
             <strong>Standardzeitraum:</strong> <?php esc_attr_e($defaultDaysInPast) ?> <?php echo $defaultDaysInPast === 1 ? 'Tag' : 'Tage' ?>
         </p>
     </div>
-    <div class="notice notice-warning">
+    <div class="notice notice-warning is-dismissible">
         <p>
             <strong>WICHTIG:</strong>
             In großen Shops mit vielen Bestellungen kann der folgende Aufruf sehr rechen- und zeitintensiv sein!<br/>

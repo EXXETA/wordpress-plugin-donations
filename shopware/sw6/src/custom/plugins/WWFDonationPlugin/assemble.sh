@@ -16,6 +16,7 @@ node_modules/.bin/shx mkdir -p "./src/Resources/public/static"
 # copy over sample images
 node_modules/.bin/shx cp -fr "../../../../../../assets/dist/images/*" "./src/Resources/app/administration/static"
 node_modules/.bin/shx cp -fr "../../../../../../assets/dist/images/*" "./src/Resources/public/static"
+node_modules/.bin/shx cp -fr "../../../../../../assets/dist/sample-images/*" "./src/Resources/public/static"
 node_modules/.bin/shx cp -fr "../../../../../../assets/dist/sample-images/*" "./src/Resources/app/administration/static"
 
 node_modules/.bin/rimraf "./src/Resources/app/administration/static/*-s.png"

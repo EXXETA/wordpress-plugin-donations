@@ -7,7 +7,7 @@ expected or of there is information missing.
 
 The following sections assume you are using a Bash-like shell to execute `.sh`-scripts.
 
-Last officially tested Shopware versions: `5.7.1 | 6.4.1.2`
+Last officially tested Shopware versions: `5.7.2 | 6.4.11.1`
 
 ## First Time (Development) Setup
 
@@ -174,6 +174,10 @@ To access the backend use [http://localhost/backend](http://localhost/backend) w
    banner and select a campaign.
 4. You can create a new Layout and you can add the WWF Banner CMS element (block category: `Commerce`) and configure it.
    Afterwards you can assign this layout to a (product) category.
+
+### Usage and integration
+
+If `APP_ENV` is `dev`, you can execute: `bin/console wwf:report-generate` to generate a test report.
 
 If you are a theme developer or if you want to integrate the banner in a Twig template, you can use the `wwfBanner(...)`
 Twig extension like this (see `\WWFDonationPlugin\Twig\BannerExtension` for details):

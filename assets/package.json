@@ -1,19 +1,21 @@
 {
   "name": "wwf-banner-core-assets",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Central image and (S)CSS asset package for wwf-banner-core",
   "private": true,
   "scripts": {
     "clean": "node_modules/.bin/rimraf dist",
-    "assemble": "shx mkdir -p dist && shx mkdir -p dist/images && shx mkdir -p dist/sample-images && npm run styles && npm run copy:assets",
+    "assemble": "shx mkdir -p dist && shx mkdir -p dist/images && shx mkdir -p dist/sample-images && npm run styles && npm run scripts && npm run copy:assets",
+    "scripts": "node_modules/.bin/minify scripts/banner.js > dist/banner.min.js && shx cp scripts/banner.js dist/banner.js",
     "styles": "node_modules/.bin/node-sass --output-style compressed styles/banner.scss > dist/banner.css",
     "stylewatch": "node_modules/.bin/node-sass -w --output-style compressed styles/banner.scss > dist/banner.css",
     "copy:assets": "shx cp -fr images/* dist/images && shx cp -fr sample-images/* dist/sample-images"
   },
-  "author": "EXXETA AG",
+  "author": "Exxeta AG",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "node-sass": "^5.0.0",
+    "minify": "^8.0.4",
+    "node-sass": "^7.0.1",
     "rimraf": "^3.0.2",
     "shx": "^0.3.3"
   }
