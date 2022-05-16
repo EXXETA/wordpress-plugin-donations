@@ -47,7 +47,7 @@
         "symfony/console": "4.4.14",
         "symfony/form": "4.4.14",
         "symfony/process": "4.4.14",
-        "symfony/serializer": "4.4.14",
+        "symfony/serializer": "4.4.35",
         "symfony/options-resolver": "4.4.14",
         "symfony/expression-language": "4.4.14",
         "symfony/web-link": "4.4.14",
